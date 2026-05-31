@@ -4,8 +4,9 @@
     --black: #06131d;
     --primary: #33a0ff;
     --secondary: #002230;
-    --accent: #00a4bd;
     --tertiary: #3366ff;
+    --accent: #00a4bd;
+    --contrast: #96d8e1;
 
     --space-sm: 4px;
     --space-md: 8px;
@@ -38,6 +39,11 @@ li {
     text-decoration: none;
     list-style: none;
     color: inherit;
+}
+
+*{
+    margin-block-start: 0px !important;
+    margin-block-end: 0px !important;
 }
 
 html {
