@@ -1,59 +1,37 @@
-#app {
-    height: 100vh;
-    text-align: center;
-}
+.nav {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    box-sizing: border-box;
+    background-color: var(--black);
+    box-shadow: 0px 0px 6px 1px var(--accent);
 
-#logo {
-    display: block;
-    width: 50%;
-    height: 50%;
-    margin: auto;
-    padding: 10% 0 0;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
-    background-origin: content-box;
-}
+    .nav_buttons {
+        display: flex;
+        gap: var(--space-md);
+        height: 100%;
+        align-items: center;
 
-.result {
-    height: 20px;
-    line-height: 20px;
-    margin: 1.5rem auto;
-}
+        .button {
+            color: var(--white) !important;
+            border: 1px solid var(--secondary);
+            border-radius: var(--radius-full);
+            padding: var(--space-md);
+            transition: border-color .2s ease-in-out;
 
-.input-box .btn {
-    width: 60px;
-    height: 30px;
-    line-height: 30px;
-    border-radius: 3px;
-    border: none;
-    margin: 0 0 0 20px;
-    padding: 0 8px;
-    cursor: pointer;
-}
+            &:hover{
+                border-color: var(--accent);
+            }
+        }
 
-.input-box .btn:hover {
-    background-image: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);
-    color: #333333;
-}
-
-.input-box .input {
-    border: none;
-    border-radius: 3px;
-    outline: none;
-    height: 30px;
-    line-height: 30px;
-    padding: 0 10px;
-    background-color: rgba(240, 240, 240, 1);
-    -webkit-font-smoothing: antialiased;
-}
-
-.input-box .input:hover {
-    border: none;
-    background-color: rgba(255, 255, 255, 1);
-}
-
-.input-box .input:focus {
-    border: none;
-    background-color: rgba(255, 255, 255, 1);
+        .highlight{
+            color: var(--white);
+            transition: color .2s ease-in-out;
+            &:hover{
+                color: var(--accent);
+            }
+        }
+    }
 }
