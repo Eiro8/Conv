@@ -21,7 +21,15 @@ function App() {
             </span>
         </section>
         <section className='header'>
-            <div className='sel'></div>
+            <div className='header_wrapper container'>
+                <div className='header_dropper_box'>
+                    <div className='dropper_img_wrap'>
+                        {/* //! trocar por svg de upload */}
+                            <img src={Logo} width={'30px'} className='dropper_img'></img></div>
+                    <h3>Selecionar Imagem(ns)</h3>
+                    <p>Arraste & Solte ou <a href='#' className='dropper_link'>Escolha</a></p>
+                </div>
+            </div>
         </section>
     </>
     )

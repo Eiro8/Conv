@@ -1,4 +1,5 @@
 .nav {
+    width: 100%;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -7,6 +8,7 @@
     box-sizing: border-box;
     background-color: var(--black);
     box-shadow: 0px 0px 6px 1px var(--accent);
+    position: sticky;
 
     .nav_buttons {
         display: flex;
@@ -16,21 +18,71 @@
 
         .button {
             color: var(--white) !important;
-            border: 1px solid var(--secondary);
+            border: 2px solid var(--secondary);
             border-radius: var(--radius-full);
             padding: var(--space-md);
             transition: border-color .2s ease-in-out;
 
-            &:hover{
+            &:hover {
                 border-color: var(--accent);
             }
         }
 
-        .highlight{
+        .highlight {
             color: var(--white);
             transition: color .2s ease-in-out;
-            &:hover{
+
+            &:hover {
                 color: var(--accent);
+            }
+        }
+    }
+}
+
+.header {
+    width: 100%;
+    height: 100%;
+
+    .header_wrapper {
+        max-height: 500px;
+        height: 100dvh;
+        width: 100%;
+        padding: var(--space-lg);
+        box-sizing: border-box;
+
+
+
+        .header_dropper_box {
+            display: flex;
+            flex-direction: column;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            width: 100%;
+            border: 1px solid var(--white);
+            background-color: var(--black);
+            border-radius: var(--radius-lg);
+            gap: var(--space-md);
+            cursor: pointer;
+            transition: .2s ease-in-out border-color;
+
+            .dropper_img_wrap {
+                padding: var(--space-lg);
+                background: var(--primary);
+                border-radius: var(--radius-full);
+                aspect-ratio: 1/1;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .dropper_link {
+                color: var(--accent);
+            }
+
+            &:hover {
+                border-color: var(--accent);
             }
         }
     }
