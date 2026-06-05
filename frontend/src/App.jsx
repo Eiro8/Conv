@@ -8,8 +8,15 @@ function App() {
     const [isHovered, setIsHovered] = useState(false);
     const [files, setFiles] = useState([]);
     const [imageCount, setImageCount] = useState(0);
+    const allowedTypes = [
+        'image/webp',
+        'image/jpeg',
+        'image/jpg',
+        'image/png',
+        'image/avif'
+    ];
 
-    //* Lógica de tratamento do Drag and drop
+    //* Lógica de tratamento do Drag and drop de imagens
     const handleDragOver = (e) => {
         e.preventDefault();
         setIsHovered(true)
@@ -18,19 +25,44 @@ function App() {
         e.preventDefault();
         setIsHovered(false);
     }
+
     const handleDrop = (e) => {
         e.preventDefault();
         setIsHovered(false)
 
-        //converte os arquivos em array JS
+        //? converte os arquivos em array JS
         const droppedFiles = Array.from(e.dataTransfer.files);
-        setFiles(files.concat(droppedFiles));
+        let filteredFiles = fileHandler(droppedFiles);
+
+        setFiles(files.concat(filteredFiles));
     }
     const handleInput = (e) => {
         e.preventDefault();
-        let newFiles = Array.from(e.target.files);
-        setFiles(files.concat(newFiles));
+        const newFiles = Array.from(e.target.files);
+        let filteredFiles = fileHandler(newFiles); //* retorna uma array dos files
+
+
+
+
+        setFiles(files.concat(filteredFiles));
     };
+    function fileHandler(arrayOfFiles) {
+        let filteredFiles = [];
+
+        arrayOfFiles.forEach((file, index) => {
+            if (allowedTypes.includes(file.type)) {
+                filteredFiles.push(file);
+            } else {
+                alert(`O arquivo ${arrayOfFiles[index].name} não é uma  imagem`)
+            }
+        })
+        return filteredFiles;
+    }
+    //!analisa os objetos File de uma array, compara com a var 'allowedTypes'
+    //!retorna uma array apenas de arquivos que estão em 'allowedTypes'
+
+
+
     //* fazer o fetch aqui pro backend pegar os arquivos
     // useEffect(() => {
     //     console.log(Array.from(files));
@@ -38,14 +70,18 @@ function App() {
     //         "method": "post",
     //     })
     // }, [files])
-
+    //* handles the Remove button
     useEffect(() => {
         let buttons = document.getElementsByClassName('image_preview_x');
-        console.log(typeof (Array.from(buttons)));
         Array.from(buttons).forEach((button) => {
             button.addEventListener('click', (e) => {
-                let itemToBeRemoved = e.target.dataset.target;
-                itemToBeRemoved.remove();
+                const targetHtmlID = e.target.dataset.target; //*ID do elemento a ser removido
+                const targetIndex = e.target.dataset.id; //* index do elemento em 'files'
+                document.getElementById(`${targetHtmlID}`).remove();
+
+
+
+
             })
         })
     }, [files]);
@@ -75,13 +111,15 @@ function App() {
                 </div>
                 <ul className='header_images_container'>
                     {files.map((file, i) => {
+
                         return (
                             <li className={`image_preview`} id={`image_preview-${i}`} key={`image_preview-${i}`}>
-                                <img src={URL.createObjectURL(file)} alt={file.name} height={100} />
-                                <button className={'image_preview_x'} data-target={`image_preview-${i}`}>
-                                    <LuX />
+                                <img src={URL.createObjectURL(file)} alt={file.name} height={100} draggable={false} />
+                                <button className={'image_preview_x'} data-target={`image_preview-${i}`} data-id={`${i}`}>
+                                    <div className='local_anchor'>
+                                        <LuX />
+                                    </div>
                                 </button>
-
                             </li>
                         )
                     })}
