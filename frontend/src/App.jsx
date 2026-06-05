@@ -7,14 +7,12 @@ function App() {
 
     const [isHovered, setIsHovered] = useState(false);
     const [files, setFiles] = useState([]);
-    
     const allowedFileTypes = new Set([
         'image/webp',
         'image/jpeg',
         'image/jpg',
         'image/png',
-        'image/avif'
-    ]);
+        'image/avif']);
 
     //* Lógica de tratamento do Drag and drop de imagens
     const handleDragOver = (e) => {
@@ -38,17 +36,15 @@ function App() {
     };
     const handleInput = (e) => {
         e.preventDefault();
-        const newFiles = Array.from(e.target.files);
-        let filteredFiles = fileHandler(newFiles); //* retorna uma array dos files
-
-
-
-
+        const inputFiles = Array.from(e.target.files);
+        let filteredFiles = fileHandler(inputFiles);
         setFiles(files.concat(filteredFiles));
     };
+
     function fileHandler(arrayOfFiles) {
         let filteredFiles = [];
 
+        //* verifica se formato de  arquivo é compativel
         arrayOfFiles.forEach((file, index) => {
             if (allowedFileTypes.has(file.type)) {
                 filteredFiles.push(file);
@@ -56,10 +52,16 @@ function App() {
                 alert(`O arquivo ${arrayOfFiles[index].name} não é uma  imagem`)
             }
         })
-        return filteredFiles;
+
+        let objectsArray = filteredFiles.map((item,i) => (
+            {
+                "id": files.length + i + 1,
+                "file": item
+            })
+        )
+        return objectsArray;
     };
-    //!analisa os objetos File de uma array, compara com a var 'allowedTypes'
-    //!retorna uma array apenas de arquivos que estão em 'allowedTypes'
+
 
 
 
@@ -70,19 +72,17 @@ function App() {
     //         "method": "post",
     //     })
     // }, [files])
-    //* handles the Remove button
+    //*Tratamento do botão de remover imagem
     useEffect(() => {
+
         let buttons = document.getElementsByClassName('image_preview_x');
         Array.from(buttons).forEach((button) => {
             button.addEventListener('click', (e) => {
                 const targetHtmlID = e.target.dataset.target; //*ID do elemento a ser removido
                 const targetIndex = e.target.dataset.id; //* index do elemento em 'files'
-                document.getElementById(`${targetHtmlID}`).remove();
-
-
-
-
-            })
+                document.getElementById(targetHtmlID)?.remove();
+                delete files[targetIndex];
+            }, { once: true });
         })
     }, [files]);
 
@@ -110,12 +110,12 @@ function App() {
                     <input type='file' accept='image/webp,image/jpeg,image/jpg,image/png,image/avif' id='file-input' multiple onChange={handleInput} />
                 </div>
                 <ul className='header_images_container'>
-                    {files.map((file, i) => {
-
+                    {files.map((item, i) => {
+                        let { file, id } = item;
                         return (
-                            <li className={`image_preview`} id={`image_preview-${i}`} key={`image_preview-${i}`}>
+                            <li className={`image_preview`} id={`image_preview-${id}`} key={id}>
                                 <img src={URL.createObjectURL(file)} alt={file.name} height={100} draggable={false} />
-                                <button className={'image_preview_x'} data-target={`image_preview-${i}`} data-id={`${i}`}>
+                                <button className={'image_preview_x'} data-target={`image_preview-${id}`} data-id={`${id}`}>
                                     <div className='local_anchor'>
                                         <LuX />
                                     </div>
