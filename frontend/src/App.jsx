@@ -7,24 +7,24 @@ function App() {
 
     const [isHovered, setIsHovered] = useState(false);
     const [files, setFiles] = useState([]);
-    const [imageCount, setImageCount] = useState(0);
-    const allowedTypes = [
+    
+    const allowedFileTypes = new Set([
         'image/webp',
         'image/jpeg',
         'image/jpg',
         'image/png',
         'image/avif'
-    ];
+    ]);
 
     //* Lógica de tratamento do Drag and drop de imagens
     const handleDragOver = (e) => {
         e.preventDefault();
         setIsHovered(true)
-    }
+    };
     const handleDragLeave = (e) => {
         e.preventDefault();
         setIsHovered(false);
-    }
+    };
 
     const handleDrop = (e) => {
         e.preventDefault();
@@ -35,7 +35,7 @@ function App() {
         let filteredFiles = fileHandler(droppedFiles);
 
         setFiles(files.concat(filteredFiles));
-    }
+    };
     const handleInput = (e) => {
         e.preventDefault();
         const newFiles = Array.from(e.target.files);
@@ -50,14 +50,14 @@ function App() {
         let filteredFiles = [];
 
         arrayOfFiles.forEach((file, index) => {
-            if (allowedTypes.includes(file.type)) {
+            if (allowedFileTypes.has(file.type)) {
                 filteredFiles.push(file);
             } else {
                 alert(`O arquivo ${arrayOfFiles[index].name} não é uma  imagem`)
             }
         })
         return filteredFiles;
-    }
+    };
     //!analisa os objetos File de uma array, compara com a var 'allowedTypes'
     //!retorna uma array apenas de arquivos que estão em 'allowedTypes'
 
