@@ -53,7 +53,7 @@ function App() {
             }
         })
 
-        let objectsArray = filteredFiles.map((item,i) => (
+        let objectsArray = filteredFiles.map((item, i) => (
             {
                 "id": files.length + i + 1,
                 "file": item
@@ -62,7 +62,15 @@ function App() {
         return objectsArray;
     };
 
-
+    function handleImageClose() {
+        let buttons = document.getElementsByClassName('image_preview_x');
+        Array.from(buttons).forEach((button) => {
+            button.addEventListener('click', (e) => {
+                const targetID = e.target.dataset.id;
+                setFiles(files.filter((item) => item.id != targetID));
+            });
+        })
+    }
 
 
     //* fazer o fetch aqui pro backend pegar os arquivos
@@ -73,18 +81,7 @@ function App() {
     //     })
     // }, [files])
     //*Tratamento do botão de remover imagem
-    useEffect(() => {
-
-        let buttons = document.getElementsByClassName('image_preview_x');
-        Array.from(buttons).forEach((button) => {
-            button.addEventListener('click', (e) => {
-                const targetHtmlID = e.target.dataset.target; //*ID do elemento a ser removido
-                const targetIndex = e.target.dataset.id; //* index do elemento em 'files'
-                document.getElementById(targetHtmlID)?.remove();
-                delete files[targetIndex];
-            }, { once: true });
-        })
-    }, [files]);
+    useEffect(handleImageClose, [files]);
 
     return (<>
         <section className='nav'>
@@ -113,9 +110,9 @@ function App() {
                     {files.map((item, i) => {
                         let { file, id } = item;
                         return (
-                            <li className={`image_preview`} id={`image_preview-${id}`} key={id}>
+                            <li className={`image_preview`} key={id}>
                                 <img src={URL.createObjectURL(file)} alt={file.name} height={100} draggable={false} />
-                                <button className={'image_preview_x'} data-target={`image_preview-${id}`} data-id={`${id}`}>
+                                <button className={'image_preview_x'} data-id={`${id}`}>
                                     <div className='local_anchor'>
                                         <LuX />
                                     </div>
