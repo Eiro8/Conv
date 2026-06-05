@@ -12,8 +12,8 @@ function App() {
         'image/jpeg',
         'image/jpg',
         'image/png',
-        'image/avif']);
-
+        'image/avif'
+    ]);
     //* Lógica de tratamento do Drag and drop de imagens
     const handleDragOver = (e) => {
         e.preventDefault();
@@ -24,27 +24,30 @@ function App() {
         setIsHovered(false);
     };
 
+
     const handleDrop = (e) => {
         e.preventDefault();
         setIsHovered(false)
 
         //? converte os arquivos em array JS
         const droppedFiles = Array.from(e.dataTransfer.files);
-        let filteredFiles = fileHandler(droppedFiles);
-
+        let filteredFiles = handleFiles(droppedFiles);
         setFiles(files.concat(filteredFiles));
     };
     const handleInput = (e) => {
         e.preventDefault();
         const inputFiles = Array.from(e.target.files);
-        let filteredFiles = fileHandler(inputFiles);
+        let filteredFiles = handleFiles(inputFiles);
+        console.log(filteredFiles);
         setFiles(files.concat(filteredFiles));
+
     };
 
-    function fileHandler(arrayOfFiles) {
+
+    function handleFiles(arrayOfFiles) {
         let filteredFiles = [];
 
-        //* verifica se formato de  arquivo é compativel
+        //?verifica se formato de  arquivo é compativel
         arrayOfFiles.forEach((file, index) => {
             if (allowedFileTypes.has(file.type)) {
                 filteredFiles.push(file);
@@ -52,7 +55,7 @@ function App() {
                 alert(`O arquivo ${arrayOfFiles[index].name} não é uma  imagem`)
             }
         })
-
+        //?Converte a array de files em array de objetos { id , File}
         let objectsArray = filteredFiles.map((item, i) => (
             {
                 "id": files.length + i + 1,
@@ -62,15 +65,22 @@ function App() {
         return objectsArray;
     };
 
-    function handleImageClose() {
-        let buttons = document.getElementsByClassName('image_preview_x');
-        Array.from(buttons).forEach((button) => {
-            button.addEventListener('click', (e) => {
-                const targetID = e.target.dataset.id;
-                setFiles(files.filter((item) => item.id != targetID));
-            });
-        })
-    }
+    // function handleImageClose(e) {
+    //     e.preventDefault();
+    //     let buttons = document.getElementsByClassName('image_preview_x');
+
+    //     //? Deleta o item da array em base de seu ID.
+    //     Array.from(buttons).forEach((button) => {
+    //         button.addEventListener('click', (e) => {
+    //             const targetID = e.target.dataset.id;
+    //             setFiles(files.filter((item) => item.id != targetID));
+    //         }, { once: true });
+    //     });
+    // }
+
+    function handleCloseButton(targetId) {
+        setFiles(files.filter((item) => item.id != targetId));
+    };
 
 
     //* fazer o fetch aqui pro backend pegar os arquivos
@@ -81,7 +91,7 @@ function App() {
     //     })
     // }, [files])
     //*Tratamento do botão de remover imagem
-    useEffect(handleImageClose, [files]);
+
 
     return (<>
         <section className='nav'>
@@ -107,15 +117,13 @@ function App() {
                     <input type='file' accept='image/webp,image/jpeg,image/jpg,image/png,image/avif' id='file-input' multiple onChange={handleInput} />
                 </div>
                 <ul className='header_images_container'>
-                    {files.map((item, i) => {
+                    {files.map((item, index) => {
                         let { file, id } = item;
                         return (
-                            <li className={`image_preview`} key={id}>
+                            <li className={`image_preview`} key={`${id} + ${index}`}>
                                 <img src={URL.createObjectURL(file)} alt={file.name} height={100} draggable={false} />
-                                <button className={'image_preview_x'} data-id={`${id}`}>
-                                    <div className='local_anchor'>
-                                        <LuX />
-                                    </div>
+                                <button className={'image_preview_x'} data-id={`${id}`} onClick={() => { handleCloseButton(id) }}>
+                                    <LuX />
                                 </button>
                             </li>
                         )
