@@ -26,6 +26,10 @@
     margin: 0 auto;
 }
 
+.local_anchor{
+    pointer-events: none;
+}
+
 
 a,
 ul,
