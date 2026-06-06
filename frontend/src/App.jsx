@@ -32,14 +32,21 @@ function App() {
         //? converte os arquivos em array JS
         const droppedFiles = Array.from(e.dataTransfer.files);
         let filteredFiles = handleFiles(droppedFiles);
-        setFiles(files.concat(filteredFiles));
+        setFiles(filesArray => filesArray.concat(filteredFiles));
+        e.target.value = '';
     };
+
     const handleInput = (e) => {
         e.preventDefault();
-        const inputFiles = Array.from(e.target.files);
-        let filteredFiles = handleFiles(inputFiles);
-        console.log(filteredFiles);
-        setFiles(files.concat(filteredFiles));
+        try {
+            const inputFiles = Array.from(e.target.files);
+            let filteredFiles = handleFiles(inputFiles);
+            setFiles(filesArray => filesArray.concat(filteredFiles));
+        } catch (error) {
+            console.log(error)
+            console.log(`O array  de itens que nao foi: ${Array.from(e.target.files)}`);
+        }
+        e.target.value = '';
 
     };
 
@@ -79,7 +86,7 @@ function App() {
     // }
 
     function handleCloseButton(targetId) {
-        setFiles(files.filter((item) => item.id != targetId));
+        setFiles(filesArray => filesArray.filter((item) => item.id != targetId));
     };
 
 
@@ -114,7 +121,7 @@ function App() {
                         <LuUpload /></div>
                     <h3>Selecionar Imagem(ns)</h3>
                     <p>Arraste & Solte ou <span className='highlight'>Escolha</span></p>
-                    <input type='file' accept='image/webp,image/jpeg,image/jpg,image/png,image/avif' id='file-input' multiple onChange={handleInput} />
+                    <input type='file' accept='image/webp,image/jpeg,image/jpg,image/png,image/avif' id='file-input' multiple onChange={handleInput} on />
                 </div>
                 <ul className='header_images_container'>
                     {files.map((item, index) => {
