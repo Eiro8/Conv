@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import './App.css';
 import Logo from './assets/images/logo-universal.png'
-import { LuUpload, LuX } from "react-icons/lu";
+import { LuUpload, LuX, LuHardDriveDownload } from "react-icons/lu";
 
 function App() {
-
+    const [isUploaded, setUploaded] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
     const [files, setFiles] = useState([]);
     const allowedFileTypes = new Set([
@@ -128,10 +128,22 @@ function App() {
                         let { file, id } = item;
                         return (
                             <li className={`image_preview`} key={`${id} + ${index}`}>
-                                <img src={URL.createObjectURL(file)} alt={file.name} height={100} draggable={false} />
-                                <button className={'image_preview_x'} data-id={`${id}`} onClick={() => { handleCloseButton(id) }}>
-                                    <LuX />
-                                </button>
+                                <img src={URL.createObjectURL(file)} draggable={false} className={'uploaded_image'} />
+                                <div className='file_info'>
+                                    <p>{file.name}</p>
+                                    {/*fazer calculo pra lidar com tamanho do arquivo e tipo de arquivo*/}
+                                    <p>{file.type},{file.size} Bytes</p>
+
+                                </div>
+                                {!isUploaded ? (
+                                    <button className={'image_preview_x primary-button'} data-id={`${id}`} onClick={() => { handleCloseButton(id) }}>
+                                        <LuX />
+                                    </button>) : (
+
+                                    <button className={'image_preview_x primary-button'} data-id={`${id}`} onClick={() => { }}>
+                                        <LuHardDriveDownload />
+                                    </button>)
+                                }
                             </li>
                         )
                     })}
