@@ -5,7 +5,9 @@ import { LuUpload, LuX, LuHardDriveDownload } from "react-icons/lu";
 
 function App() {
     const [isUploaded, setUploaded] = useState(false);
+    const [selected, setSelected] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
+    const [open, setOpen] = useState(false);
     const [files, setFiles] = useState([]);
     const allowedFileTypes = new Set([
         'image/webp',
@@ -66,7 +68,8 @@ function App() {
         let objectsArray = filteredFiles.map((item, i) => (
             {
                 "id": files.length + i + 1,
-                "file": item
+                "file": item,
+                "convertTo": "webp"
             })
         )
         return objectsArray;
@@ -123,11 +126,11 @@ function App() {
                     <p>Arraste & Solte ou <span className='highlight'>Escolha</span></p>
                     <input type='file' accept='image/webp,image/jpeg,image/jpg,image/png,image/avif' id='file-input' multiple onChange={handleInput} on />
                 </div>
-                <ul className='header_images_container'>
+                <ul className='header_files_container'>
                     {files.map((item, index) => {
                         let { file, id } = item;
                         return (
-                            <li className={`image_preview`} key={`${id} + ${index}`}>
+                            <li className={`file_preview`} key={`${id} + ${index}`}>
                                 <img src={URL.createObjectURL(file)} draggable={false} className={'uploaded_image'} />
                                 <div className='file_info'>
                                     <p>{file.name}</p>
@@ -135,6 +138,27 @@ function App() {
                                     <p>{file.type},{file.size} Bytes</p>
 
                                 </div>
+
+                                <p>Converter para</p>
+                                <button onClick={() => setOpen(!open)}>
+                                    {selected}
+                                </button>
+
+                                {open && (
+                                    <ul>
+                                        {Array.from(allowedFileTypes).map(format => (
+                                            <li
+                                                key={format}
+                                                onClick={() => {
+                                                    setSelected(format);
+                                                    setOpen(false);
+                                                }}
+                                            >
+                                                {format}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
                                 {!isUploaded ? (
                                     <button className={'image_preview_x primary-button'} data-id={`${id}`} onClick={() => { handleCloseButton(id) }}>
                                         <LuX />
