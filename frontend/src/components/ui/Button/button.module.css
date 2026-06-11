@@ -1,3 +1,10 @@
+.span {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: var(--space-md);
+}
+
 .primary {
     display: flex;
     width: fit-content;
@@ -11,7 +18,7 @@
     cursor: pointer;
     transition: border-color .3s ease-in-out;
     background: transparent;
-
+    color: black;
 
     &:hover {
         border-color: var(--primary);
@@ -35,5 +42,45 @@
 
     &:hover {
         background-color: var(--black);
+    }
+}
+
+.tertiary {
+    width: 100%;
+    padding: var(--space-lg);
+    border-radius: var(--radius-md);
+    background: linear-gradient(to right, var(--black), var(--tertiary));
+    border: 1px solid var(--black);
+    cursor: pointer;
+    color: var(--white);
+    transition: .2s ease-in-out background;
+    position: relative;
+    z-index: 0;
+    overflow: hidden;
+
+    svg {
+        color: var(--white);
+        font-size: 20px;
+    }
+
+    .span {
+        z-index: 1;
+        position: relative;
+    }
+
+    &::before {
+        content: '';
+        position: absolute;
+        background: black;
+        z-index: -1;
+        inset: 0;
+        opacity: 0;
+        transition: .3s ease opacity;
+
+
+    }
+
+    &:hover::before {
+        opacity: 1;
     }
 }
