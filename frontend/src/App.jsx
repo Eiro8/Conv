@@ -120,57 +120,59 @@ function App() {
         </section>
         <section className='header'>
             <div className='header_wrapper container'>
-                <div className='header_dropper_box' onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop}>
-                    <div className='dropper_img_wrap'>
-                        <LuUpload /></div>
-                    <h3>Selecionar Imagem(ns)</h3>
-                    <p>Arraste & Solte ou <span className='highlight'>Escolha</span></p>
-                    <input type='file' accept='image/webp,image/jpeg,image/jpg,image/png,image/avif' id='file-input' multiple onChange={handleInput} on />
-                </div>
-                <ul className='header_files_container'>
-                    {files.map((item, index) => {
-                        let { file, id } = item;
-                        return (
-                            <li className={`file`} key={`${id} + ${index}`}>
-                                <img src={URL.createObjectURL(file)} draggable={false} className={'image'} />
-                                <div className='file_description'>
-                                    <p className='text_overflow file_name'>{file.name}</p>
-                                    {/* //*fazer calculo pra lidar com tamanho do arquivo e tipo de arquivo*/}
-                                    <p className='text_overflow file_type'>{file.type}, {file.size} Bytes</p>
+                {
+                    files ? (<ul className='header_files_container'>
+                        {files.map((item, index) => {
+                            let { file, id } = item;
+                            return (
+                                <li className={`file`} key={`${id} + ${index}`}>
+                                    <img src={URL.createObjectURL(file)} draggable={false} className={'image'} />
+                                    <div className='file_description'>
+                                        <p className='text_overflow file_name'>{file.name}</p>
+                                        {/* //*fazer calculo pra lidar com tamanho do arquivo e tipo de arquivo*/}
+                                        <p className='text_overflow file_type'>{file.type}, {file.size} Bytes</p>
 
-                                </div>
-                                <span className={'buttons'}>
-                                    <p className='text'>Converter para</p>
-                                    <Button children={selected} onClick={() => setOpen(!open)} />
-                                    {open && (
-                                        <ul>
-                                            {Array.from(allowedFileTypes).map(format => (
-                                                <li
-                                                    key={format}
-                                                    onClick={() => {
-                                                        setSelected(format);
-                                                        setOpen(false);
-                                                    }}
-                                                >
-                                                    {format}
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    )}
-                                    {!isUploaded ?
-                                        (<Button data-id={`${id}`} onClick={() => { handleCloseButton(id) }} children={<LuX />} />)
-                                        :
-                                        (<Button data-id={`${id}`} onClick={() => { }} children={<LuHardDriveDownload />} />)
-                                    }
-                                </span>
-                            </li>
-                        )
-                    })}
-                </ul>
-            </div>
+                                    </div>
+                                    <span className={'buttons'}>
+                                        <p className='text'>Converter para</p>
+                                        <Button children={selected} onClick={() => setOpen(!open)} />
+                                        {open && (
+                                            <ul>
+                                                {Array.from(allowedFileTypes).map(format => (
+                                                    <li
+                                                        key={format}
+                                                        onClick={() => {
+                                                            setSelected(format);
+                                                            setOpen(false);
+                                                        }}
+                                                    >
+                                                        {format}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        )}
+                                        {!isUploaded ?
+                                            (<Button data-id={`${id}`} onClick={() => { handleCloseButton(id) }} children={<LuX />} />)
+                                            :
+                                            (<Button data-id={`${id}`} onClick={() => { }} children={<LuHardDriveDownload />} />)
+                                        }
+                                    </span>
+                                </li>
+                            )
+                        })}
+                    </ul>) : (<div className='header_dropper_box' onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop}>
+                        <div className='dropper_img_wrap'>
+                            <LuUpload /></div>
+                        <h3>Selecionar Imagem(ns)</h3>
+                        <p>Arraste & Solte ou <span className='highlight'>Escolha</span></p>
+                        <input type='file' accept='image/webp,image/jpeg,image/jpg,image/png,image/avif' id='file-input' multiple onChange={handleInput} on />
+                    </div>)
+
+                }</div>
         </section>
     </>
     )
 }
 
 export default App
+
