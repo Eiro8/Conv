@@ -15,12 +15,12 @@ export const Button = (
 
 
     return (
-        <button 
+        <button
             className={`${styles[variant]} ${isLoading ? styles.loading : ""}`}
             disabled={isLoading || props.disabled}
             ref={ref}
             {...props}>
-            {isLoading ? <LuLoader /> : children}
+            <span className={styles.span}>{isLoading ? <LuLoader /> : children}</span>
         </button>
     )
 }
