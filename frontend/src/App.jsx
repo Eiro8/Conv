@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import './App.css';
 import Logo from './assets/images/logo-universal.png'
-import { LuUpload, LuX, LuHardDriveDownload } from "react-icons/lu";
+import { LuUpload, LuX, LuHardDriveDownload, LuCornerDownLeft, LuCirclePlus, LuSettings2 } from "react-icons/lu";
 import { Button } from './components/ui/Button/Button';
 
 function App() {
@@ -52,7 +52,6 @@ function App() {
         e.target.value = '';
 
     };
-
 
     function handleFiles(arrayOfFiles) {
         let filteredFiles = [];
@@ -122,46 +121,64 @@ function App() {
             <div className='header_wrapper container'>
                 {
                     files.length > 0 ?
-                        (<ul className='header_files_container'>
-                            {files.map((item, index) => {
-                                let { file, id } = item;
-                                return (
-                                    <li className={`file`} key={`${id} + ${index}`}>
-                                        <img src={URL.createObjectURL(file)} draggable={false} className={'image'} />
-                                        <div className='file_description'>
-                                            <p className='text_overflow file_name'>{file.name}</p>
-                                            {/* //*fazer calculo pra lidar com tamanho do arquivo e tipo de arquivo*/}
-                                            <p className='text_overflow file_type'>{file.type}, {file.size} Bytes</p>
+                        (
+                            <div className={'files_container'}>
+                                <ul className='files_box' onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop}>
+                                    {files.map((item, index) => {
+                                        let { file, id } = item;
+                                        return (
+                                            <li className={`file`} key={`${id} + ${index}`}>
+                                                <img src={URL.createObjectURL(file)} draggable={false} className={'image'} />
+                                                <div className='file_description'>
+                                                    <p className='text_overflow file_name'>{file.name}</p>
+                                                    {/* //*fazer calculo pra lidar com tamanho do arquivo e tipo de arquivo*/}
+                                                    <p className='text_overflow file_type'>{file.type}, {file.size} Bytes</p>
 
+                                                </div>
+                                                <span className={'buttons'}>
+                                                    <p className='text'>Converter para</p>
+                                                    <Button children={selected} onClick={() => setOpen(!open)} />
+                                                    {open && (
+                                                        <ul>
+                                                            {Array.from(allowedFileTypes).map(format => (
+                                                                <li
+                                                                    key={format}
+                                                                    onClick={() => {
+                                                                        setSelected(format);
+                                                                        setOpen(false);
+                                                                    }}
+                                                                >
+                                                                    {format}
+                                                                </li>
+                                                            ))}
+                                                        </ul>
+                                                    )}
+                                                    {!isUploaded ?
+                                                        (<Button data-id={`${id}`} onClick={() => { handleCloseButton(id) }} children={<LuX />} />)
+                                                        :
+                                                        (<Button data-id={`${id}`} onClick={() => { }} children={<LuHardDriveDownload />} />)
+                                                    }
+                                                </span>
+                                            </li>
+                                        )
+                                    })}
+                                </ul>
+                                <div className='files_settings'>
+                                    <div className='files_utils'>
+                                        <div className='files_form'>
+                                            <label for={'file-input'} className='input-text'><LuCirclePlus />Adicionar Mais</label>
+                                            <input type='file' accept='image/webp,image/jpeg,image/jpg,image/png,image/avif' id='file-input' multiple onChange={handleInput} />
                                         </div>
-                                        <span className={'buttons'}>
-                                            <p className='text'>Converter para</p>
-                                            <Button children={selected} onClick={() => setOpen(!open)} />
-                                            {open && (
-                                                <ul>
-                                                    {Array.from(allowedFileTypes).map(format => (
-                                                        <li
-                                                            key={format}
-                                                            onClick={() => {
-                                                                setSelected(format);
-                                                                setOpen(false);
-                                                            }}
-                                                        >
-                                                            {format}
-                                                        </li>
-                                                    ))}
-                                                </ul>
-                                            )}
-                                            {!isUploaded ?
-                                                (<Button data-id={`${id}`} onClick={() => { handleCloseButton(id) }} children={<LuX />} />)
-                                                :
-                                                (<Button data-id={`${id}`} onClick={() => { }} children={<LuHardDriveDownload />} />)
-                                            }
-                                        </span>
-                                    </li>
-                                )
-                            })}
-                        </ul>) :
+                                        <Button variant='primary' children={<LuCornerDownLeft />} />
+                                    </div>
+                                    <div className='files_buttons'>
+                                        <Button variant='primary' children={< LuSettings2 />} / >
+                                            <Button variant='secondary' children={<><LuHardDriveDownload />Converter Todos </>} />
+                                    </div>
+
+                                </div>
+                            </div>
+                        ) :
                         (<div className='header_dropper_box' onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop}>
                             <div className='dropper_img_wrap'>
                                 <LuUpload /></div>
