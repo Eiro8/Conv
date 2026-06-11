@@ -131,37 +131,38 @@ function App() {
                     {files.map((item, index) => {
                         let { file, id } = item;
                         return (
-                            <li className={`file_preview`} key={`${id} + ${index}`}>
-                                <img src={URL.createObjectURL(file)} draggable={false} className={'uploaded_image'} />
-                                <div className='file_info'>
-                                    <p>{file.name}</p>
-                                    {/*fazer calculo pra lidar com tamanho do arquivo e tipo de arquivo*/}
-                                    <p>{file.type},{file.size} Bytes</p>
+                            <li className={`file`} key={`${id} + ${index}`}>
+                                <img src={URL.createObjectURL(file)} draggable={false} className={'image'} />
+                                <div className='file_description'>
+                                    <p className='text_overflow file_name'>{file.name}</p>
+                                    {/* //*fazer calculo pra lidar com tamanho do arquivo e tipo de arquivo*/}
+                                    <p className='text_overflow file_type'>{file.type}, {file.size} Bytes</p>
 
                                 </div>
-
-                                <p>Converter para</p>
-                                <Button children={selected} onClick={() => setOpen(!open)} />
-                                {open && (
-                                    <ul>
-                                        {Array.from(allowedFileTypes).map(format => (
-                                            <li
-                                                key={format}
-                                                onClick={() => {
-                                                    setSelected(format);
-                                                    setOpen(false);
-                                                }}
-                                            >
-                                                {format}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                )}
-                                {!isUploaded ?
-                                    (<Button data-id={`${id}`} onClick={() => { handleCloseButton(id) }} children={<LuX />} />)
-                                    :
-                                    (<Button data-id={`${id}`} onClick={() => { }} children={<LuHardDriveDownload />} />)
-                                }
+                                <span className={'buttons'}>
+                                    <p className='text'>Converter para</p>
+                                    <Button children={selected} onClick={() => setOpen(!open)} />
+                                    {open && (
+                                        <ul>
+                                            {Array.from(allowedFileTypes).map(format => (
+                                                <li
+                                                    key={format}
+                                                    onClick={() => {
+                                                        setSelected(format);
+                                                        setOpen(false);
+                                                    }}
+                                                >
+                                                    {format}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    )}
+                                    {!isUploaded ?
+                                        (<Button data-id={`${id}`} onClick={() => { handleCloseButton(id) }} children={<LuX />} />)
+                                        :
+                                        (<Button data-id={`${id}`} onClick={() => { }} children={<LuHardDriveDownload />} />)
+                                    }
+                                </span>
                             </li>
                         )
                     })}
