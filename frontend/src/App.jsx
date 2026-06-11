@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import './App.css';
 import Logo from './assets/images/logo-universal.png'
 import { LuUpload, LuX, LuHardDriveDownload } from "react-icons/lu";
+import { Button } from './components/ui/Button/Button';
 
 function App() {
     const [isUploaded, setUploaded] = useState(false);
@@ -140,10 +141,7 @@ function App() {
                                 </div>
 
                                 <p>Converter para</p>
-                                <button onClick={() => setOpen(!open)}>
-                                    {selected}
-                                </button>
-
+                                <Button children={selected} onClick={() => setOpen(!open)} />
                                 {open && (
                                     <ul>
                                         {Array.from(allowedFileTypes).map(format => (
@@ -159,14 +157,10 @@ function App() {
                                         ))}
                                     </ul>
                                 )}
-                                {!isUploaded ? (
-                                    <button className={'image_preview_x primary-button'} data-id={`${id}`} onClick={() => { handleCloseButton(id) }}>
-                                        <LuX />
-                                    </button>) : (
-
-                                    <button className={'image_preview_x primary-button'} data-id={`${id}`} onClick={() => { }}>
-                                        <LuHardDriveDownload />
-                                    </button>)
+                                {!isUploaded ?
+                                    (<Button data-id={`${id}`} onClick={() => { handleCloseButton(id) }} children={<LuX />} />)
+                                    :
+                                    (<Button data-id={`${id}`} onClick={() => { }} children={<LuHardDriveDownload />} />)
                                 }
                             </li>
                         )
