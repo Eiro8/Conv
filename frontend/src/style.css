@@ -1,12 +1,14 @@
 :root {
-    --text: #454540;
-    --white: #ffff;
-    --black: #06131d;
-    --primary: #33a0ff;
-    --secondary: #002230;
-    --tertiary: #3366ff;
-    --accent: #00a4bd;
-    --contrast: #96d8e1;
+    --text: #FFFFFF;
+    --white: #d1f1fd;
+    --black: #0f172a;
+
+    --primary: #061122;
+    --secondary: #0E192C;
+    --tertiary: #295BF6;
+
+    --accent: #2E4569;
+    --contrast: #cbd5e1;
 
     --space-sm: 4px;
     --space-md: 8px;
@@ -57,7 +59,6 @@ li {
 }
 
 html {
-    background-color: rgba(27, 38, 54, 1);
     text-align: center;
     color: white;
 }
