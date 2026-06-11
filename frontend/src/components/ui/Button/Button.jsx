@@ -15,9 +15,8 @@ export const Button = (
 
 
     return (
-        <button
-            className={isLoading ? 'loading-animation' : `button-${variant}`}
-            lassName={`button-${variant} ${isLoading ? "loading-animation" : ""}`}
+        <button 
+            className={`${styles[variant]} ${isLoading ? styles.loading : ""}`}
             disabled={isLoading || props.disabled}
             ref={ref}
             {...props}>

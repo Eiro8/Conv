@@ -1,0 +1,39 @@
+.primary {
+    display: flex;
+    width: fit-content;
+    align-items: center;
+    gap: var(--space-sm);
+    font-weight: 600;
+    padding: var(--space-lg);
+    border: 1px solid var(--black);
+    border-radius: var(--radius-lg);
+    box-sizing: border-box;
+    cursor: pointer;
+    transition: border-color .3s ease-in-out;
+    background: transparent;
+
+
+    &:hover {
+        border-color: var(--primary);
+    }
+}
+
+.secondary {
+    display: flex;
+    width: fit-content;
+    box-sizing: border-box;
+    align-items: center;
+    cursor: pointer;
+    border: none;
+    background: var(--primary);
+    gap: var(--space-md);
+    padding: var(--space-lg);
+    border-radius: var(--radius-lg);
+    transition: background-color .3s ease-in-out;
+    font-weight: 600;
+
+
+    &:hover {
+        background-color: var(--black);
+    }
+}
