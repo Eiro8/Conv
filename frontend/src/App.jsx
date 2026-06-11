@@ -75,19 +75,6 @@ function App() {
         return objectsArray;
     };
 
-    // function handleImageClose(e) {
-    //     e.preventDefault();
-    //     let buttons = document.getElementsByClassName('image_preview_x');
-
-    //     //? Deleta o item da array em base de seu ID.
-    //     Array.from(buttons).forEach((button) => {
-    //         button.addEventListener('click', (e) => {
-    //             const targetID = e.target.dataset.id;
-    //             setFiles(files.filter((item) => item.id != targetID));
-    //         }, { once: true });
-    //     });
-    // }
-
     function handleCloseButton(targetId) {
         setFiles(filesArray => filesArray.filter((item) => item.id != targetId));
     };
@@ -169,13 +156,12 @@ function App() {
                                             <label for={'file-input'} className='input-text'><LuCirclePlus />Adicionar Mais</label>
                                             <input type='file' accept='image/webp,image/jpeg,image/jpg,image/png,image/avif' id='file-input' multiple onChange={handleInput} />
                                         </div>
-                                        <Button variant='primary' children={<LuCornerDownLeft />} />
+                                        <Button variant='primary' children={<><LuCornerDownLeft /></>} />
                                     </div>
                                     <div className='files_buttons'>
-                                        <Button variant='primary' children={< LuSettings2 />} / >
-                                            <Button variant='secondary' children={<><LuHardDriveDownload />Converter Todos </>} />
+                                        <Button variant='primary' children={< LuSettings2 />} />
+                                        <Button variant='secondary' children={<><LuHardDriveDownload />Converter Todos </>} />
                                     </div>
-
                                 </div>
                             </div>
                         ) :
@@ -184,7 +170,7 @@ function App() {
                                 <LuUpload /></div>
                             <h3>Selecionar Imagem(ns)</h3>
                             <p>Arraste & Solte ou <span className='highlight'>Escolha</span></p>
-                            <input type='file' accept='image/webp,image/jpeg,image/jpg,image/png,image/avif' id='file-input' multiple onChange={handleInput} on />
+                            <input type='file' accept='image/webp,image/jpeg,image/jpg,image/png,image/avif' id='file-input' multiple onChange={handleInput} />
                         </div>)
 
                 }</div>
