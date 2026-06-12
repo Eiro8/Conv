@@ -126,7 +126,7 @@ function App() {
                                                     <p className='text'>Converter para</p>
                                                     <Button children={selected} onClick={() => setOpen(!open)} />
                                                     {open && (
-                                                        <ul>
+                                                        <ul className='format_options'>
                                                             {Array.from(allowedFileTypes).map(format => (
                                                                 <li
                                                                     key={format}
@@ -134,6 +134,7 @@ function App() {
                                                                         setSelected(format);
                                                                         setOpen(false);
                                                                     }}
+                                                                    className='format_option'
                                                                 >
                                                                     {format}
                                                                 </li>
