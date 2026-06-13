@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import './App.css';
 import Logo from './assets/images/logo-universal.png'
-import { LuUpload, LuX, LuHardDriveDownload, LuCornerDownLeft, LuCirclePlus, LuSettings2 } from "react-icons/lu";
+import { LuUpload, LuX, LuHardDriveDownload, LuCornerDownLeft, LuCirclePlus, LuSettings2, LuChevronDown } from "react-icons/lu";
 import { Button } from './components/ui/Button/Button';
 
 function App() {
@@ -80,6 +80,9 @@ function App() {
     };
 
 
+function rotateSVG(){
+    
+}
     //* fazer o fetch aqui pro backend pegar os arquivos
     // useEffect(() => {
     //     console.log(Array.from(files));
@@ -120,11 +123,10 @@ function App() {
                                                     <p className='text_overflow file_name'>{file.name}</p>
                                                     {/* //*fazer calculo pra lidar com tamanho do arquivo e tipo de arquivo*/}
                                                     <p className='text_overflow file_type'>{file.type}, {file.size} Bytes</p>
-
                                                 </div>
                                                 <span className={'buttons'}>
                                                     <p className='text'>Converter para</p>
-                                                    <Button children={selected} onClick={() => setOpen(!open)} />
+                                                    <Button variant={"dropdown"} children={<>{selected}<span className={'rotate_onClick'}><LuChevronDown/></span></>} onClick={() => setOpen(!open)} />
                                                     {open && (
                                                         <ul className='format_options'>
                                                             {Array.from(allowedFileTypes).map(format => (
