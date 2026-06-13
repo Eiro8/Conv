@@ -76,6 +76,9 @@ function App() {
         return objectsArray;
     };
 
+    function handleCloseButton(targetId) {
+        setFiles(filesArray => filesArray.filter((item) => item.id != targetId));
+    };
 
 
 
@@ -123,7 +126,7 @@ function App() {
                                                     </div>
                                                     <span className={'buttons'}>
                                                         <p className='text'>Converter para</p>
-                                                        <Button variant={"dropdown"} children={<>{file.convertTo}<span className={'rotate_onClick'}><LuChevronDown /></span></>} onClick={() => setOpen(id)} />
+                                                        <Button variant={"dropdown"} children={<>{file.convertTo}<span className={'rotate_onClick'}><LuChevronDown /></span></>} onClick={() => { open ? setOpen(null) : setOpen(id) }} />
                                                         {open === id && (
                                                             <ul className='format_options'>
                                                                 {Array.from(allowedFileTypes).map((format, index) => (
