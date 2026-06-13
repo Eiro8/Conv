@@ -6,7 +6,6 @@ import { Button } from './components/ui/Button/Button';
 
 function App() {
     const [isUploaded, setUploaded] = useState(false);
-    const [selected, setSelected] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
     const [open, setOpen] = useState(false);
     const [files, setFiles] = useState([]);
@@ -69,7 +68,7 @@ function App() {
             {
                 "id": files.length + i + 1,
                 "file": item,
-                "convertTo": "webp"
+                convertTo: ""
             })
         )
         return objectsArray;
@@ -80,9 +79,6 @@ function App() {
     };
 
 
-function rotateSVG(){
-    
-}
     //* fazer o fetch aqui pro backend pegar os arquivos
     // useEffect(() => {
     //     console.log(Array.from(files));
@@ -117,7 +113,7 @@ function rotateSVG(){
                                     {files.map((item, index) => {
                                         let { file, id } = item;
                                         return (
-                                            <li className={`file`} key={`${id} + ${index}`}>
+                                            <li className={'file'} key={`${id} + ${index}`}>
                                                 <img src={URL.createObjectURL(file)} draggable={false} className={'image'} />
                                                 <div className='file_description'>
                                                     <p className='text_overflow file_name'>{file.name}</p>
@@ -126,14 +122,14 @@ function rotateSVG(){
                                                 </div>
                                                 <span className={'buttons'}>
                                                     <p className='text'>Converter para</p>
-                                                    <Button variant={"dropdown"} children={<>{selected}<span className={'rotate_onClick'}><LuChevronDown/></span></>} onClick={() => setOpen(!open)} />
+                                                    <Button variant={"dropdown"} children={<>{file.convertTo}<span className={'rotate_onClick'}><LuChevronDown /></span></>} onClick={() => setOpen(!open)} />
                                                     {open && (
                                                         <ul className='format_options'>
-                                                            {Array.from(allowedFileTypes).map(format => (
+                                                            {Array.from(allowedFileTypes).map((format, index) => (
                                                                 <li
-                                                                    key={format}
+                                                                    key={`_${format[0]}${index}`}
                                                                     onClick={() => {
-                                                                        setSelected(format);
+                                                                        file.convertTo = format;
                                                                         setOpen(false);
                                                                     }}
                                                                     className='format_option'
@@ -144,9 +140,9 @@ function rotateSVG(){
                                                         </ul>
                                                     )}
                                                     {!isUploaded ?
-                                                        (<Button data-id={`${id}`} onClick={() => { handleCloseButton(id) }} children={<LuX />} />)
+                                                        (<Button  onClick={() => { handleCloseButton(id) }} children={<LuX />} />)
                                                         :
-                                                        (<Button data-id={`${id}`} onClick={() => { }} children={<LuHardDriveDownload />} />)
+                                                        (<Button  onClick={() => { }} children={<LuHardDriveDownload />} />)
                                                     }
                                                 </span>
                                             </li>
@@ -156,7 +152,7 @@ function rotateSVG(){
                                 <div className='files_settings'>
                                     <div className='files_utils'>
                                         <div className='files_form'>
-                                            <label for={'file-input'} className='input-text'><LuCirclePlus />Adicionar Mais</label>
+                                            <label htmlFor={"file-input"} className='input-text'><LuCirclePlus />Adicionar Mais</label>
                                             <input type='file' accept='image/webp,image/jpeg,image/jpg,image/png,image/avif' id='file-input' multiple onChange={handleInput} />
                                         </div>
                                         <Button variant='primary' children={<><LuCornerDownLeft /></>} />
