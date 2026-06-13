@@ -203,9 +203,39 @@
                         align-items: center;
                         gap: var(--space-sm);
                         position: relative;
+
                         .text {
                             width: 100%;
                             white-space: nowrap;
+                        }
+
+                        .format_options {
+                            position: absolute;
+                            display: grid;
+                            grid-template-columns: repeat(3, 1fr);
+                            padding: var(--space-lg);
+                            gap: var(--space-md);
+                            background-color: var(--secondary);
+                            border: 2px solid var(--white);
+                            border-radius: var(--space-md);
+                            top: 0;
+                            right: 50%;
+                            transform: translateX(-10%);
+                            z-index: 1;
+                            box-sizing: border-box;
+
+                            .format_option {
+                                cursor: pointer;
+                                background-color: var(--accent);
+                                border-radius: var(--radius-sm);
+                                padding: var(--space-md);
+                                border: 2px solid transparent;
+                                box-sizing: border-box;
+
+                                &:hover {
+                                    border-color: var(--white);
+                                }
+                            }
                         }
                     }
 
@@ -222,8 +252,6 @@
                     }
                 }
             }
-
-
         }
     }
 

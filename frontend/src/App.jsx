@@ -7,7 +7,7 @@ import { Button } from './components/ui/Button/Button';
 function App() {
     const [isUploaded, setUploaded] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(null)
     const [files, setFiles] = useState([]);
     const allowedFileTypes = new Set([
         'image/webp',
@@ -16,16 +16,17 @@ function App() {
         'image/png',
         'image/avif'
     ]);
+
     //* Lógica de tratamento do Drag and drop de imagens
     const handleDragOver = (e) => {
         e.preventDefault();
         setIsHovered(true)
     };
+
     const handleDragLeave = (e) => {
         e.preventDefault();
         setIsHovered(false);
     };
-
 
     const handleDrop = (e) => {
         e.preventDefault();
@@ -52,6 +53,7 @@ function App() {
 
     };
 
+    //* realiza o tratamento os arquivos inputados
     function handleFiles(arrayOfFiles) {
         let filteredFiles = [];
 
@@ -68,15 +70,13 @@ function App() {
             {
                 "id": files.length + i + 1,
                 "file": item,
-                convertTo: ""
+                convertTo: "WEBP"
             })
         )
         return objectsArray;
     };
 
-    function handleCloseButton(targetId) {
-        setFiles(filesArray => filesArray.filter((item) => item.id != targetId));
-    };
+
 
 
     //* fazer o fetch aqui pro backend pegar os arquivos
@@ -110,44 +110,34 @@ function App() {
                         (
                             <div className={'files_container'}>
                                 <ul className='files_box' onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop}>
-                                    {files.map((item, index) => {
-                                        let { file, id } = item;
-                                        return (
-                                            <li className={'file'} key={`${id} + ${index}`}>
-                                                <img src={URL.createObjectURL(file)} draggable={false} className={'image'} />
-                                                <div className='file_description'>
-                                                    <p className='text_overflow file_name'>{file.name}</p>
-                                                    {/* //*fazer calculo pra lidar com tamanho do arquivo e tipo de arquivo*/}
-                                                    <p className='text_overflow file_type'>{file.type}, {file.size} Bytes</p>
-                                                </div>
-                                                <span className={'buttons'}>
-                                                    <p className='text'>Converter para</p>
-                                                    <Button variant={"dropdown"} children={<>{file.convertTo}<span className={'rotate_onClick'}><LuChevronDown /></span></>} onClick={() => setOpen(!open)} />
-                                                    {open && (
-                                                        <ul className='format_options'>
-                                                            {Array.from(allowedFileTypes).map((format, index) => (
-                                                                <li
-                                                                    key={`_${format[0]}${index}`}
-                                                                    onClick={() => {
-                                                                        file.convertTo = format;
-                                                                        setOpen(false);
-                                                                    }}
-                                                                    className='format_option'
-                                                                >
-                                                                    {format}
-                                                                </li>
-                                                            ))}
-                                                        </ul>
-                                                    )}
-                                                    {!isUploaded ?
-                                                        (<Button  onClick={() => { handleCloseButton(id) }} children={<LuX />} />)
-                                                        :
-                                                        (<Button  onClick={() => { }} children={<LuHardDriveDownload />} />)
-                                                    }
-                                                </span>
-                                            </li>
-                                        )
-                                    })}
+                                    {
+                                        files.map((item, index) => {
+                                            let { file, id } = item;
+                                            return (
+                                                <li className={'file'} key={`${id} + ${index}`}>
+                                                    <img src={URL.createObjectURL(file)} draggable={false} className={'image'} />
+                                                    <div className='file_description'>
+                                                        <p className='text_overflow file_name'>{file.name}</p>
+                                                        {/* //*fazer calculo pra lidar com tamanho do arquivo e tipo de arquivo*/}
+                                                        <p className='text_overflow file_type'>{file.type}, {file.size} Bytes</p>
+                                                    </div>
+                                                    <span className={'buttons'}>
+                                                        <p className='text'>Converter para</p>
+                                                        <Button variant={"dropdown"} children={<>{file.convertTo}<span className={'rotate_onClick'}><LuChevronDown /></span></>} onClick={() => setOpen(id)} />
+                                                        {open === id && (
+                                                            <ul className='format_options'>
+                                                                {Array.from(allowedFileTypes).map((format, index) => (
+                                                                    <li key={`_${format[0]}${index}`} onClick={() => { file.convertTo = format; setOpen(false); }} className='format_option'>
+                                                                        {format.slice(6, format.length).toLocaleUpperCase()} {/* de fato, uma das linhas de código de todos tempos. */}
+                                                                    </li>
+                                                                ))}
+                                                            </ul>
+                                                        )}
+                                                        <Button onClick={() => { handleCloseButton(id) }} children={<LuX />} />
+                                                    </span>
+                                                </li>
+                                            )
+                                        })}
                                 </ul>
                                 <div className='files_settings'>
                                     <div className='files_utils'>
