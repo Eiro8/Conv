@@ -291,7 +291,7 @@
                         align-items: center;
                         gap: var(--space-sm);
                         position: relative;
-
+ 
                         &>*{
                             z-index: inherit;
                         }
