@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import './App.css';
 import Logo from './assets/images/logo-universal.png'
 import { LuUpload, LuX, LuHardDriveDownload, LuCornerDownLeft, LuCirclePlus, LuSettings2, LuChevronDown } from "react-icons/lu";
@@ -90,7 +90,6 @@ function App() {
     //     })
     // }, [files])
     //*Tratamento do botão de remover imagem
-
 
     return (<>
         <section className='nav'>
