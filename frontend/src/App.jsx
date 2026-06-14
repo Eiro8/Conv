@@ -3,6 +3,7 @@ import './App.css';
 import Logo from './assets/images/logo-universal.png'
 import { LuUpload, LuX, LuHardDriveDownload, LuCornerDownLeft, LuCirclePlus, LuSettings2 } from "react-icons/lu";
 import { Button } from './components/ui/Button/Button';
+import { Greet } from "../wailsjs/go/main/App";
 
 function App() {
     const [isUploaded, setUploaded] = useState(false);
@@ -87,8 +88,8 @@ function App() {
     //         "method": "post",
     //     })
     // }, [files])
-    //*Tratamento do botão de remover imagem
 
+    
 
     return (<>
         <section className='nav'>
@@ -161,7 +162,7 @@ function App() {
                                     </div>
                                     <div className='files_buttons'>
                                         <Button variant='primary' children={< LuSettings2 />} />
-                                        <Button variant='secondary' children={<><LuHardDriveDownload />Converter Todos </>} />
+                                        <Button variant='secondary' children={<><LuHardDriveDownload />Converter Todos </>} onClick={async() => { console.log(await Greet("Isr"))}} />
                                     </div>
                                 </div>
                             </div>
