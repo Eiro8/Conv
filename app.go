@@ -25,3 +25,21 @@ func (a *App) startup(ctx context.Context) {
 func (a *App) Greet(name string) string {
 	return fmt.Sprintf("Hello %s, It's show time!", name)
 }
+
+func (a *App) FileInfo(name string, filetype string, filesize int) string {
+
+	fmt.Printf("O arquivo foi recebido! vi que seu nome é %v, o tipo é %v e ele tem %v de tamanho!", name, filetype, filesize)
+	return "ok"
+}
+
+func (a *App) OpenFileDialog() { //* consegui passar a array, mas vou usar dialog agr
+
+	// runtime.OpenMultipleFilesDialog(
+	// 	a.ctx,
+	// 	runtime.OpenDialogOptions{
+	// 		"/",
+	// 		"gluglu",
+	// 		"TitleHere",
+	// 	},
+	// )
+}
