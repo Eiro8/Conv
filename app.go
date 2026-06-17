@@ -3,6 +3,8 @@ package main
 import (
 	"context"
 	"fmt"
+
+	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
 // App struct
@@ -42,4 +44,9 @@ func (a *App) OpenFileDialog() { //* consegui passar a array, mas vou usar dialo
 	// 		"TitleHere",
 	// 	},
 	// )
+
+	runtime.OpenMultipleFilesDialog(
+		a.ctx,
+		runtime.OpenDialogOptions{},
+	)
 }
