@@ -3,6 +3,10 @@ package main
 import (
 	"context"
 	"fmt"
+	"image"
+	"log"
+	"os"
+	"strings"
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
@@ -34,9 +38,9 @@ func (a *App) FileInfo(name string, filetype string, filesize int) string {
 	return "ok"
 }
 
-func (a *App) OpenFileDialog() ([]string, error) {
+func (a *App) OpenFileDialog() []string {
 
-	images, err := runtime.OpenMultipleFilesDialog(
+	images, _ := runtime.OpenMultipleFilesDialog(
 		a.ctx,
 		runtime.OpenDialogOptions{
 			Title:            "Selecione os arquivos", //* Título da caixa
@@ -49,6 +53,21 @@ func (a *App) OpenFileDialog() ([]string, error) {
 			},
 		},
 	)
+	newArr := make([]string, len(images), len(images))
+	for _, v := range images {
+		v = strings.ReplaceAll(v, "\\", "/")
+		file, err := os.Open(v)
+		if err != nil {
+			log.Fatalf("erro aconteceu na linha 61: %v", err)
+		}
+		defer file.Close()
 
-	return images, err //* retorna uma array de string contendo o path da imagem, e um erro, caso aconteça.
+		_, format, err := image.Decode(file)
+		if err != nil {
+			log.Fatalf("erro aconteceu na linha 65: %v", err)
+		}
+
+		fmt.Printf("formato é %v\n", format)
+	}
+	return newArr //* retorna uma array de string contendo o path da imagem, e um erro, caso aconteça.
 }
