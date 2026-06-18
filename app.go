@@ -2,10 +2,12 @@ package main
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"image"
 	"log"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
@@ -27,15 +29,53 @@ func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 }
 
-// Greet returns a greeting for the given name
-func (a *App) Greet(name string) string {
-	return fmt.Sprintf("Hello %s, It's show time!", name)
+type ImageStuct struct {
+	FileName string
+	FileType string
+	FilePath string
 }
 
-func (a *App) FileInfo(name string, filetype string, filesize int) string {
+var AllowedFileType map[string]string = map[string]string{
+	"webp": "webp",
+	"jpeg": "jpeg",
+	"jpg":  "jpg",
+	"png":  "png",
+	"avif": "avif",
+}
 
-	fmt.Printf("O arquivo foi recebido! vi que seu nome é %v, o tipo é %v e ele tem %v de tamanho!", name, filetype, filesize)
-	return "ok"
+func (a *App) SelectImage() []ImageStuct {
+
+	images := a.OpenFileDialog()
+
+	structArr := make([]ImageStuct, len(images))
+
+	for _, v := range images {
+		v = strings.ReplaceAll(v, "\\", "/")
+
+		file, err := os.Open(v)
+		if err != nil {
+			log.Fatalf("erro aconteceu na linha 61: %v", err)
+		}
+		defer file.Close()
+
+		_, format, err := image.Decode(file)
+
+		ok := CheckFormat(format)
+		if ok != nil {
+			fmt.Printf("A imagem não tem formato aceito pelo sistema.")
+			continue
+
+		} else {
+			ImgStruct, ok := CreateImageStruct(format, v)
+			if ok != nil {
+				continue
+			}
+			structArr = append(structArr, ImgStruct)
+		}
+
+	}
+
+	return structArr
 }
 
 func (a *App) OpenFileDialog() []string {
@@ -53,21 +93,25 @@ func (a *App) OpenFileDialog() []string {
 			},
 		},
 	)
-	newArr := make([]string, len(images), len(images))
-	for _, v := range images {
-		v = strings.ReplaceAll(v, "\\", "/")
-		file, err := os.Open(v)
-		if err != nil {
-			log.Fatalf("erro aconteceu na linha 61: %v", err)
-		}
-		defer file.Close()
+	return images
+}
 
-		_, format, err := image.Decode(file)
-		if err != nil {
-			log.Fatalf("erro aconteceu na linha 65: %v", err)
-		}
-
-		fmt.Printf("formato é %v\n", format)
+func CheckFormat(format string) error {
+	_, ok := AllowedFileType[format]
+	if ok {
+		return nil
+	} else {
+		return errors.New("Um erro ocorreu em CheckFormat():")
 	}
-	return newArr //* retorna uma array de string contendo o path da imagem, e um erro, caso aconteça.
+}
+
+func CreateImageStruct(format string, path string) (ImageStuct, error) {
+	name := filepath.Base(path)
+	if name == "" {
+		return ImageStuct{}, errors.New("Não há nenhuma imagem nesse local, selecione novamente.")
+	}
+	var newImg ImageStuct = ImageStuct{
+		name, format, path,
+	}
+	return newImg, nil
 }
