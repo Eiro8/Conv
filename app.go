@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/base64"
 	"errors"
 	"fmt"
 	"image"
@@ -33,6 +34,7 @@ type ImageStuct struct {
 	FileName string
 	FileType string
 	FilePath string
+	Preview  string
 }
 
 var AllowedFileType map[string]string = map[string]string{
@@ -47,7 +49,7 @@ func (a *App) SelectImage() []ImageStuct {
 
 	images := a.OpenFileDialog()
 
-	structArr := make([]ImageStuct, len(images))
+	structArr := make([]ImageStuct, 0, len(images))
 
 	for _, v := range images {
 		v = strings.ReplaceAll(v, "\\", "/")
@@ -58,20 +60,26 @@ func (a *App) SelectImage() []ImageStuct {
 		}
 		defer file.Close()
 
+		bytes, err := os.ReadFile(v)
+		if err != nil {
+			fmt.Printf("Erro ao ler o arquivo: %v\n", err)
+			continue
+		}
+
+		Base64Str := base64.StdEncoding.EncodeToString(bytes)
+
 		_, format, err := image.Decode(file)
 
 		ok := CheckFormat(format)
 		if ok != nil {
 			fmt.Printf("A imagem não tem formato aceito pelo sistema.")
 			continue
-
-		} else {
-			ImgStruct, ok := CreateImageStruct(format, v)
-			if ok != nil {
-				continue
-			}
-			structArr = append(structArr, ImgStruct)
 		}
+		ImgStruct, ok := CreateImageStruct(format, v, Base64Str)
+		if ok != nil {
+			continue
+		}
+		structArr = append(structArr, ImgStruct)
 
 	}
 
@@ -105,13 +113,13 @@ func CheckFormat(format string) error {
 	}
 }
 
-func CreateImageStruct(format string, path string) (ImageStuct, error) {
+func CreateImageStruct(format string, path string, base64 string) (ImageStuct, error) {
 	name := filepath.Base(path)
 	if name == "" {
 		return ImageStuct{}, errors.New("Não há nenhuma imagem nesse local, selecione novamente.")
 	}
 	var newImg ImageStuct = ImageStuct{
-		name, format, path,
+		name, format, path, base64,
 	}
 	return newImg, nil
 }
