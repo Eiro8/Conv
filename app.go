@@ -34,19 +34,21 @@ func (a *App) FileInfo(name string, filetype string, filesize int) string {
 	return "ok"
 }
 
-func (a *App) OpenFileDialog() { //* consegui passar a array, mas vou usar dialog agr
+func (a *App) OpenFileDialog() ([]string, error) {
 
-	// runtime.OpenMultipleFilesDialog(
-	// 	a.ctx,
-	// 	runtime.OpenDialogOptions{
-	// 		"/",
-	// 		"gluglu",
-	// 		"TitleHere",
-	// 	},
-	// )
-
-	runtime.OpenMultipleFilesDialog(
+	images, err := runtime.OpenMultipleFilesDialog(
 		a.ctx,
-		runtime.OpenDialogOptions{},
+		runtime.OpenDialogOptions{
+			Title:            "Selecione os arquivos", //* Título da caixa
+			DefaultDirectory: "",                      //* Default Directory aceita uma string, que se vazia meio que 'deixa' pro OS escolher aonde vai abrir o Dialog
+			Filters: []runtime.FileFilter{ //* Filtros de arquivo
+				{
+					DisplayName: "Imagens (*.jpg;*.png;*.webp)", //* Informação do Filtro ex: "Imagens (jpeg,png,avif)"
+					Pattern:     "*.jpg;*.webp;*.png",           //* lista de extensoes separadas por ponto e vírgula ex: "*.jpeg;*.png;*.avif;"
+				},
+			},
+		},
 	)
+
+	return images, err //* retorna uma array de string contendo o path da imagem, e um erro, caso aconteça.
 }
