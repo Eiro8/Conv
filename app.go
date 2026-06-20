@@ -80,7 +80,6 @@ func (a *App) SelectImage() []ImageStuct {
 			continue
 		}
 		structArr = append(structArr, ImgStruct)
-
 	}
 
 	return structArr
