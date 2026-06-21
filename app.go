@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"image"
+	"image/jpeg"
 	"image/png"
 	"log"
 	"os"
@@ -144,7 +145,16 @@ func (a *App) ConvertImage(path string, extension string) (string, error) {
 		return "Erro ao criar arquivo:", err
 	}
 	defer temp.Close()
-	png.Encode(temp, imgfile)
+
+	switch extension {
+	case "PNG":
+		png.Encode(temp, imgfile)
+	case "JPG":
+		jpeg.Encode(temp, imgfile, &jpeg.Options{})
+	case "JPEG":
+		jpeg.Encode(temp, imgfile, &jpeg.Options{})
+	case "WEBP":
+	}
 
 	return temp.Name(), nil
 }
