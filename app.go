@@ -13,6 +13,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/HugoSmits86/nativewebp"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
@@ -138,9 +139,10 @@ func (a *App) ConvertImage(path string, extension string) (string, error) {
 	if err != nil {
 		return "Ocorreu um erro ao ler o arquivo: ", err
 	}
+	defer img.Close()
 
 	imgfile, _, err := image.Decode(img)
-	temp, err := os.CreateTemp("", "*.png")
+	temp, err := os.CreateTemp("", "*."+strings.ToLower(extension))
 	if err != nil {
 		return "Erro ao criar arquivo:", err
 	}
@@ -148,13 +150,25 @@ func (a *App) ConvertImage(path string, extension string) (string, error) {
 
 	switch extension {
 	case "PNG":
-		png.Encode(temp, imgfile)
+		err = png.Encode(temp, imgfile)
+		if err != nil {
+			return "", err
+		}
 	case "JPG":
-		jpeg.Encode(temp, imgfile, &jpeg.Options{})
+		err = jpeg.Encode(temp, imgfile, nil)
+		if err != nil {
+			return "", err
+		}
 	case "JPEG":
-		jpeg.Encode(temp, imgfile, &jpeg.Options{})
+		err = jpeg.Encode(temp, imgfile, nil)
+		if err != nil {
+			return "", err
+		}
 	case "WEBP":
+		err = nativewebp.Encode(temp, imgfile, nil)
+		if err != nil {
+			return "", err
+		}
 	}
-
 	return temp.Name(), nil
 }
