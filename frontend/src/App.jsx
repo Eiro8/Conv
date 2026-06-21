@@ -11,7 +11,6 @@ import { Button } from './components/ui/Button/Button';
 import { SelectImage, ConvertImage } from "../wailsjs/go/main/App"; //* FUNCAO DO GO!!!!
 
 function App() {
-    const [isUploaded, setUploaded] = useState(false);
     const [selected, setSelected] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
     const [open, setOpen] = useState(null);
@@ -49,7 +48,7 @@ function App() {
             pathArray.forEach(async (item, i) => {
                 let { FileName, FilePath, FileType, Preview } = item
                 let fileObj = {
-                    "id": files.length + i + 1,
+                    "id": files.length + i + 2,
                     "name": FileName,
                     "type": FileType,
                     "src": `data:image/${FileType};charset=utf-8;base64,${Preview}`, //* blob do arquivo em Base64
@@ -67,16 +66,22 @@ function App() {
         setFiles(files.concat(ImageArray))
     }
 
-    async function handleConvert(file, format) {
+    function handleConvert() {
         try {
-            const convertedImage = await ConvertImage(file, format);
-            file.convertPath = convertedImage;
-            file.isConverted = true;
+            files.forEach(async image => {
+                if (!image.isConverted) {
+                    let convertedImage = await ConvertImage(image.path, image.convertTo)
+                    console.log(image);
+                    console.log(convertedImage);
+                    image.convertPath = convertedImage;
+                    image.isConverted = true;
+                }
+            })
         }
         catch (error) {
             return new Error(`Um erro ocorreu ao converter o arquivo: \n \n${error}`)
         }
-        return this
+        return files
     }
 
     return (<>
@@ -120,17 +125,16 @@ function App() {
                                                                 setOpen(false);
                                                                 item.convertTo = format
                                                             }}
-                                                            className='format_option'
-                                                        >
+                                                            className='format_option'>
                                                             {format}
                                                         </li>
                                                     ))}
                                                 </ul>
                                             ) : _}
-                                            {!isUploaded ?
+                                            {!item.isConverted ?
                                                 (<Button onClick={() => { handleCloseButton(id) }} children={<LuX />} />)
                                                 :
-                                                (<Button onClick={() => { }} children={<LuHardDriveDownload />} />)
+                                                (<Button onClick={() => {}} children={<LuHardDriveDownload />} />)
                                             }
                                         </span>
                                     </li>
