@@ -57,8 +57,6 @@ function App() {
                     "convertTo": "WEBP",
                 }
                 ImageArray.push(fileObj)
-                console.log(ImageArray)
-                console.log(item)
             })
         } catch (error) {
             console.log(new Error(`Ocorreu um erro ao processar suas imagens: ${error.message}`))
@@ -71,12 +69,14 @@ function App() {
         try {
             const convertedImage = await ConvertImage(file, format);
             file.convertPath = convertedImage;
+            file.isConverted = true;
         }
         catch (error) {
             return new Error(`Um erro ocorreu ao converter o arquivo: \n \n${error}`)
         }
         return this
     }
+    
     return (<>
         <Navbar />
         <section className='header'>
