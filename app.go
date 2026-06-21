@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"image"
+	"image/png"
 	"log"
 	"os"
 	"path/filepath"
@@ -30,11 +31,12 @@ func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 }
 
-type ImageStuct struct {
-	FileName string
-	FileType string
-	FilePath string
-	Preview  string
+type ImageStruct struct {
+	FileName      string
+	FileType      string
+	FilePath      string
+	ConvertedPath string
+	Preview       string
 }
 
 var AllowedFileType map[string]string = map[string]string{
@@ -45,11 +47,11 @@ var AllowedFileType map[string]string = map[string]string{
 	"avif": "avif",
 }
 
-func (a *App) SelectImage() []ImageStuct {
+func (a *App) SelectImage() []ImageStruct {
 
 	images := a.OpenFileDialog()
 
-	structArr := make([]ImageStuct, 0, len(images))
+	structArr := make([]ImageStruct, 0, len(images))
 
 	for _, v := range images {
 		v = strings.ReplaceAll(v, "\\", "/")
@@ -112,13 +114,37 @@ func CheckFormat(format string) error {
 	}
 }
 
-func CreateImageStruct(format string, path string, base64 string) (ImageStuct, error) {
+func CreateImageStruct(format string, path string, base64 string) (ImageStruct, error) {
 	name := filepath.Base(path)
 	if name == "" {
-		return ImageStuct{}, errors.New("Não há nenhuma imagem nesse local, selecione novamente.")
+		return ImageStruct{}, errors.New("Não há nenhuma imagem nesse local, selecione novamente.")
 	}
-	var newImg ImageStuct = ImageStuct{
-		name, format, path, base64,
+	var newImg ImageStruct = ImageStruct{
+		name, format, path, "", base64,
 	}
 	return newImg, nil
+}
+
+type ConvertedImage struct {
+	ID          int
+	OutputPath  string
+	IsConverted bool
+}
+
+func (a *App) ConvertImage(path string, extension string) (string, error) {
+
+	img, err := os.Open(path)
+	if err != nil {
+		return "Ocorreu um erro ao ler o arquivo: ", err
+	}
+
+	imgfile, _, err := image.Decode(img)
+	temp, err := os.CreateTemp("", "*.png")
+	if err != nil {
+		return "Erro ao criar arquivo:", err
+	}
+	defer temp.Close()
+	png.Encode(temp, imgfile)
+
+	return temp.Name(), nil
 }
