@@ -1,4 +1,4 @@
-import Logo from './assets/images/logo-universal.png'
+import Logo from '../../../assets/images/logo-universal.png'
 
 import React from 'react'
 
