@@ -78,3 +78,14 @@
     }
 
 }
+
+.dropdown {
+    height: 100%;
+    width: 100%;
+    background-color: var(--tertiary);
+    border: 1px solid var(--accent);
+    border-radius: var(--radius-sm);
+    padding: var(--space-lg) var(--space-md);
+    color: var(--white);
+    cursor: pointer;
+}

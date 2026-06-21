@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { LuLoader } from "react-icons/lu";
 import styles from './button.module.css'
 
@@ -9,8 +9,7 @@ export const Button = (
         variant = "primary",
         ref,
         ...props
-    }
-) => {
+    }) => {
 
 
 
