@@ -3,10 +3,7 @@ import { useState } from 'react';
 import './App.css';
 
 
-import Logo from './assets/images/logo-universal.png'
-
-
-
+import Navbar from './components/layout/Navbar/Navbar';
 import { LuUpload, LuX, LuHardDriveDownload, LuCornerDownLeft, LuCirclePlus, LuSettings2, LuChevronDown } from "react-icons/lu";
 import { Button } from './components/ui/Button/Button';
 import { SelectImage, ConvertImage } from "../wailsjs/go/main/App"; //* FUNCAO DO GO!!!!
@@ -78,22 +75,10 @@ function App() {
         catch (error) {
             return new Error(`Um erro ocorreu ao converter o arquivo: \n \n${error}`)
         }
-        return convertImage
+        return this
     }
     return (<>
-        <section className='nav'>
-            <a href='#' className='nav_logo' draggable='false'>
-                <img src={Logo} width={'60px'} draggable='false' ></img>
-            </a>
-            <span className='nav_buttons'>
-                <a href='#' className='highlight'>
-                    Precisa de ajuda?
-                </a>
-                <a href='#' className='button'>
-                    Contato
-                </a>
-            </span>
-        </section>
+        <Navbar />
         <section className='header'>
             <div className='header_wrapper container'>
                 {files.length > 0 ? (
