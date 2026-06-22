@@ -8,6 +8,7 @@ import (
 	"image"
 	"image/jpeg"
 	"image/png"
+	"io"
 	"log"
 	"os"
 	"path/filepath"
@@ -134,7 +135,6 @@ type ConvertedImage struct {
 }
 
 func (a *App) ConvertImage(path string, extension string) (string, error) {
-
 	img, err := os.Open(path)
 	if err != nil {
 		return "Ocorreu um erro ao ler o arquivo: ", err
@@ -170,5 +170,48 @@ func (a *App) ConvertImage(path string, extension string) (string, error) {
 			return "", err
 		}
 	}
+
 	return temp.Name(), nil
+}
+
+func (a *App) SaveFile(tempPath, name, format string) error {
+
+	path, err := runtime.SaveFileDialog(a.ctx, runtime.SaveDialogOptions{
+		Title:            "Salvar Imagem Convertida",
+		DefaultDirectory: "",
+		DefaultFilename:  name + "." + format,
+		Filters: []runtime.FileFilter{
+			{DisplayName: "Imagem " + format, Pattern: "*." + format},
+		},
+	})
+
+	if err != nil {
+		return err
+	}
+	if path == "" {
+		return nil
+	}
+
+	source, err := os.Open(tempPath)
+	if err != nil {
+		return err
+	}
+	defer source.Close()
+
+	destination, err := os.Create(path)
+	if err != nil {
+		return err
+	}
+	defer destination.Close()
+
+	_, err = io.Copy(destination, source)
+	if err != nil {
+		return err
+	}
+
+	err = os.Remove(tempPath)
+	if err != nil {
+		return err
+	}
+	return nil
 }

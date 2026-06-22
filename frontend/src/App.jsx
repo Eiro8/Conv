@@ -8,7 +8,7 @@ import Logo from './assets/images/logo-universal.png'
 
 import { LuUpload, LuX, LuHardDriveDownload, LuCornerDownLeft, LuCirclePlus, LuSettings2, LuChevronDown } from "react-icons/lu";
 import { Button } from './components/ui/Button/Button';
-import { SelectImage, ConvertImage } from "../wailsjs/go/main/App"; //* FUNCAO DO GO!!!!
+import { SelectImage, ConvertImage, SaveFile } from "../wailsjs/go/main/App"; //* FUNCAO DO GO!!!!
 
 function App() {
     const [selected, setSelected] = useState(false);
@@ -19,7 +19,6 @@ function App() {
         'WEBP',
         'JPG',
         'PNG',
-        'AVIF'
     ]);
 
     //* Lógica de tratamento do Drag and drop de imagens
@@ -36,7 +35,6 @@ function App() {
     function handleCloseButton(targetId) {
         setFiles(filesArray => filesArray.filter((item) => item.id != targetId));
     };
-
 
 
     //* Recebe a imagem em Base64, decodifica e converte em imagem. Passa o valor para o state Files()
@@ -82,6 +80,14 @@ function App() {
             return new Error(`Um erro ocorreu ao converter o arquivo: \n \n${error}`)
         }
         return files
+    }
+
+    async function saveFile(path, name, format) {
+        try {
+            SaveFile(path, name, format)
+        } catch (error) {
+            return new Error(error.message)
+        }
     }
 
     return (<>
@@ -134,7 +140,7 @@ function App() {
                                             {!item.isConverted ?
                                                 (<Button onClick={() => { handleCloseButton(id) }} children={<LuX />} />)
                                                 :
-                                                (<Button onClick={() => {}} children={<LuHardDriveDownload />} />)
+                                                (<Button onClick={() => { saveFile(item.convertPath, name, item.convertTo) }} children={<LuHardDriveDownload />} />)
                                             }
                                         </span>
                                     </li>
@@ -172,4 +178,3 @@ function App() {
 }
 
 export default App
-
