@@ -6,8 +6,8 @@ export function ConvertImage(arg1, arg2) {
   return window['go']['main']['App']['ConvertImage'](arg1, arg2);
 }
 
-export function OpenFileDialog() {
-  return window['go']['main']['App']['OpenFileDialog']();
+export function SaveFile(arg1, arg2, arg3) {
+  return window['go']['main']['App']['SaveFile'](arg1, arg2, arg3);
 }
 
 export function SelectImage() {

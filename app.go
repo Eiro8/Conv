@@ -2,19 +2,9 @@ package main
 
 import (
 	"context"
-	"encoding/base64"
-	"errors"
-	"fmt"
-	"image"
-	"image/jpeg"
-	"image/png"
-	"io"
-	"log"
-	"os"
-	"path/filepath"
-	"strings"
+	"file/models"
+	"file/services"
 
-	"github.com/HugoSmits86/nativewebp"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
@@ -34,66 +24,19 @@ func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 }
 
-type ImageStruct struct {
-	FileName      string
-	FileType      string
-	FilePath      string
-	ConvertedPath string
-	Preview       string
-}
+func (a *App) SelectImage() []models.ImageStruct {
 
-var AllowedFileType map[string]string = map[string]string{
-	"webp": "webp",
-	"jpeg": "jpeg",
-	"jpg":  "jpg",
-	"png":  "png",
-	"avif": "avif",
-}
-
-func (a *App) SelectImage() []ImageStruct {
-
-	images := a.OpenFileDialog()
-
-	structArr := make([]ImageStruct, 0, len(images))
-
-	for _, v := range images {
-		v = strings.ReplaceAll(v, "\\", "/")
-
-		file, err := os.Open(v)
-		if err != nil {
-			log.Fatalf("erro aconteceu na linha 61: %v", err)
-		}
-		defer file.Close()
-
-		bytes, err := os.ReadFile(v)
-		if err != nil {
-			fmt.Printf("Erro ao ler o arquivo: %v\n", err)
-			continue
-		}
-
-		Base64Str := base64.StdEncoding.EncodeToString(bytes)
-
-		_, format, err := image.Decode(file)
-
-		ok := CheckFormat(format)
-		if ok != nil {
-			fmt.Printf("A imagem não tem formato aceito pelo sistema.")
-			continue
-		}
-		ImgStruct, ok := CreateImageStruct(format, v, Base64Str)
-		if ok != nil {
-			continue
-		}
-		structArr = append(structArr, ImgStruct)
+	images, err := runtime.OpenMultipleFilesDialog(a.ctx, runtime.OpenDialogOptions{})
+	if err != nil {
+		return nil
 	}
-
-	return structArr
+	return services.SelectImage(images)
 }
 
-func (a *App) OpenFileDialog() []string {
+func OpenFileDialog(a context.Context) []string {
 
 	images, _ := runtime.OpenMultipleFilesDialog(
-		a.ctx,
+		a,
 		runtime.OpenDialogOptions{
 			Title:            "Selecione os arquivos", //* Título da caixa
 			DefaultDirectory: "",                      //* Default Directory aceita uma string, que se vazia meio que 'deixa' pro OS escolher aonde vai abrir o Dialog
@@ -108,110 +51,10 @@ func (a *App) OpenFileDialog() []string {
 	return images
 }
 
-func CheckFormat(format string) error {
-	_, ok := AllowedFileType[format]
-	if ok {
-		return nil
-	} else {
-		return errors.New("Um erro ocorreu em CheckFormat():")
-	}
-}
-
-func CreateImageStruct(format string, path string, base64 string) (ImageStruct, error) {
-	name := filepath.Base(path)
-	if name == "" {
-		return ImageStruct{}, errors.New("Não há nenhuma imagem nesse local, selecione novamente.")
-	}
-	var newImg ImageStruct = ImageStruct{
-		name, format, path, "", base64,
-	}
-	return newImg, nil
-}
-
-type ConvertedImage struct {
-	ID          int
-	OutputPath  string
-	IsConverted bool
-}
-
 func (a *App) ConvertImage(path string, extension string) (string, error) {
-	img, err := os.Open(path)
-	if err != nil {
-		return "Ocorreu um erro ao ler o arquivo: ", err
-	}
-	defer img.Close()
-
-	imgfile, _, err := image.Decode(img)
-	temp, err := os.CreateTemp("", "*."+strings.ToLower(extension))
-	if err != nil {
-		return "Erro ao criar arquivo:", err
-	}
-	defer temp.Close()
-
-	switch extension {
-	case "PNG":
-		err = png.Encode(temp, imgfile)
-		if err != nil {
-			return "", err
-		}
-	case "JPG":
-		err = jpeg.Encode(temp, imgfile, nil)
-		if err != nil {
-			return "", err
-		}
-	case "JPEG":
-		err = jpeg.Encode(temp, imgfile, nil)
-		if err != nil {
-			return "", err
-		}
-	case "WEBP":
-		err = nativewebp.Encode(temp, imgfile, nil)
-		if err != nil {
-			return "", err
-		}
-	}
-
-	return temp.Name(), nil
+	return services.Convert(path, extension)
 }
 
 func (a *App) SaveFile(tempPath, name, format string) error {
-
-	path, err := runtime.SaveFileDialog(a.ctx, runtime.SaveDialogOptions{
-		Title:            "Salvar Imagem Convertida",
-		DefaultDirectory: "",
-		DefaultFilename:  name + "." + format,
-		Filters: []runtime.FileFilter{
-			{DisplayName: "Imagem " + format, Pattern: "*." + format},
-		},
-	})
-
-	if err != nil {
-		return err
-	}
-	if path == "" {
-		return nil
-	}
-
-	source, err := os.Open(tempPath)
-	if err != nil {
-		return err
-	}
-	defer source.Close()
-
-	destination, err := os.Create(path)
-	if err != nil {
-		return err
-	}
-	defer destination.Close()
-
-	_, err = io.Copy(destination, source)
-	if err != nil {
-		return err
-	}
-
-	err = os.Remove(tempPath)
-	if err != nil {
-		return err
-	}
-	return nil
+	return services.SaveFile(tempPath, name, format, a.ctx)
 }
