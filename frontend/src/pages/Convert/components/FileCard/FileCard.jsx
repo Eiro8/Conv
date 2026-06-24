@@ -54,7 +54,7 @@ const FileCard = ({
 
                 {/*//* o Dropdown */}
                 {open ? (
-                    <ul className='format_options'>
+                    <ul className={styles.format_options}>
                         {Array.from(allowedFileTypes).map(format => (
                             <li
                                 key={format}
@@ -62,7 +62,7 @@ const FileCard = ({
                                     setOpen(false);
                                     setSelector(format);
                                 }}
-                                className='format_option'>
+                                className={styles.format_option}>
                                 {format}
                             </li>
                         ))}
