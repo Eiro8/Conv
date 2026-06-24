@@ -1,18 +1,11 @@
-import { useState } from 'react';
-
-import './App.css';
-
-
-import Navbar from './components/layout/Navbar/Navbar';
-import FileCard from './pages/Convert/components/FileCard/FileCard';
-import Logo from './assets/images/logo-universal.png'
-
+import React from 'react'
+import styles from './converter.module.css'
 import { LuUpload, LuX, LuHardDriveDownload, LuCornerDownLeft, LuCirclePlus, LuSettings2, LuChevronDown } from "react-icons/lu";
-import { Button } from './components/ui/Button/Button';
-import { SelectImage, ConvertImage, SaveFile } from "../wailsjs/go/main/App"; //* FUNCAO DO GO!!!!
+import { Button } from '../../components/ui/Button/Button';
+import { SelectImage, ConvertImage, SaveFile } from "../../../wailsjs/go/main/App"; //* FUNCAO DO GO!!!!
 
-function App() {
-    const [selected, setSelected] = useState(false);
+
+export const Converter = () => {
     const [isHovered, setIsHovered] = useState(false);
     const [open, setOpen] = useState(null);
     const [files, setFiles] = useState([]);
@@ -21,7 +14,6 @@ function App() {
         'JPG',
         'PNG',
     ]);
-
     //* Lógica de tratamento do Drag and drop de imagens
     const handleDragOver = (e) => {
         e.preventDefault();
@@ -37,7 +29,6 @@ function App() {
         setFiles(filesArray => filesArray.filter((item) => item.id != targetId));
     };
 
-
     //* Recebe a imagem em Base64, decodifica e converte em imagem. Passa o valor para o state Files()
     async function handleFileInput() {
         let ImageArray = []
@@ -46,12 +37,11 @@ function App() {
 
             pathArray.forEach(async (item, i) => {
                 let { FileName, FilePath, FileType, Preview } = item
-                let fileObj = {
+                const fileObj = {
                     "id": files.length + i + 2,
                     "name": FileName,
                     "type": FileType,
                     "src": `data:image/${FileType};charset=utf-8;base64,${Preview}`, //* blob do arquivo em Base64
-                    "size": 2, //adicionar size do arquivo pelo backend
                     "path": FilePath,
                     "isConverted": false,
                     "convertPath": "",
@@ -92,28 +82,47 @@ function App() {
         }
     }
 
-    return (<>
-        <Navbar />
-        <section className='header'>
-            <div className='header_wrapper container'>
-                {files.length > 0 ? (
+    return (
+        <section className={styles.header}>
+            <div className={`${styles.header_wrapper} container`}>
+                {!files.length > 0 ? (
                     <div className={'files_container'}>
                         <ul className='files_box' onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleConvert}>
                             {files.map((item, index) => {
-                                let ID = index + files.length + 1
+                                let { id, name, _, type, src } = item;
                                 return (
-                                    <FileCard
-                                        file={item}
-                                        key={ID}
-                                        id={ID}
-                                        isSaved={false}
-
-                                        allowedFileTypes={allowedFileTypes}
-
-                                        handleCloseButton={handleCloseButton}
-                                        handleSave={saveFile}
-                                    />
-
+                                    <li className={`file`} key={`${id} + ${index}`}>
+                                        <img src={src} draggable={false} className={'image'} />
+                                        <div className='file_description'>
+                                            <p className='text_overflow file_name'>{name}</p>
+                                            {/* //*fazer calculo pra lidar com tamanho do arquivo e tipo de arquivo*/}
+                                            <p className='text_overflow file_type'>{type}, {4} Bytes</p>
+                                        </div>
+                                        <span className={'buttons'}>
+                                            <p className='text'>Converter para</p>
+                                            <Button variant={"dropdown"} children={<>{item.convertTo}<span className={'rotate_onClick'}><LuChevronDown /></span></>} onClick={() => { open ? setOpen(null) : setOpen(id) }} />
+                                            {open == id ? (
+                                                <ul className='format_options'>
+                                                    {Array.from(allowedFileTypes).map(format => (
+                                                        <li
+                                                            key={format}
+                                                            onClick={() => {
+                                                                setOpen(false);
+                                                                item.convertTo = format
+                                                            }}
+                                                            className='format_option'>
+                                                            {format}
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            ) : _}
+                                            {!item.isConverted ?
+                                                (<Button onClick={() => { handleCloseButton(id) }} children={<LuX />} />)
+                                                :
+                                                (<Button onClick={() => { saveFile(item.convertPath, name, item.convertTo) }} children={<LuHardDriveDownload />} />)
+                                            }
+                                        </span>
+                                    </li>
                                 )
                             })}
                         </ul>
@@ -143,8 +152,5 @@ function App() {
                 )}
             </div>
         </section>
-    </>
     )
 }
-
-export default App
