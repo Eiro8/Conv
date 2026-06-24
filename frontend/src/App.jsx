@@ -37,6 +37,10 @@ function App() {
         setFiles(filesArray => filesArray.filter((item) => item.id != targetId));
     };
 
+    function handleBackButton() {
+        setFiles([])
+    }
+
 
     //* Recebe a imagem em Base64, decodifica e converte em imagem. Passa o valor para o state Files()
     async function handleFileInput() {
@@ -92,6 +96,7 @@ function App() {
         }
     }
 
+
     return (<>
         <Navbar />
         <section className='header'>
@@ -113,25 +118,21 @@ function App() {
                                         handleCloseButton={handleCloseButton}
                                         handleSave={saveFile}
                                     />
-
                                 )
                             })}
-                        </ul>
-                        <div className='files_settings'>
-                            <div className='files_utils'>
-                                <div className='files_form'>
-                                    <label htmlFor={'file-input'} className='input-text'><LuCirclePlus />Adicionar Mais</label>
-                                    <div type='file' accept='image/webp,image/jpeg,image/jpg,image/png,image/avif' id='file-input' multiple onClick={handleFileInput} ></div>
+                            <div className='files_settings'>
+                                <div className='files_utils'>
+                                    <Button type='button' onClick={handleFileInput} children={<><LuCirclePlus />Adicionar Mais</>} />
+                                    <Button variant='primary' children={<><LuCornerDownLeft /></>} onClick={() => handleBackButton()} />
                                 </div>
-                                <Button variant='primary' children={<><LuCornerDownLeft /></>} />
+                                <div className='files_buttons'>
+                                    <Button variant='primary' children={< LuSettings2 />} />
+                                    {/*o ideal aqui seria passar uma array de strings ( file ) para entao converter todos juntos no Go.*/}
+                                    <Button variant='secondary' children={<><LuHardDriveDownload />Converter Todos </>} onClick={async () => { files.forEach(file => handleConvert(file.path, file.convertTo)) }} />
+                                </div>
                             </div>
-                            <div className='files_buttons'>
-                                <Button variant='primary' children={< LuSettings2 />} />
+                        </ul>
 
-                                {/*o ideal aqui seria passar uma array de strings ( file ) para entao converter todos juntos no Go.*/}
-                                <Button variant='secondary' children={<><LuHardDriveDownload />Converter Todos </>} onClick={async () => { files.forEach(file => handleConvert(file.path, file.convertTo)) }} />
-                            </div>
-                        </div>
                     </div>
                 ) : (
                     <div className='header_dropper_box' onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop} onClick={() => handleFileInput()}>
