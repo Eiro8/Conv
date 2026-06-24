@@ -1,0 +1,40 @@
+.nav {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    box-sizing: border-box;
+    background-color: var(--black);
+    box-shadow: 0px 0px 6px 1px var(--accent);
+    position: sticky;
+
+    .nav_buttons {
+        display: flex;
+        gap: var(--space-md);
+        height: 100%;
+        align-items: center;
+
+        .button {
+            color: var(--white) !important;
+            border: 2px solid var(--secondary);
+            border-radius: var(--radius-full);
+            padding: var(--space-md);
+            transition: border-color .2s ease-in-out;
+
+            &:hover {
+                border-color: var(--accent);
+            }
+        }
+
+        .highlight {
+            color: var(--white);
+            transition: color .2s ease-in-out;
+
+            &:hover {
+                color: var(--accent);
+            }
+        }
+    }
+}

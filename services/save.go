@@ -8,14 +8,14 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
-func SaveFile(tempPath, name, format string, ctx context.Context) error {
+func SaveFile(tempPath, name, desiredFormat string, ctx context.Context) error {
 
 	path, err := runtime.SaveFileDialog(ctx, runtime.SaveDialogOptions{
 		Title:            "Salvar Imagem Convertida",
 		DefaultDirectory: "",
-		DefaultFilename:  name + "." + format,
+		DefaultFilename:  name + "." + desiredFormat,
 		Filters: []runtime.FileFilter{
-			{DisplayName: "Imagem " + format, Pattern: "*." + format},
+			{DisplayName: "Imagem " + desiredFormat, Pattern: "*." + desiredFormat},
 		},
 	})
 
