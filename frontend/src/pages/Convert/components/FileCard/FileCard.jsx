@@ -12,28 +12,16 @@ const FileCard = ({
     handleSave,
     ...props
 }) => {
-    const { id, name, type, src, path, isConverted, convertPath, convertTo, size } = file;
-
+    const { id, name, type, src, path, isConverted, convertPath, convertTo, size = 2000 } = file;
+    //* Receber o size em bytes para melhorar
     const [fileSize, setFileSize] = useState({
-        size: size / 1000,
+        size: size,
         format: "KB"
     });
     const [open, setOpen] = useState(false);
     const [selector, setSelector] = useState(convertTo);
 
-
-    //* Receber o size em bytes para melhorar conversão
-    if (size.size >= 1000) {
-        setSize(prev => ({
-            size: prev.size / 1000,
-            format: "MB",
-        }))
-    } else if (size.size >= 10000) {
-        setSize(prev => ({
-            size: prev.size / 10000,
-            format: "GB",
-        }))
-    }
+    
 
     return (
         <li className={styles.file}>
@@ -68,7 +56,6 @@ const FileCard = ({
                         ))}
                     </ul>
                 ) : null}
-
                 {isConverted == true ?
                     (<Button variant={"primary"} onClick={() => { handleSave(path, name, selector) }} children={<LuHardDriveDownload />} />)
                     :

@@ -47,5 +47,5 @@ func Convert(path string, extension string) (string, error) {
 		}
 	}
 
-	return temp.Name(), nil
+	return temp.Name(), nil //* Retorna o path do arquivo já convertido
 }

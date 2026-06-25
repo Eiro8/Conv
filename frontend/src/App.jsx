@@ -31,7 +31,9 @@ function App() {
         e.preventDefault();
         setIsHovered(false);
     };
-    const handleDrop = () => { }
+    const handleDrop = (e) => {
+       
+    }
 
     function handleCloseButton(targetId) {
         setFiles(filesArray => filesArray.filter((item) => item.id != targetId));
@@ -113,11 +115,11 @@ function App() {
 
     return (<>
         <Navbar />
-        <section className='header'>
+        <section className='header' onDrop={handleDrop} onDragOver={handleDragOver} onDragLeave={handleDragLeave}>
             <div className='header_wrapper container'>
                 {files.length > 0 ? (
                     <div className={'files_container'}>
-                        <ul className='files_box' onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleConvert}>
+                        <ul className='files_box' >
                             {files.map((item, index) => {
                                 let ID = index + files.length + 1
                                 return (
@@ -149,18 +151,18 @@ function App() {
 
                     </div >
                 ) : (
-                        <div className='header_dropper_box' onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop} onClick={() => handleFileInput()}>
-                            <div className='dropper_img_wrap' >
-                                <LuUpload /></div>
-                            <h3>Selecionar Imagem(ns)</h3>
-                            <p>Arraste & Solte ou <span className='highlight'>Escolha</span></p>
-                        </div>
-                    )
+                    <div className='header_dropper_box' onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop} onClick={() => handleFileInput()}>
+                        <div className='dropper_img_wrap' >
+                            <LuUpload /></div>
+                        <h3>Selecionar Imagem(ns)</h3>
+                        <p>Arraste & Solte ou <span className='highlight'>Escolha</span></p>
+                    </div>
+                )
                 }
             </div >
         </section >
     </>
     )
-        }
+}
 
 export default App

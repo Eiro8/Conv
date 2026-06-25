@@ -1,4 +1,5 @@
 import React from 'react'
+import { useState } from 'react';
 import styles from './converter.module.css'
 import { LuUpload, LuX, LuHardDriveDownload, LuCornerDownLeft, LuCirclePlus, LuSettings2, LuChevronDown } from "react-icons/lu";
 import { Button } from '../../components/ui/Button/Button';
@@ -28,6 +29,10 @@ export const Converter = () => {
     function handleCloseButton(targetId) {
         setFiles(filesArray => filesArray.filter((item) => item.id != targetId));
     };
+
+    function handleBackButton() {
+        setFiles([]);
+    }
 
     //* Recebe a imagem em Base64, decodifica e converte em imagem. Passa o valor para o state Files()
     async function handleFileInput() {
@@ -89,40 +94,20 @@ export const Converter = () => {
                     <div className={'files_container'}>
                         <ul className='files_box' onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleConvert}>
                             {files.map((item, index) => {
-                                let { id, name, _, type, src } = item;
+                                let ID = index + files.length + 1
                                 return (
-                                    <li className={`file`} key={`${id} + ${index}`}>
-                                        <img src={src} draggable={false} className={'image'} />
-                                        <div className='file_description'>
-                                            <p className='text_overflow file_name'>{name}</p>
-                                            {/* //*fazer calculo pra lidar com tamanho do arquivo e tipo de arquivo*/}
-                                            <p className='text_overflow file_type'>{type}, {4} Bytes</p>
-                                        </div>
-                                        <span className={'buttons'}>
-                                            <p className='text'>Converter para</p>
-                                            <Button variant={"dropdown"} children={<>{item.convertTo}<span className={'rotate_onClick'}><LuChevronDown /></span></>} onClick={() => { open ? setOpen(null) : setOpen(id) }} />
-                                            {open == id ? (
-                                                <ul className='format_options'>
-                                                    {Array.from(allowedFileTypes).map(format => (
-                                                        <li
-                                                            key={format}
-                                                            onClick={() => {
-                                                                setOpen(false);
-                                                                item.convertTo = format
-                                                            }}
-                                                            className='format_option'>
-                                                            {format}
-                                                        </li>
-                                                    ))}
-                                                </ul>
-                                            ) : _}
-                                            {!item.isConverted ?
-                                                (<Button onClick={() => { handleCloseButton(id) }} children={<LuX />} />)
-                                                :
-                                                (<Button onClick={() => { saveFile(item.convertPath, name, item.convertTo) }} children={<LuHardDriveDownload />} />)
-                                            }
-                                        </span>
-                                    </li>
+                                    <FileCard
+                                        file={item}
+                                        key={ID}
+                                        id={ID}
+                                        isSaved={false}
+
+                                        allowedFileTypes={allowedFileTypes}
+
+                                        handleCloseButton={handleCloseButton}
+                                        handleSave={saveFile}
+                                    />
+
                                 )
                             })}
                         </ul>
@@ -135,7 +120,7 @@ export const Converter = () => {
                                 <Button variant='primary' children={<><LuCornerDownLeft /></>} />
                             </div>
                             <div className='files_buttons'>
-                                <Button variant='primary' children={< LuSettings2 />} />
+                                <Button variant='primary' children={< LuSettings2 />} onClick={handleBackButton()} />
 
                                 {/*o ideal aqui seria passar uma array de strings ( file ) para entao converter todos juntos no Go.*/}
                                 <Button variant='secondary' children={<><LuHardDriveDownload />Converter Todos </>} onClick={async () => { files.forEach(file => handleConvert(file.path, file.convertTo)) }} />
