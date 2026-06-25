@@ -82,15 +82,16 @@ function App() {
             files.forEach(async (item, i) => {
                 if (!item.isConverted) {
                     const { path, convertTo } = item;
-                    const convertedPath = await ConvertImage(path, convertTo);
+                    const convertedFilePath = await ConvertImage(path, convertTo);
 
                     setFiles(prev => {
-                        prev[i].convertedPath = convertedPath;
-                        prev[i].isConverted = true
-
-                        return [...prev]
+                        /*//& Ao deixar ...prev, eu reutilizo as referencias dos objetos anteriores, fazendo com que
+                        //& O react apenas compare a referencia de cada objeto, e atualize apenas os objetos os quais foram alterados */
+                        const newArr = [...prev]
+                        let newItem = { ...item, convertPath: convertedFilePath, isConverted: true }
+                        newArr[i] = newItem
+                        return newArr
                     })
-
                 }
             })
 
@@ -142,23 +143,24 @@ function App() {
                                     <Button variant='primary' children={< LuSettings2 />} />
                                     {/*o ideal aqui seria passar uma array de strings ( file ) para entao converter todos juntos no Go.*/}
                                     <Button variant='secondary' children={<><LuHardDriveDownload />Converter Todos </>} onClick={async () => { files.forEach(file => handleConvert(file.path, file.convertTo)) }} />
-                                </div>
-                            </div>
-                        </ul>
+                                </div >
+                            </div >
+                        </ul >
 
-                    </div>
+                    </div >
                 ) : (
-                    <div className='header_dropper_box' onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop} onClick={() => handleFileInput()}>
-                        <div className='dropper_img_wrap' >
-                            <LuUpload /></div>
-                        <h3>Selecionar Imagem(ns)</h3>
-                        <p>Arraste & Solte ou <span className='highlight'>Escolha</span></p>
-                    </div>
-                )}
-            </div>
-        </section>
+                        <div className='header_dropper_box' onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop} onClick={() => handleFileInput()}>
+                            <div className='dropper_img_wrap' >
+                                <LuUpload /></div>
+                            <h3>Selecionar Imagem(ns)</h3>
+                            <p>Arraste & Solte ou <span className='highlight'>Escolha</span></p>
+                        </div>
+                    )
+                }
+            </div >
+        </section >
     </>
     )
-}
+        }
 
 export default App
