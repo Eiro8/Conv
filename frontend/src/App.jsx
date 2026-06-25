@@ -67,20 +67,33 @@ function App() {
             console.log(new Error(`Ocorreu um erro ao processar suas imagens: ${error.message}`))
             return new Error(`Ocorreu um erro ao processar suas imagens: ${error.message}`)
         }
-        setFiles(files.concat(ImageArray))
+        // setFiles(files.concat(ImageArray))
+        console.log(...ImageArray);
+
+        setFiles(prev => [...prev, ...ImageArray])
+
     }
 
     function handleConvert() {
+
+        //* Em um futuro próximo, devo alterar esse index para ID, porque quero adicionar um botão X caso o user
+        //* queria remover um arquivo ENQUANTO está convertendo
         try {
-            files.forEach(async image => {
-                if (!image.isConverted) {
-                    let convertedImage = await ConvertImage(image.path, image.convertTo)
-                    console.log(image);
-                    console.log(convertedImage);
-                    image.convertPath = convertedImage;
-                    image.isConverted = true;
+            files.forEach(async (item, i) => {
+                if (!item.isConverted) {
+                    const { path, convertTo } = item;
+                    const convertedPath = await ConvertImage(path, convertTo);
+
+                    setFiles(prev => {
+                        prev[i].convertedPath = convertedPath;
+                        prev[i].isConverted = true
+
+                        return [...prev]
+                    })
+
                 }
             })
+
         }
         catch (error) {
             return new Error(`Um erro ocorreu ao converter o arquivo: \n \n${error}`)

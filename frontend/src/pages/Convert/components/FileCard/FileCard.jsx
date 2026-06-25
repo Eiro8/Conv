@@ -19,9 +19,10 @@ const FileCard = ({
         format: "KB"
     });
     const [open, setOpen] = useState(false);
-    const [selector, setSelector] = useState(convertTo)
+    const [selector, setSelector] = useState(convertTo);
 
 
+    //* Receber o size em bytes para melhorar conversão
     if (size.size >= 1000) {
         setSize(prev => ({
             size: prev.size / 1000,
@@ -39,7 +40,6 @@ const FileCard = ({
             <img className={styles.image} src={src} draggable={false} />
             <div className={styles.description}>
                 <p className={`${styles.name} text_overflow`}>{name}</p>
-                {/*//* O ideal é receber o filesize em bytes. */}
                 <p className={`${styles.type} text_overflow`}>{type}, <span>{fileSize.size}{fileSize.format}</span></p>
             </div>
 
@@ -69,7 +69,7 @@ const FileCard = ({
                     </ul>
                 ) : null}
 
-                {isConverted ?
+                {isConverted == true ?
                     (<Button variant={"primary"} onClick={() => { handleSave(path, name, selector) }} children={<LuHardDriveDownload />} />)
                     :
                     (<Button variant={"primary"} onClick={() => { handleCloseButton(id) }} children={<LuX />} />)}
