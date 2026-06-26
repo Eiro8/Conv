@@ -10,6 +10,7 @@ var AllowedFileType map[string]string = map[string]string{
 	"avif": "avif",
 }
 
+//Função responsável por verificar se o formato da imagem é compativel com o sistema
 func CheckFormat(format string) error {
 	_, ok := AllowedFileType[format]
 	if ok {

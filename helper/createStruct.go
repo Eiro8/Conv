@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 )
 
+// Cria o struct das Imagens
 func CreateImageStruct(format string, path string, base64 string) (models.ImageStruct, error) {
 	name := filepath.Base(path)
 	if name == "" {
