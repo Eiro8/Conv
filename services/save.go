@@ -8,8 +8,7 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
-func SaveFile(tempPath, name, desiredFormat string, ctx context.Context) error {
-
+func SaveImage(tempPath, name, desiredFormat string, ctx context.Context) error {
 	path, err := runtime.SaveFileDialog(ctx, runtime.SaveDialogOptions{
 		Title:            "Salvar Imagem Convertida",
 		DefaultDirectory: "",

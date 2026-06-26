@@ -6,10 +6,14 @@ export function ConvertImage(arg1, arg2) {
   return window['go']['main']['App']['ConvertImage'](arg1, arg2);
 }
 
+export function DropImage() {
+  return window['go']['main']['App']['DropImage']();
+}
+
 export function SaveFile(arg1, arg2, arg3) {
   return window['go']['main']['App']['SaveFile'](arg1, arg2, arg3);
 }
 
-export function SelectImage() {
-  return window['go']['main']['App']['SelectImage']();
+export function SelectImage(arg1) {
+  return window['go']['main']['App']['SelectImage'](arg1);
 }

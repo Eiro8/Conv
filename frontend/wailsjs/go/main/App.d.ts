@@ -4,6 +4,8 @@ import {models} from '../models';
 
 export function ConvertImage(arg1:string,arg2:string):Promise<string>;
 
+export function DropImage():Promise<void>;
+
 export function SaveFile(arg1:string,arg2:string,arg3:string):Promise<void>;
 
-export function SelectImage():Promise<Array<models.ImageStruct>>;
+export function SelectImage(arg1:Array<string>):Promise<Array<models.ImageStruct>>;

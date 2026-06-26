@@ -23,7 +23,10 @@ func main() {
 		AssetServer: &assetserver.Options{
 			Assets: assets,
 		},
-		WindowStartState: options.Maximised, //* deixa a tela maximisada ao iniciar o app
+		DragAndDrop: &options.DragAndDrop{
+			EnableFileDrop: true,
+		},
+		WindowStartState: options.Minimised, //* deixa a tela maximisada ao iniciar o app
 		Frameless:        false,             //* deixa sem frame em volta
 		AlwaysOnTop:      false,             //*Mantém o frame no topo das outras abas, mesmo quando perdeo  foco.
 		//! AlwaysOnTop ( removido por enquanto para melhor experiencia de desenvolvimento)

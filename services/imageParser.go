@@ -24,10 +24,10 @@ func PathToImageStruct(images []string) []models.ImageStruct {
 
 	structArr := make([]models.ImageStruct, 0, len(images))
 
-	for _, v := range images {
-		v = strings.ReplaceAll(v, "\\", "/")
+	for _, imgPath := range images {
+		imgPath = strings.ReplaceAll(imgPath, "\\", "/")
 
-		file, err := os.Open(v)
+		file, err := os.Open(imgPath)
 		if err != nil {
 			log.Fatalf("erro aconteceu na linha 61: %v", err)
 		}
@@ -55,11 +55,11 @@ func PathToImageStruct(images []string) []models.ImageStruct {
 
 		Base64Str := base64.StdEncoding.EncodeToString(buffer.Bytes())
 
-		ImgStruct, ok := helper.CreateImageStruct(format, v, Base64Str)
+		imgStruct, ok := helper.CreateImageStruct(format, imgPath, Base64Str)
 		if ok != nil {
 			continue
 		}
-		structArr = append(structArr, ImgStruct)
+		structArr = append(structArr, imgStruct)
 	}
 
 	return structArr
