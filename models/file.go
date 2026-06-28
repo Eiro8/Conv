@@ -1,9 +1,11 @@
 package models
 
 type ImageStruct struct {
-	FileName      string
-	FileType      string
-	FilePath      string
+	FileName string
+	FileType string
+	FilePath string
+	FileSize int64
+
 	ConvertedPath string
-	Preview       string
+	Base64Preview string
 }

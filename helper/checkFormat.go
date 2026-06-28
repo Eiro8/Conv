@@ -11,7 +11,7 @@ var AllowedFileType map[string]string = map[string]string{
 }
 
 //Função responsável por verificar se o formato da imagem é compativel com o sistema
-func CheckFormat(format string) error {
+func CheckImageFormat(format string) error {
 	_, ok := AllowedFileType[format]
 	if ok {
 		return nil
