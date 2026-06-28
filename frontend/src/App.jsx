@@ -9,7 +9,7 @@ import Logo from './assets/images/logo-universal.png'
 
 import { LuUpload, LuX, LuHardDriveDownload, LuCornerDownLeft, LuCirclePlus, LuSettings2, LuChevronDown } from "react-icons/lu";
 import { Button } from './components/ui/Button/Button';
-import { SelectImage, ConvertImage, SaveFile } from "../wailsjs/go/main/App"; //* FUNCAO DO GO!!!!
+import { SelectImage, ConvertImage, SaveFile } from "../wailsjs/go/main/App";
 
 function App() {
     const [selected, setSelected] = useState(false);
@@ -32,7 +32,7 @@ function App() {
         setIsHovered(false);
     };
     const handleDrop = (e) => {
-       
+
     }
 
     function handleCloseButton(targetId) {
@@ -46,38 +46,30 @@ function App() {
 
     //* Recebe a imagem em Base64, decodifica e converte em imagem. Passa o valor para o state Files()
     async function handleFileInput() {
-        let ImageArray = []
         try {
             const pathArray = await SelectImage();
-
             pathArray.forEach(async (item, i) => {
-                let { FileName, FilePath, FileType, Preview } = item
+                let { FileName, FilePath, FileType, FileSize, ConvertedPath, Base64Preview } = item
                 let fileObj = {
                     "id": files.length + i + 2,
                     "name": FileName,
                     "type": FileType,
-                    "src": `data:image/${FileType};charset=utf-8;base64,${Preview}`, //* blob do arquivo em Base64
-                    "size": 2, //adicionar size do arquivo pelo backend
+                    "src": `data:image/${FileType};charset=utf-8;base64,${Base64Preview}`, //* blob do arquivo em Base64
+                    "size": FileSize, //adicionar size do arquivo pelo backend
                     "path": FilePath,
                     "isConverted": false,
-                    "convertPath": "",
+                    "convertPath": ConvertedPath,
                     "convertTo": "WEBP",
                 }
-                ImageArray.push(fileObj)
+                setFiles(prev => [...prev, fileObj])
             })
         } catch (error) {
             console.log(new Error(`Ocorreu um erro ao processar suas imagens: ${error.message}`))
             return new Error(`Ocorreu um erro ao processar suas imagens: ${error.message}`)
         }
-        // setFiles(files.concat(ImageArray))
-        console.log(...ImageArray);
-
-        setFiles(prev => [...prev, ...ImageArray])
-
     }
 
     function handleConvert() {
-
         //* Em um futuro próximo, devo alterar esse index para ID, porque quero adicionar um botão X caso o user
         //* queria remover um arquivo ENQUANTO está convertendo
         try {
@@ -94,6 +86,8 @@ function App() {
                         newArr[i] = newItem
                         return newArr
                     })
+                } else {
+                    return item
                 }
             })
 
@@ -144,7 +138,7 @@ function App() {
                                 <div className='files_buttons'>
                                     <Button variant='primary' children={< LuSettings2 />} />
                                     {/*o ideal aqui seria passar uma array de strings ( file ) para entao converter todos juntos no Go.*/}
-                                    <Button variant='secondary' children={<><LuHardDriveDownload />Converter Todos </>} onClick={async () => { files.forEach(file => handleConvert(file.path, file.convertTo)) }} />
+                                    <Button variant='secondary' children={<><LuHardDriveDownload />Converter Todos </>} onClick={async () => { handleConvert() }} />
                                 </div >
                             </div >
                         </ul >

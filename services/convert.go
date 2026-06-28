@@ -1,7 +1,7 @@
 package services
 
 import (
-	"image"
+	"file/helper"
 	"image/jpeg"
 	"image/png"
 	"os"
@@ -11,13 +11,8 @@ import (
 )
 
 func Convert(path string, extension string) (string, error) {
-	img, err := os.Open(path)
-	if err != nil {
-		return "Ocorreu um erro ao ler o arquivo: ", err
-	}
-	defer img.Close()
-
-	imgfile, _, err := image.Decode(img)
+	// al := time.Now()
+	imgfile, _, _, err := helper.OpenAndDecode(path)
 	temp, err := os.CreateTemp("", "*."+strings.ToLower(extension))
 	if err != nil {
 		return "Erro ao criar arquivo:", err
@@ -46,6 +41,7 @@ func Convert(path string, extension string) (string, error) {
 			return "", err
 		}
 	}
-
+	// acu := time.Since(al)
+	// fmt.Printf("tempo passado pra converter %v foi de: %v \n\n", path, acu)
 	return temp.Name(), nil //* Retorna o path do arquivo já convertido
 }
