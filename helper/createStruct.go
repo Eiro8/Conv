@@ -13,7 +13,7 @@ func CreateImageStruct(format string, path string, base64 string, size int64) (m
 		return models.ImageStruct{}, errors.New("Não há nenhuma imagem nesse local, selecione novamente.")
 	}
 	var newImg models.ImageStruct = models.ImageStruct{
-		name, format, path, size, " ", base64,
+		name, format, path, size, " ", 0, base64,
 	}
 	return newImg, nil
 }

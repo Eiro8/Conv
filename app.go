@@ -24,7 +24,7 @@ func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 }
 
-func (a *App) ConvertImage(path string, extension string) (string, error) {
+func (a *App) ConvertImage(path string, extension string) (string, int64, error) {
 	return services.Convert(path, extension)
 }
 
@@ -38,5 +38,5 @@ func (a *App) SelectImage(ImagesPath []string) []models.ImageStruct {
 	if err != nil {
 		return nil
 	}
-	return services.PathToImageStruct(imagePaths)
+	return services.LoadImages(imagePaths)
 }
