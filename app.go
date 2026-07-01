@@ -24,8 +24,9 @@ func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 }
 
-func (a *App) ConvertImage(path string, extension string) (string, int64, error) {
-	return services.Convert(path, extension)
+func (a *App) ConvertImage(path string, extension string) (models.ConversionInfo, error) {
+	convertedFileInfo, err := services.Convert(path, extension)
+	return convertedFileInfo, err
 }
 
 func (a *App) SaveFile(tempPath, name, format string) error {

@@ -1,5 +1,6 @@
 package models
 
+//struct que representa as imagens do converter
 type ImageStruct struct {
 	FileName string
 	FileType string
