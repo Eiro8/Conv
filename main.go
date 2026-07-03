@@ -26,8 +26,6 @@ func main() {
 		DragAndDrop: &options.DragAndDrop{
 			EnableFileDrop:     true,
 			DisableWebViewDrop: false,
-			CSSDropProperty:    "--drop-zone",
-			CSSDropValue:       "drop",
 		},
 		WindowStartState: options.Minimised, //* deixa a tela maximisada ao iniciar o app
 		Frameless:        false,             //* deixa sem frame em volta
