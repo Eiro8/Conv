@@ -43,7 +43,6 @@ func Convert(path string, extension string) (models.ConversionInfo, error) {
 		err = nativewebp.Encode(temp, imgfile, nil)
 		if err != nil {
 			return models.ConversionInfo{}, err
-
 		}
 	}
 
