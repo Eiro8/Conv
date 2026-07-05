@@ -24,20 +24,21 @@ func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 }
 
-func (a *App) ConvertImage(path string, extension string) (models.ConversionInfo, error) {
-	convertedFileInfo, err := services.Convert(path, extension)
+func (a *App) ConvertImage(ImagePath string, extension string) (models.ConversionInfo, error) {
+	convertedFileInfo, err := services.Convert(ImagePath, extension)
 	return convertedFileInfo, err
 }
 
 func (a *App) SaveFile(tempPath, name, format string) error {
 	return services.SaveImage(tempPath, name, format, a.ctx)
 }
-
-func (a *App) SelectImage(ImagesPath []string) []models.ImageStruct {
-
+func (a *App) GetInputPath() []string {
 	imagePaths, err := runtime.OpenMultipleFilesDialog(a.ctx, runtime.OpenDialogOptions{})
 	if err != nil {
 		return nil
 	}
-	return services.LoadImages(imagePaths)
+	return imagePaths
+}
+func (a *App) ParseImagePaths(ImagesPath []string) []models.ImageStruct {
+	return services.LoadImages(ImagesPath)
 }
