@@ -28,6 +28,31 @@
             font-size: 18px;
             font-weight: 600;
         }
+
+        .info {
+            width: fit-content;
+            display: flex;
+            flex-direction: row;
+            gap: var(--space-md);
+
+
+            .newInfo {
+                display: flex;
+                line-clamp: 1;
+                flex-shrink: 0;
+                color: var(--tertiary);
+            }
+
+            svg {
+                height: auto;
+                width: 36px;
+                aspect-ratio: 1/1;
+                color: var(--tertiary);
+            }
+
+
+
+        }
     }
 
     .buttons {

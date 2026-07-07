@@ -48,6 +48,8 @@
     height: 100%;
 
     .header_wrapper {
+        /* --wails-drop-target nã é nada mais que, o atributo que faz com que o runtime do wails indentifique qual elemento o drag and drop dele funcionará.*/
+        --wails-drop-target: drop;
         height: 100%;
         width: 100%;
         box-sizing: border-box;
@@ -58,6 +60,8 @@
 
 
         .header_dropper_box {
+            /*? CSSDropProperty do wails  */
+            --drop-zone: drop;
             display: flex;
             align-items: center;
             flex-direction: column;
@@ -165,6 +169,54 @@
                         display: flex;
                         flex-direction: row;
                         gap: var(--space-md);
+                        position: relative;
+
+                        .config_background {
+                            position: fixed;
+                            width: 100vw;
+                            height: 100vh;
+                            inset: 0;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            backdrop-filter: blur(4px);
+
+                            .config_options {
+                                height: fit-content;
+                                width: 350px;
+                                padding: var(--space-lg);
+                                background: var(--primary);
+                                border: 2px solid var(--tertiary);
+                                display: flex;
+                                flex-direction: column;
+                                align-items: end;
+                                gap: var(--space-lg);
+                                border-radius: var(--radius-md);
+
+                                .options_box {
+                                    display: flex;
+                                    flex-direction: column;
+                                    height: 100%;
+                                    width: 100%;
+                                    gap: var(--space-sm);
+
+                                    .option {
+                                        width: 100%;
+                                        height: 50px;
+                                        border: 1px solid red;
+                                        border-radius: var(--radius-sm);
+                                        box-sizing: border-box;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+
+                                        .option_input {
+                                            width: 100%;
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }

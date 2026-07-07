@@ -6,14 +6,14 @@ export function ConvertImage(arg1, arg2) {
   return window['go']['main']['App']['ConvertImage'](arg1, arg2);
 }
 
-export function DropImage() {
-  return window['go']['main']['App']['DropImage']();
+export function GetInputPath() {
+  return window['go']['main']['App']['GetInputPath']();
+}
+
+export function ParseImagePaths(arg1) {
+  return window['go']['main']['App']['ParseImagePaths'](arg1);
 }
 
 export function SaveFile(arg1, arg2, arg3) {
   return window['go']['main']['App']['SaveFile'](arg1, arg2, arg3);
-}
-
-export function SelectImage(arg1) {
-  return window['go']['main']['App']['SelectImage'](arg1);
 }

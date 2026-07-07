@@ -22,18 +22,17 @@ func LoadImages(images []string) []models.ImageStruct {
 			fmt.Printf("Ocorreu um erro: %v", ok)
 			continue
 		}
-
+		var erro error = helper.CheckImageFormat(format)
+		if erro != nil {
+			fmt.Printf("O formato %v não é aceito pelo sistema.", format)
+			continue
+		}
 		ImageSize, err := helper.GetByteSize(imgPath)
 		if err != nil {
 			fmt.Printf("Ocorreu um erro: %v", err)
 			continue
 		}
 
-		var erro error = helper.CheckImageFormat(format)
-		if erro != nil {
-			fmt.Printf("O formato %v não é aceito pelo sistema.", format)
-			continue
-		}
 		thumbBase64 := helper.GenerateThumbnailBase64(sourceImage, 0, 0, 150, 150)
 		imgStruct, ok := helper.CreateImageStruct(format, imgPath, thumbBase64, ImageSize)
 		if ok != nil {

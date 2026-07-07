@@ -48,7 +48,7 @@ function App() {
     }, true)
 
 
-    function createImageObject(id = 1, name = "Image-Name", type = "TYPE", base64 = "BASE64", size = 67, path = "/", isConverted = false, convertPath = "/", convertTo = "WEBP", convertSize = 67) {
+    function createImageObject(id = 1, name = "Image-Name", type = "TYPE", base64 = "BASE64", size = 67, path = "/", isConverted, convertPath = "/", convertTo = "WEBP", convertSize = 67) {
         let fileObj = {
             "id": id,
             "name": name,
@@ -109,9 +109,9 @@ function App() {
                     let { NewPath, NewSize } = await ConvertImage(file.path, file.convertTo);
 
                     setFiles(prev => {
-                        const newArr = [...prev]
-                        let newFile = { convertPath: NewPath, convertSize: NewSize, isConverted: true, ...file }
-                        newArr[i] = newFile
+                        const newArr = [...prev];
+                        let newFile = { ...file, convertPath: NewPath, convertSize: NewSize, isConverted: true };
+                        newArr[i] = newFile;
                         return newArr
                     })
                 } else {
@@ -132,8 +132,6 @@ function App() {
             return new Error(error.message)
         }
     }
-
-
 
 
     return (<>

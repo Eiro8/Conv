@@ -4,16 +4,17 @@ import styles from './filecard.module.css'
 import { Button } from '../../../../components/ui/Button/Button'
 import { LuX, LuHardDriveDownload, LuChevronDown, LuArrowLeftFromLine, LuArrowRight } from "react-icons/lu";
 
-function convertSize(size) {
+//* formata bytes para GB/MB/KB/Bytes (ex: 6000000 => "6 MB" )
+function bytesParser(size) {
     let kilobyte = 1024;
     let megabyte = kilobyte * 1024;
     let gigabyte = megabyte * 1024;
     let fileSize = ""
 
     if (size >= gigabyte) {
-        fileSize = `${(size / gigabyte).toFixed(1)} MB`
+        fileSize = `${(size / gigabyte).toFixed(1)} GB`
     } else if (size >= megabyte) {
-        fileSize = `${(size / megabyte).toFixed(1)} KB`
+        fileSize = `${(size / megabyte).toFixed(1)} MB`
     } else if (size >= kilobyte) {
         fileSize = `${(size / kilobyte).toFixed(1)} KB`
     } else {
@@ -29,15 +30,12 @@ const FileCard = ({
     handleSave,
     ...props
 }) => {
-    const { id, name, type, src, path, isConverted, convertPath, convertTo, size = "SIX SEVENNN ( erro )" } = file;
+    const { id, name, type, src, path, isConverted, convertTo, size, convertSize } = file;
     //* Receber o size em bytes para melhorar
     const [open, setOpen] = useState(false);
     const [selector, setSelector] = useState(convertTo);
-    let convertedFileSize = 232;
-
-    let oldSize = convertSize(size);
-    let newSize = convertSize(convertedFileSize)
-
+    let oldSize = bytesParser(size);
+    let newSize = bytesParser(convertSize);
 
     return (
         <li className={styles.file}>
@@ -46,7 +44,7 @@ const FileCard = ({
                 <p className={`${styles.name} text_overflow`}>{name}</p>
                 <span className={styles.info}>
                     <p className={`${styles.type} text_overflow`}>{type}, <span>{oldSize}</span></p>
-                    {isConverted ? (<p className={styles.newType}><LuArrowRight />{newSize}</p>) : (null)}
+                    {isConverted ? (<><LuArrowRight /><span className={styles.newInfo}>{newSize},</span><span className={styles.newInfo}>{convertTo}</span></>) : (null)}
                 </span>
 
 
@@ -78,7 +76,9 @@ const FileCard = ({
                     </ul>
                 ) : null}
                 {isConverted == true ?
-                    (<Button variant={"primary"} onClick={() => { handleSave(path, name, selector) }} children={<LuHardDriveDownload />} />)
+                    (
+                        <Button variant={"primary"} onClick={() => { handleSave(path, name, selector) }} children={<LuHardDriveDownload />} />
+                    )
                     :
                     (<Button variant={"primary"} onClick={() => { handleCloseButton(id) }} children={<LuX />} />)}
             </span>

@@ -1,11 +1,27 @@
 export namespace models {
 	
+	export class ConversionInfo {
+	    NewPath: string;
+	    NewSize: number;
+	
+	    static createFrom(source: any = {}) {
+	        return new ConversionInfo(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.NewPath = source["NewPath"];
+	        this.NewSize = source["NewSize"];
+	    }
+	}
 	export class ImageStruct {
 	    FileName: string;
 	    FileType: string;
 	    FilePath: string;
+	    FileSize: number;
 	    ConvertedPath: string;
-	    Preview: string;
+	    ConvertedSize: number;
+	    Base64Preview: string;
 	
 	    static createFrom(source: any = {}) {
 	        return new ImageStruct(source);
@@ -16,8 +32,10 @@ export namespace models {
 	        this.FileName = source["FileName"];
 	        this.FileType = source["FileType"];
 	        this.FilePath = source["FilePath"];
+	        this.FileSize = source["FileSize"];
 	        this.ConvertedPath = source["ConvertedPath"];
-	        this.Preview = source["Preview"];
+	        this.ConvertedSize = source["ConvertedSize"];
+	        this.Base64Preview = source["Base64Preview"];
 	    }
 	}
 
