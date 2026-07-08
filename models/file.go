@@ -8,6 +8,8 @@ type ImageStruct struct {
 	FilePath string
 	FileSize int64
 
+	IsConverted   bool
+	ConvertTo     string
 	ConvertedPath string
 	ConvertedSize int64
 	Base64Preview string
