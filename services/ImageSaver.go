@@ -8,6 +8,7 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
+// * Salva a imagem presente no caminho especificado utilizando o formato e nome informados.
 func SaveImage(tempPath, name, desiredFormat string, ctx context.Context) error {
 	path, err := runtime.SaveFileDialog(ctx, runtime.SaveDialogOptions{
 		Title:            "Salvar Imagem Convertida",
@@ -17,10 +18,10 @@ func SaveImage(tempPath, name, desiredFormat string, ctx context.Context) error 
 			{DisplayName: "Imagem " + desiredFormat, Pattern: "*." + desiredFormat},
 		},
 	})
-
 	if err != nil {
 		return err
 	}
+
 	if path == "" {
 		return nil
 	}

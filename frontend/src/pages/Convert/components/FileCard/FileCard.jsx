@@ -30,21 +30,23 @@ const FileCard = ({
     handleSave,
     ...props
 }) => {
-    const { id, name, type, src, path, isConverted, convertTo, size, convertSize } = file;
+    const { ID, FileName, FilePath, FileSize, FileType, IsConverted, ConvertedPath, ConvertedSize, ConvertTo = "WEBP", Base64Preview } = file;
     //* Receber o size em bytes para melhorar
     const [open, setOpen] = useState(false);
-    const [selector, setSelector] = useState(convertTo);
-    let oldSize = bytesParser(size);
-    let newSize = bytesParser(convertSize);
+    const [selector, setSelector] = useState(ConvertTo);
+
+    const src = `data:image/${FileType};charset=utf-8;base64,${Base64Preview}` //* blob do arquivo em Base64
+    let oldSize = bytesParser(FileSize);
+    let newSize = bytesParser(ConvertedSize); // por algum motivo convertedsize ta retornando o convertedpath
 
     return (
         <li className={styles.file}>
             <img className={styles.image} src={src} draggable={false} />
             <div className={styles.description}>
-                <p className={`${styles.name} text_overflow`}>{name}</p>
+                <p className={`${styles.name} text_overflow`}>{FileName}</p>
                 <span className={styles.info}>
-                    <p className={`${styles.type} text_overflow`}>{type}, <span>{oldSize}</span></p>
-                    {isConverted ? (<><LuArrowRight /><span className={styles.newInfo}>{newSize},</span><span className={styles.newInfo}>{convertTo}</span></>) : (null)}
+                    <p className={`${styles.type} text_overflow`}>{FileType}, <span>{oldSize}</span></p>
+                    {IsConverted ? (<><LuArrowRight /><span className={styles.newInfo}>{newSize}</span><span className={styles.newInfo}>{ConvertTo}</span></>) : (null)}
                 </span>
 
 
@@ -52,7 +54,7 @@ const FileCard = ({
 
 
             <span className={styles.buttons}>
-                {!isConverted ? (
+                {!IsConverted ? (
                     <>
                         <p className={styles.text}>Converter para</p>
                         <Button variant={styles.dropdown} children={<>{selector}<span className={styles.rotateOnClick}><LuChevronDown /></span></>} onClick={() => { setOpen(!open) }} />
@@ -75,12 +77,12 @@ const FileCard = ({
                         ))}
                     </ul>
                 ) : null}
-                {isConverted == true ?
+                {IsConverted == true ?
                     (
-                        <Button variant={"primary"} onClick={() => { handleSave(path, name, selector) }} children={<LuHardDriveDownload />} />
+                        <Button variant={"primary"} onClick={() => { handleSave(FilePath, FileName, selector) }} children={<LuHardDriveDownload />} />
                     )
                     :
-                    (<Button variant={"primary"} onClick={() => { handleCloseButton(id) }} children={<LuX />} />)}
+                    (<Button variant={"primary"} onClick={() => { handleCloseButton(ID) }} children={<LuX />} />)}
             </span>
         </li>
     )

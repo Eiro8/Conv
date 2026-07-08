@@ -29,6 +29,7 @@ function App() {
         e.preventDefault();
         setIsHovered(true)
     };
+
     const handleDragLeave = (e) => {
         e.preventDefault();
         setIsHovered(false);
@@ -36,7 +37,7 @@ function App() {
 
 
     function handleCloseButton(targetId) {
-        setFiles(filesArray => filesArray.filter((item) => item.id != targetId));
+        setFiles(filesArray => filesArray.filter((item) => item.ID != targetId));
     };
 
     function handleBackButton() {
@@ -47,26 +48,7 @@ function App() {
         handleImageDrop(paths)
     }, true)
 
-
-    function createImageObject(id = 1, name = "Image-Name", type = "TYPE", base64 = "BASE64", size = 67, path = "/", isConverted, convertPath = "/", convertTo = "WEBP", convertSize = 67) {
-        let fileObj = {
-            "id": id,
-            "name": name,
-            "type": type,
-            "src": `data:image/${type};charset=utf-8;base64,${base64}`, //* blob do arquivo em Base64
-            "size": size, //adicionar size do arquivo pelo backend
-            "path": path,
-            "isConverted": isConverted,
-            "convertPath": convertPath,
-            "convertTo": convertTo,
-            "convertSize": convertSize,
-        }
-
-        return fileObj
-    }
-
     async function handleImageDrop(pathArray) {
-        console.log(pathArray)
         await imageParser(pathArray);
     }
 
@@ -78,21 +60,8 @@ function App() {
     async function imageParser(pathArray) {
         try {
             let ImageObjects = await ParseImagePaths(pathArray);
-            ImageObjects.forEach(async (item, i) => {
-                let { FileName, FilePath, FileType, FileSize, ConvertedPath, Base64Preview, ConvertedSize } = item
-                const fileObj = createImageObject(
-                    files.length + i + 2,
-                    FileName,
-                    FileType,
-                    Base64Preview,
-                    FileSize,
-                    FilePath,
-                    false,
-                    ConvertedPath,
-                    "WEBP",
-                    ConvertedSize
-                )
-                setFiles(prev => [...prev, fileObj])
+            ImageObjects.forEach(async (fileObj, i) => {
+                setFiles(prev => [...prev, fileObj]);
             })
         } catch (error) {
             console.log(new Error(`Ocorreu um erro ao processar suas imagens: ${error.message}`))
@@ -101,16 +70,14 @@ function App() {
     }
 
     async function handleConvert() {
-        //* Em um futuro próximo, devo alterar esse index para ID, porque quero adicionar um botão X caso o user
-        //* queria remover um arquivo ENQUANTO está convertendo
         try {
             files.forEach(async (file, i) => {
-                if (!file.isConverted) {
-                    let { NewPath, NewSize } = await ConvertImage(file.path, file.convertTo);
-
+                const { IsConverted, FilePath, ConvertTo } = file;
+                if (IsConverted === false) {
+                    let { NewPath, NewSize } = await ConvertImage(FilePath, ConvertTo);
                     setFiles(prev => {
                         const newArr = [...prev];
-                        let newFile = { ...file, convertPath: NewPath, convertSize: NewSize, isConverted: true };
+                        let newFile = { ...file, ConvertedSize: NewSize, ConvertedPath: NewPath, IsConverted: true, };
                         newArr[i] = newFile;
                         return newArr
                     })
@@ -120,14 +87,15 @@ function App() {
             })
         }
         catch (error) {
+            console.log(error)
             return new Error(`Um erro ocorreu ao converter o arquivo: \n \n${error}`)
         }
         return files
     }
 
-    async function saveFile(path, name, format) {
+    async function saveFile(currentPath, name, format) {
         try {
-            SaveFile(path, name, format)
+            SaveFile(currentPath, name, format)
         } catch (error) {
             return new Error(error.message)
         }
@@ -141,15 +109,13 @@ function App() {
                 {files.length > 0 ? (
                     <div className={'files_container'}>
                         <ul className='files_box' >
-                            {files.map((item, index) => {
-                                let ID = index + files.length + 1
+                            {files.map((item) => {
+                                let ID = item.ID
                                 return (
                                     <FileCard
                                         file={item}
                                         key={ID}
                                         id={ID}
-                                        isSaved={false}
-
                                         allowedFileTypes={allowedFileTypes}
 
                                         handleCloseButton={handleCloseButton}
