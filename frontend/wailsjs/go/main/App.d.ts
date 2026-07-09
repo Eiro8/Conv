@@ -6,6 +6,8 @@ export function ConvertImage(arg1:string,arg2:string):Promise<models.ConversionI
 
 export function GetInputPath():Promise<Array<string>>;
 
+export function OpenDirectoryDialog():Promise<string>;
+
 export function ParseImagePaths(arg1:Array<string>):Promise<Array<models.ImageStruct>>;
 
-export function SaveFile(arg1:string,arg2:string,arg3:string):Promise<void>;
+export function SaveFile(arg1:string,arg2:string,arg3:string,arg4:string):Promise<void>;

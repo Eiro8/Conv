@@ -8,14 +8,21 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
-// * Salva a imagem presente no caminho especificado utilizando o formato e nome informados.
-func SaveImage(tempPath, name, desiredFormat string, ctx context.Context) error {
+var DirectoryPath = ""
+
+// * Salva a imagem presente no caminho especificado no  utilizando o formato e nome informados.
+func SaveImage(FileName, FileFormat, CurrentPath, DesiredPath string, ctx context.Context) error {
+	if DesiredPath != "" {
+		DirectoryPath = DesiredPath
+	}
+	print(DesiredPath)
+	print(DirectoryPath)
 	path, err := runtime.SaveFileDialog(ctx, runtime.SaveDialogOptions{
 		Title:            "Salvar Imagem Convertida",
-		DefaultDirectory: "",
-		DefaultFilename:  name + "." + desiredFormat,
+		DefaultDirectory: DirectoryPath,
+		DefaultFilename:  FileName,
 		Filters: []runtime.FileFilter{
-			{DisplayName: "Imagem " + desiredFormat, Pattern: "*." + desiredFormat},
+			{DisplayName: "Imagem " + FileFormat, Pattern: "*." + FileFormat},
 		},
 	})
 	if err != nil {
@@ -26,7 +33,7 @@ func SaveImage(tempPath, name, desiredFormat string, ctx context.Context) error 
 		return nil
 	}
 
-	source, err := os.Open(tempPath)
+	source, err := os.Open(CurrentPath)
 	if err != nil {
 		return err
 	}
@@ -43,7 +50,7 @@ func SaveImage(tempPath, name, desiredFormat string, ctx context.Context) error 
 		return err
 	}
 
-	err = os.Remove(tempPath)
+	err = os.Remove(CurrentPath)
 	if err != nil {
 		return err
 	}

@@ -17,7 +17,7 @@ func CreateImageStruct(format string, path string, base64 string, size int64) (m
 	}
 	idCounter++
 	var newImg models.ImageStruct = models.ImageStruct{
-		idCounter, name, format, path, size, false, "WEBP", "?", 0, base64,
+		idCounter, name, format, path, size, false, "WEBP", "", 0, base64,
 	}
 	return newImg, nil
 }

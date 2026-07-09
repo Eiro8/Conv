@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 import './App.css';
 
@@ -7,13 +7,19 @@ import Navbar from './components/layout/Navbar/Navbar';
 import FileCard from './pages/Convert/components/FileCard/FileCard';
 import Logo from './assets/images/logo-universal.png'
 
-import { LuUpload, LuX, LuHardDriveDownload, LuCornerDownLeft, LuCirclePlus, LuSettings2 } from "react-icons/lu";
+import { LuUpload, LuX, LuHardDriveDownload, LuCornerDownLeft, LuCirclePlus, LuSettings2, LuFile } from "react-icons/lu";
 import { Button } from './components/ui/Button/Button';
 
-import { GetInputPath, ConvertImage, SaveFile, ParseImagePaths } from "../wailsjs/go/main/App";
+import { GetInputPath, ConvertImage, SaveFile, ParseImagePaths, OpenDirectoryDialog } from "../wailsjs/go/main/App";
 import { OnFileDrop } from '../wailsjs/runtime/runtime'
 
 function App() {
+
+    const [saveDirectory, setSaveDirectory] = useState("");
+    const [convertQuality, setConvertQuality] = useState(1)
+
+
+    const ConfigForm = useRef();
     const [selected, setSelected] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
     const [open, setOpen] = useState(false)
@@ -93,12 +99,36 @@ function App() {
         return files
     }
 
-    async function saveFile(currentPath, name, format) {
+    async function saveFile(name, format, currentPath, saveDirectory) {
         try {
-            SaveFile(currentPath, name, format)
+            SaveFile(name, format, currentPath, saveDirectory)
         } catch (error) {
             return new Error(error.message)
         }
+    }
+
+    function handleConfigSubmit(e) {
+        e.preventDefault();
+        const formData = new FormData(ConfigForm.current)
+        const data = Object.fromEntries(formData)
+        console.log(data);
+        setOpen(false);
+    }
+
+    async function handleDirectorySelector(e) {
+        e.preventDefault();
+        let directory = await OpenDirectoryDialog();
+        console.log(directory)
+        if (!directory) {
+            console.log("!directory")
+            setSaveDirectory("")
+        } else {
+            setSaveDirectory(directory)
+        }
+    }
+
+    function handleDirectorySelectorInput(e) {
+        setSaveDirectory(e.target.value)
     }
 
 
@@ -120,6 +150,7 @@ function App() {
 
                                         handleCloseButton={handleCloseButton}
                                         handleSave={saveFile}
+                                        saveDirectory={saveDirectory}
                                     />
                                 )
                             })}
@@ -135,13 +166,21 @@ function App() {
                                             <div className='config_background'>
                                                 <div className='config_options'>
                                                     <Button children={<LuX />} onClick={() => setOpen(false)} />
-                                                    <div className='options_box'>
+
+                                                    <form className='options_box' ref={ConfigForm}>
                                                         <h2>Configurações</h2>
-                                                        <div className='option'>
-                                                            <input className='option_input' id='option_input' type='text' placeholder='ex: C:/Users/Pogba/Downloads'></input>
-                                                        </div>
-                                                    </div>
+                                                        <span>
+                                                            <button type='button' onClick={handleDirectorySelector}><LuFile /></button>
+                                                            <input type='text' name={"save_directory"} placeholder="ex: C:\User\CR7\GOAT" value={saveDirectory} onChange={handleDirectorySelectorInput} ></input>
+                                                        </span>
+                                                        <input className="option_range" name="quality_range" type='range' min={1} max={4} step={1} defaultValue={convertQuality}></input>
+                                                        <button type="submit" name="submit_button" onClick={handleConfigSubmit}>Salvar</button>
+                                                    </form>
                                                 </div>
+
+
+
+
                                             </div>
                                         ) : (null)}
                                     {/*o ideal aqui seria passar uma array de strings ( file ) para entao converter todos juntos no Go.*/}
@@ -158,7 +197,8 @@ function App() {
                         <h3>Selecionar Imagem(ns)</h3>
                         <p>Arraste & Solte ou <span className='highlight'>Escolha</span></p>
                     </div>
-                )}
+                )
+                }
             </div >
         </section >
     </>

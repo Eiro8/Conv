@@ -3,7 +3,6 @@ import { useState } from 'react'
 import styles from './filecard.module.css'
 import { Button } from '../../../../components/ui/Button/Button'
 import { LuX, LuHardDriveDownload, LuChevronDown, LuArrowLeftFromLine, LuArrowRight } from "react-icons/lu";
-
 //* formata bytes para GB/MB/KB/Bytes (ex: 6000000 => "6 MB" )
 function bytesParser(size) {
     let kilobyte = 1024;
@@ -28,6 +27,7 @@ const FileCard = ({
     allowedFileTypes,
     handleCloseButton,
     handleSave,
+    saveDirectory,
     ...props
 }) => {
     const { ID, FileName, FilePath, FileSize, FileType, IsConverted, ConvertedPath, ConvertedSize, ConvertTo = "WEBP", Base64Preview } = file;
@@ -79,7 +79,7 @@ const FileCard = ({
                 ) : null}
                 {IsConverted == true ?
                     (
-                        <Button variant={"primary"} onClick={() => { handleSave(FilePath, FileName, selector) }} children={<LuHardDriveDownload />} />
+                        <Button variant={"primary"} onClick={() => { handleSave(FileName, selector, FilePath, saveDirectory) }} children={<LuHardDriveDownload />} />
                     )
                     :
                     (<Button variant={"primary"} onClick={() => { handleCloseButton(ID) }} children={<LuX />} />)}

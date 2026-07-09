@@ -24,13 +24,13 @@ func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 }
 
-func (a *App) ConvertImage(ImagePath string, extension string) (models.ConversionInfo, error) {
+func (a *App) ConvertImage(ImagePath, extension string) (models.ConversionInfo, error) {
 	convertedFileInfo, err := services.Convert(ImagePath, extension)
 	return convertedFileInfo, err
 }
 
-func (a *App) SaveFile(tempPath, name, format string) error {
-	return services.SaveImage(tempPath, name, format, a.ctx)
+func (a *App) SaveFile(FileName, FileFormat, CurrentPath, DesiredPath string) error {
+	return services.SaveImage(FileName, FileFormat, CurrentPath, DesiredPath, a.ctx)
 }
 func (a *App) GetInputPath() []string {
 	imagePaths, err := runtime.OpenMultipleFilesDialog(a.ctx, runtime.OpenDialogOptions{})
@@ -41,4 +41,16 @@ func (a *App) GetInputPath() []string {
 }
 func (a *App) ParseImagePaths(ImagesPath []string) []models.ImageStruct {
 	return services.LoadImages(ImagesPath)
+}
+
+func (a *App) OpenDirectoryDialog() (string, error) {
+	dir, err := runtime.OpenDirectoryDialog(a.ctx, runtime.OpenDialogOptions{
+		DefaultDirectory:           "",
+		DefaultFilename:            "",
+		Title:                      "Selecione a pasta a qual deseja salvar seus arquivos",
+		ShowHiddenFiles:            false,
+		CanCreateDirectories:       true,
+		TreatPackagesAsDirectories: false,
+	})
+	return dir, err
 }
