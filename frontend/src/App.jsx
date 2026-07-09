@@ -42,10 +42,17 @@ function App() {
     };
 
 
+    /**
+     * Remove de 'files' o elemento cujo targetID for igual a seu ID.
+     * @param {string} targetId ID do elemento a ser deletado do useState files 
+     */
     function handleCloseButton(targetId) {
         setFiles(filesArray => filesArray.filter((item) => item.ID != targetId));
     };
 
+    /** 
+     * Reseta setFiles() para uma array vazia
+    */
     function handleBackButton() {
         setFiles([])
     }
@@ -54,15 +61,30 @@ function App() {
         handleImageDrop(paths)
     }, true)
 
+    /**
+     * Recebe uma array de paths e os executa chamando function imageParser()
+     * @param {string} pathArray array de paths de arquivos  
+     */
+
     async function handleImageDrop(pathArray) {
         await imageParser(pathArray);
     }
 
+    /**
+     * Chama {@link GetInputPath} e executa o retorno em {@link imageParser}
+     */
     async function handleImageInput() {
         const pathArray = await GetInputPath();
         await imageParser(pathArray);
     }
 
+    /**
+     * Recebe uma lista de caminhos de imagens, cria os objetos correspondentes
+    * através de {@link ParseImagePaths} e adiciona os arquivos ao estado.
+     * 
+     * @param {string} pathArray 
+     * @returns erro caso ocorra uma falha
+     */
     async function imageParser(pathArray) {
         try {
             let ImageObjects = await ParseImagePaths(pathArray);
@@ -75,11 +97,16 @@ function App() {
         }
     }
 
+    /**
+     * processa os arquivos de {@link files} e verifica se estao convertidos.
+     * caso nao,  {@link ConvertImage} irá converte-los e atualizar seus objetos 
+     * @returns erro caso ocorra um erro ao converter um arquivo
+     */
     async function handleConvert() {
         try {
             files.forEach(async (file, i) => {
                 const { IsConverted, FilePath, ConvertTo } = file;
-                if (IsConverted === false) {
+                if (!IsConverted) {
                     let { NewPath, NewSize } = await ConvertImage(FilePath, ConvertTo);
                     setFiles(prev => {
                         const newArr = [...prev];
@@ -99,6 +126,15 @@ function App() {
         return files
     }
 
+    /**
+     * Salva o arquivo no diretório selecionado
+     * 
+     * @param {string} name - Nome do arquivo
+     * @param {string} format - Formato do arquivo
+     * @param {string} currentPath - Caminho do arquivo original
+     * @param {string} saveDirectory - Caminho do arquivo convertido
+     * @returns 
+     */
     async function saveFile(name, format, currentPath, saveDirectory) {
         try {
             SaveFile(name, format, currentPath, saveDirectory)
@@ -107,14 +143,26 @@ function App() {
         }
     }
 
+    /**
+     * Atualiza os estados de {@link setSaveDirectory} e {@link setConvertQuality} a partir do input da form
+     * @param {Event} e evento de clique 
+     */
     function handleConfigSubmit(e) {
         e.preventDefault();
         const formData = new FormData(ConfigForm.current)
         const data = Object.fromEntries(formData)
         console.log(data);
+
+        let { save_directory, quality_range } = data
+        setSaveDirectory(save_directory)
+        setConvertQuality(quality_range)
         setOpen(false);
     }
 
+    /**
+     * Lida com o botão de seleção de diretório em configurações
+     * @param {Event} e 
+     */
     async function handleDirectorySelector(e) {
         e.preventDefault();
         let directory = await OpenDirectoryDialog();
@@ -127,6 +175,10 @@ function App() {
         }
     }
 
+    /**
+     * Lida com o input de seleção de diretório em configurações.
+     * @param {Event} e 
+     */
     function handleDirectorySelectorInput(e) {
         setSaveDirectory(e.target.value)
     }
