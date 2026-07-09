@@ -2,6 +2,8 @@ package services
 
 import (
 	"context"
+	"errors"
+	"file/helper"
 	"io"
 	"os"
 
@@ -13,8 +15,13 @@ var DirectoryPath = ""
 // * Salva a imagem presente no caminho especificado no  utilizando o formato e nome informados.
 func SaveImage(FileName, FileFormat, CurrentPath, DesiredPath string, ctx context.Context) error {
 	if DesiredPath != "" {
+		var err error = helper.ValidatePath(DesiredPath)
+		if err != nil {
+			return errors.New("A pasta de salvamento que você escolheu é invalida")
+		}
 		DirectoryPath = DesiredPath
 	}
+
 	print(DesiredPath)
 	print(DirectoryPath)
 	path, err := runtime.SaveFileDialog(ctx, runtime.SaveDialogOptions{
