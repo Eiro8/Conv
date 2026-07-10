@@ -16,7 +16,7 @@ import { OnFileDrop } from '../wailsjs/runtime/runtime'
 function App() {
 
     const [saveDirectory, setSaveDirectory] = useState("");
-    const [convertQuality, setConvertQuality] = useState(1)
+    const [convertQuality, setConvertQuality] = useState(75)
 
 
     const ConfigForm = useRef();
@@ -224,7 +224,7 @@ function App() {
                                                             <button type='button' onClick={handleDirectorySelector}><LuFile /></button>
                                                             <input type='text' name={"save_directory"} placeholder="ex: C:\User\CR7\GOAT" value={saveDirectory} onChange={handleDirectorySelectorInput} ></input>
                                                         </span>
-                                                        <input className="option_range" name="quality_range" type='range' min={0} max={4} step={1} defaultValue={convertQuality}></input>
+                                                        <input className="option_range" name="quality_range" type='range' min={0} max={100} step={1} defaultValue={convertQuality}></input>
                                                         <button type="submit" name="submit_button" onClick={handleConfigSubmit}>Salvar</button>
                                                     </form>
                                                 </div>

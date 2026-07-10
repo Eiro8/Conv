@@ -1,9 +1,10 @@
 module file
 
-go 1.23.0
+go 1.24.2
 
 require (
 	github.com/HugoSmits86/nativewebp v1.3.0
+	github.com/deepteams/webp v1.2.7
 	github.com/wailsapp/wails/v2 v2.12.0
 	golang.org/x/image v0.24.0
 )
