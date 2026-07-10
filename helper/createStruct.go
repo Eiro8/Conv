@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 )
 
-// * mantém a informação de qual ID e
+// * número único utilizado para indentificação de ImageStruct
 var idCounter = 0
 
 // Cria o struct das Imagens

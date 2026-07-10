@@ -11,36 +11,34 @@ Itera sobre todos arquivos, e após limpar o path ( troca \\ por /), e verificar
 
 extensão do arquivo ( png, jpeg etc...), o adiciona em uma array de models.ImageStruct
 */
-func LoadImages(images []string) []models.ImageStruct {
+func LoadImages(imagePath string) models.ImageStruct {
 
-	structArr := make([]models.ImageStruct, 0, len(images))
+	sourceImage, format, ok := helper.OpenAndDecode(imagePath)
+	if ok != nil {
+		fmt.Printf("Ocorreu um erro: %v", ok)
+		return models.ImageStruct{}
 
-	for _, imgPath := range images {
-
-		sourceImage, format, ok := helper.OpenAndDecode(imgPath)
-		if ok != nil {
-			fmt.Printf("Ocorreu um erro: %v", ok)
-			continue
-		}
-		var erro error = helper.CheckImageFormat(format)
-		if erro != nil {
-			fmt.Printf("O formato %v não é aceito pelo sistema.", format)
-			continue
-		}
-		ImageSize, err := helper.GetByteSize(imgPath)
-		if err != nil {
-			fmt.Printf("Ocorreu um erro: %v", err)
-			continue
-		}
-
-		thumbBase64 := helper.GenerateThumbnailBase64(sourceImage, 0, 0, 150, 150)
-		imgStruct, ok := helper.CreateImageStruct(format, imgPath, thumbBase64, ImageSize)
-		if ok != nil {
-			fmt.Printf("Ocorreu um erro ao criar o struct da imagem.\n\n %v", ok)
-			continue
-		}
-		structArr = append(structArr, imgStruct)
 	}
 
-	return structArr
+	var erro error = helper.CheckImageFormat(format)
+	if erro != nil {
+		fmt.Printf("O formato %v não é aceito pelo sistema.", format)
+		return models.ImageStruct{}
+
+	}
+	ImageSize, err := helper.GetByteSize(imagePath)
+	if err != nil {
+		fmt.Printf("Ocorreu um erro ao pegar os bytes: %v", err)
+		return models.ImageStruct{}
+	}
+
+	thumbBase64 := helper.GenerateThumbnailBase64(sourceImage, 0, 0, 150, 100)
+
+	imgStruct, ok := helper.CreateImageStruct(format, imagePath, thumbBase64, ImageSize)
+	if ok != nil {
+		fmt.Printf("Ocorreu um erro ao criar o struct da imagem.\n\n %v", ok)
+		return models.ImageStruct{}
+	}
+
+	return imgStruct
 }

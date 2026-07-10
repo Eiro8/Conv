@@ -16,7 +16,7 @@ import { OnFileDrop } from '../wailsjs/runtime/runtime'
 function App() {
 
     const [saveDirectory, setSaveDirectory] = useState("");
-    const [convertQuality, setConvertQuality] = useState(75)
+    const [convertQuality, setConvertQuality] = useState(20)
 
 
     const ConfigForm = useRef();
@@ -96,7 +96,6 @@ function App() {
             return new Error(`Ocorreu um erro ao processar suas imagens: ${error.message}`)
         }
     }
-
     /**
      * processa os arquivos de {@link files} e verifica se estao convertidos.
      * caso nao,  {@link ConvertImage} irá converte-los e atualizar seus objetos 
@@ -104,16 +103,19 @@ function App() {
      */
     async function handleConvert() {
         try {
+
             files.forEach(async (file, i) => {
                 const { IsConverted, FilePath, ConvertTo } = file;
                 if (!IsConverted) {
                     let { NewPath, NewSize } = await ConvertImage(FilePath, ConvertTo, convertQuality);
+
                     setFiles(prev => {
                         const newArr = [...prev];
                         let newFile = { ...file, ConvertedSize: NewSize, ConvertedPath: NewPath, IsConverted: true, };
                         newArr[i] = newFile;
                         return newArr
                     })
+
                 } else {
                     return file
                 }

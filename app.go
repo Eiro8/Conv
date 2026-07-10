@@ -4,6 +4,7 @@ import (
 	"context"
 	"file/models"
 	"file/services"
+	"sync"
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
@@ -40,7 +41,18 @@ func (a *App) GetInputPath() []string {
 	return imagePaths
 }
 func (a *App) ParseImagePaths(ImagesPath []string) []models.ImageStruct {
-	return services.LoadImages(ImagesPath)
+	pathsArray := make([]models.ImageStruct, 0, len(ImagesPath))
+	var wg sync.WaitGroup
+	for _, path := range ImagesPath {
+		wg.Add(1)
+		go func() {
+			imgStruct := services.LoadImages(path)
+			pathsArray = append(pathsArray, imgStruct)
+			wg.Done()
+		}()
+	}
+	wg.Wait()
+	return pathsArray
 }
 
 func (a *App) OpenDirectoryDialog() (string, error) {
