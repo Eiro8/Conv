@@ -24,8 +24,8 @@ func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 }
 
-func (a *App) ConvertImage(ImagePath, extension string) (models.ConversionInfo, error) {
-	convertedFileInfo, err := services.Convert(ImagePath, extension)
+func (a *App) ConvertImage(ImagePath, extension string, convertQuality int) (models.ConversionInfo, error) {
+	convertedFileInfo, err := services.Convert(ImagePath, extension, convertQuality)
 	return convertedFileInfo, err
 }
 
