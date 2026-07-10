@@ -107,7 +107,7 @@ function App() {
             files.forEach(async (file, i) => {
                 const { IsConverted, FilePath, ConvertTo } = file;
                 if (!IsConverted) {
-                    let { NewPath, NewSize } = await ConvertImage(FilePath, ConvertTo);
+                    let { NewPath, NewSize } = await ConvertImage(FilePath, ConvertTo, convertQuality);
                     setFiles(prev => {
                         const newArr = [...prev];
                         let newFile = { ...file, ConvertedSize: NewSize, ConvertedPath: NewPath, IsConverted: true, };
@@ -131,13 +131,13 @@ function App() {
      * 
      * @param {string} name - Nome do arquivo
      * @param {string} format - Formato do arquivo
-     * @param {string} currentPath - Caminho do arquivo original
+     * @param {string} convertedPath - Caminho do arquivo original
      * @param {string} saveDirectory - Caminho do arquivo convertido
      * @returns 
      */
-    async function saveFile(name, format, currentPath, saveDirectory) {
+    async function saveFile(name, format, convertedPath, saveDirectory) {
         try {
-            SaveFile(name, format, currentPath, saveDirectory)
+            SaveFile(name, format, convertedPath, saveDirectory)
         } catch (error) {
             return new Error(error.message)
         }
@@ -151,11 +151,10 @@ function App() {
         e.preventDefault();
         const formData = new FormData(ConfigForm.current)
         const data = Object.fromEntries(formData)
-        console.log(data);
 
         let { save_directory, quality_range } = data
         setSaveDirectory(save_directory)
-        setConvertQuality(quality_range)
+        setConvertQuality(parseInt(quality_range))
         setOpen(false);
     }
 
@@ -225,7 +224,7 @@ function App() {
                                                             <button type='button' onClick={handleDirectorySelector}><LuFile /></button>
                                                             <input type='text' name={"save_directory"} placeholder="ex: C:\User\CR7\GOAT" value={saveDirectory} onChange={handleDirectorySelectorInput} ></input>
                                                         </span>
-                                                        <input className="option_range" name="quality_range" type='range' min={1} max={4} step={1} defaultValue={convertQuality}></input>
+                                                        <input className="option_range" name="quality_range" type='range' min={0} max={4} step={1} defaultValue={convertQuality}></input>
                                                         <button type="submit" name="submit_button" onClick={handleConfigSubmit}>Salvar</button>
                                                     </form>
                                                 </div>

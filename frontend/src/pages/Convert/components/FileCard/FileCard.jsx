@@ -3,7 +3,11 @@ import { useState } from 'react'
 import styles from './filecard.module.css'
 import { Button } from '../../../../components/ui/Button/Button'
 import { LuX, LuHardDriveDownload, LuChevronDown, LuArrowLeftFromLine, LuArrowRight } from "react-icons/lu";
-//* formata bytes para GB/MB/KB/Bytes (ex: 6000000 => "6 MB" )
+/**
+ * formata bytes para GB/MB/KB/Bytes (ex: 6000000 => "6 MB" )
+ * @param {number} size tamanho em bytes
+ * @returns {string}
+ *  */
 function bytesParser(size) {
     let kilobyte = 1024;
     let megabyte = kilobyte * 1024;
@@ -30,14 +34,15 @@ const FileCard = ({
     saveDirectory,
     ...props
 }) => {
-    const { ID, FileName, FilePath, FileSize, FileType, IsConverted, ConvertedPath, ConvertedSize, ConvertTo = "WEBP", Base64Preview } = file;
+    const { ID, FileName, FileSize, FileType, IsConverted, ConvertedPath, ConvertedSize, Base64Preview } = file;
+    let { ConvertTo } = file;
     //* Receber o size em bytes para melhorar
     const [open, setOpen] = useState(false);
     const [selector, setSelector] = useState(ConvertTo);
 
     const src = `data:image/${FileType};charset=utf-8;base64,${Base64Preview}` //* blob do arquivo em Base64
     let oldSize = bytesParser(FileSize);
-    let newSize = bytesParser(ConvertedSize); // por algum motivo convertedsize ta retornando o convertedpath
+    let newSize = bytesParser(ConvertedSize);
 
     return (
         <li className={styles.file}>
@@ -46,7 +51,7 @@ const FileCard = ({
                 <p className={`${styles.name} text_overflow`}>{FileName}</p>
                 <span className={styles.info}>
                     <p className={`${styles.type} text_overflow`}>{FileType}, <span>{oldSize}</span></p>
-                    {IsConverted ? (<><LuArrowRight /><span className={styles.newInfo}>{newSize}</span><span className={styles.newInfo}>{ConvertTo}</span></>) : (null)}
+                    {IsConverted ? (<><LuArrowRight /><span className={styles.newInfo}>{newSize}</span><span className={styles.newInfo}>{selector}</span></>) : (null)}
                 </span>
 
 
@@ -57,7 +62,7 @@ const FileCard = ({
                 {!IsConverted ? (
                     <>
                         <p className={styles.text}>Converter para</p>
-                        <Button variant={styles.dropdown} children={<>{selector}<span className={styles.rotateOnClick}><LuChevronDown /></span></>} onClick={() => { setOpen(!open) }} />
+                        <Button variant={styles.dropdown} children={<>{selector}<span className={styles.rotateOnClick}><LuChevronDown /></span></>} onClick={() => { setOpen(!open); }} />
                     </>
                 ) : null}
 
@@ -79,7 +84,7 @@ const FileCard = ({
                 ) : null}
                 {IsConverted == true ?
                     (
-                        <Button variant={"primary"} onClick={() => { handleSave(FileName, selector, FilePath, saveDirectory) }} children={<LuHardDriveDownload />} />
+                        <Button variant={"primary"} onClick={() => { handleSave(FileName, selector, ConvertedPath, saveDirectory) }} children={<LuHardDriveDownload />} />
                     )
                     :
                     (<Button variant={"primary"} onClick={() => { handleCloseButton(ID) }} children={<LuX />} />)}
