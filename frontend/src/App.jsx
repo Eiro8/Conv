@@ -10,8 +10,9 @@ import Logo from './assets/images/logo-universal.png'
 import { LuUpload, LuX, LuHardDriveDownload, LuCornerDownLeft, LuCirclePlus, LuSettings2, LuFile } from "react-icons/lu";
 import { Button } from './components/ui/Button/Button';
 
-import { GetInputPath, ConvertImage, SaveFile, ParseImagePaths, OpenDirectoryDialog } from "../wailsjs/go/main/App";
+import { GetInputPath, ConvertImage, ParseImagePaths, OpenDirectoryDialog } from "../wailsjs/go/main/App";
 import { OnFileDrop } from '../wailsjs/runtime/runtime'
+import CreateImageObject from './services/fileCreatorService';
 
 function App() {
 
@@ -23,6 +24,7 @@ function App() {
     const [selected, setSelected] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
     const [open, setOpen] = useState(false)
+
     const [files, setFiles] = useState([]);
     const allowedFileTypes = new Set([
         'WEBP',
@@ -80,15 +82,15 @@ function App() {
 
     /**
      * Recebe uma lista de caminhos de imagens, cria os objetos correspondentes
-    * através de {@link ParseImagePaths} e adiciona os arquivos ao estado.
+    * através de {@link CreateImageObject} e adiciona os arquivos ao estado.
      * 
      * @param {string} pathArray 
      * @returns erro caso ocorra uma falha
      */
-    async function imageParser(pathArray) {
+    function imageParser(pathArray) {
         try {
-            let ImageObjects = await ParseImagePaths(pathArray);
-            ImageObjects.forEach(async (fileObj, i) => {
+            let ImageObjects = CreateImageObject(pathArray);
+            ImageObjects.forEach((fileObj) => {
                 setFiles(prev => [...prev, fileObj]);
             })
         } catch (error) {
@@ -96,19 +98,19 @@ function App() {
             return new Error(`Ocorreu um erro ao processar suas imagens: ${error.message}`)
         }
     }
+
     /**
      * processa os arquivos de {@link files} e verifica se estao convertidos.
      * caso nao,  {@link ConvertImage} irá converte-los e atualizar seus objetos 
      * @returns erro caso ocorra um erro ao converter um arquivo
      */
-    async function handleConvert() {
+    function handleConvert() {
         try {
-
             files.forEach(async (file, i) => {
                 const { IsConverted, FilePath, ConvertTo } = file;
                 if (!IsConverted) {
                     let { NewPath, NewSize } = await ConvertImage(FilePath, ConvertTo, convertQuality);
-
+                    unconvertedArr.push(i = {})
                     setFiles(prev => {
                         const newArr = [...prev];
                         let newFile = { ...file, ConvertedSize: NewSize, ConvertedPath: NewPath, IsConverted: true, };
@@ -128,22 +130,9 @@ function App() {
         return files
     }
 
-    /**
-     * Salva o arquivo no diretório selecionado
-     * 
-     * @param {string} name - Nome do arquivo
-     * @param {string} format - Formato do arquivo
-     * @param {string} convertedPath - Caminho do arquivo original
-     * @param {string} saveDirectory - Caminho do arquivo convertido
-     * @returns 
-     */
-    async function saveFile(name, format, convertedPath, saveDirectory) {
-        try {
-            SaveFile(name, format, convertedPath, saveDirectory)
-        } catch (error) {
-            return new Error(error.message)
-        }
-    }
+
+
+
 
     /**
      * Atualiza os estados de {@link setSaveDirectory} e {@link setConvertQuality} a partir do input da form
@@ -202,7 +191,6 @@ function App() {
                                         allowedFileTypes={allowedFileTypes}
 
                                         handleCloseButton={handleCloseButton}
-                                        handleSave={saveFile}
                                         saveDirectory={saveDirectory}
                                     />
                                 )

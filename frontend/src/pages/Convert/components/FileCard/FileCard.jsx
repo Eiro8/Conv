@@ -2,35 +2,14 @@ import React from 'react'
 import { useState } from 'react'
 import styles from './filecard.module.css'
 import { Button } from '../../../../components/ui/Button/Button'
-import { LuX, LuHardDriveDownload, LuChevronDown, LuArrowLeftFromLine, LuArrowRight } from "react-icons/lu";
-/**
- * formata bytes para GB/MB/KB/Bytes (ex: 6000000 => "6 MB" )
- * @param {number} size tamanho em bytes
- * @returns {string}
- *  */
-function bytesParser(size) {
-    let kilobyte = 1024;
-    let megabyte = kilobyte * 1024;
-    let gigabyte = megabyte * 1024;
-    let fileSize = ""
-
-    if (size >= gigabyte) {
-        fileSize = `${(size / gigabyte).toFixed(1)} GB`
-    } else if (size >= megabyte) {
-        fileSize = `${(size / megabyte).toFixed(1)} MB`
-    } else if (size >= kilobyte) {
-        fileSize = `${(size / kilobyte).toFixed(1)} KB`
-    } else {
-        fileSize = `${size} bytes`
-    }
-    return fileSize
-}
+import { LuX, LuHardDriveDownload, LuChevronDown, LuArrowRight } from "react-icons/lu";
+import bytesParser from '../../../../utils/ByteParser';
+import saveFile from '../../../../services/saveFile';
 
 const FileCard = ({
     file,
     allowedFileTypes,
     handleCloseButton,
-    handleSave,
     saveDirectory,
     ...props
 }) => {
@@ -84,7 +63,7 @@ const FileCard = ({
                 ) : null}
                 {IsConverted == true ?
                     (
-                        <Button variant={"primary"} onClick={() => { handleSave(FileName, selector, ConvertedPath, saveDirectory) }} children={<LuHardDriveDownload />} />
+                        <Button variant={"primary"} onClick={() => { saveFile(FileName, selector, ConvertedPath, saveDirectory) }} children={<LuHardDriveDownload />} />
                     )
                     :
                     (<Button variant={"primary"} onClick={() => { handleCloseButton(ID) }} children={<LuX />} />)}
