@@ -4,7 +4,7 @@ import styles from './filecard.module.css'
 import { Button } from '../../../../components/ui/Button/Button'
 import { LuX, LuHardDriveDownload, LuChevronDown, LuArrowRight } from "react-icons/lu";
 import bytesParser from '../../../../utils/ByteParser';
-import saveFile from '../../../../services/saveFile';
+import saveFile from '../../../../services/fileSaverService';
 
 const FileCard = ({
     file,

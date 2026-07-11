@@ -87,9 +87,9 @@ function App() {
      * @param {string} pathArray 
      * @returns erro caso ocorra uma falha
      */
-    function imageParser(pathArray) {
+    async function imageParser(pathArray) {
         try {
-            let ImageObjects = CreateImageObject(pathArray);
+            let ImageObjects = await CreateImageObject(pathArray);
             ImageObjects.forEach((fileObj) => {
                 setFiles(prev => [...prev, fileObj]);
             })
