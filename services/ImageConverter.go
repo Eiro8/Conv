@@ -9,7 +9,11 @@ import (
 	"sync"
 )
 
-func Convert(path, extension string, conversionQuality int) (models.ConversionInfo, error) {
+func Convert(unconvertedFile models.UnconvertedFile, conversionQuality uint8) (models.ConversionInfo, error) {
+
+	path := unconvertedFile.FilePath
+	extension := unconvertedFile.ConvertTo
+	ID := unconvertedFile.ID
 
 	imgfile, _, err := helper.OpenAndDecode(path)
 
@@ -21,7 +25,7 @@ func Convert(path, extension string, conversionQuality int) (models.ConversionIn
 	var wg sync.WaitGroup
 	wg.Add(1)
 	go func() {
-		helper.EncodeByExtension(extension, conversionQuality, temp, imgfile)
+		helper.EncodeByExtension(extension, int(conversionQuality), temp, imgfile)
 		wg.Done()
 	}()
 
@@ -34,5 +38,5 @@ func Convert(path, extension string, conversionQuality int) (models.ConversionIn
 		return models.ConversionInfo{}, err
 	}
 
-	return models.ConversionInfo{newPath, newSize}, nil
+	return models.ConversionInfo{ID, newPath, newSize}, nil
 }

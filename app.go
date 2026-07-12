@@ -4,6 +4,7 @@ import (
 	"context"
 	"file/models"
 	"file/services"
+	"fmt"
 	"sync"
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
@@ -25,9 +26,23 @@ func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 }
 
-func (a *App) ConvertImage(ImagePath, extension string, convertQuality int) (models.ConversionInfo, error) {
-	convertedFileInfo, err := services.Convert(ImagePath, extension, convertQuality)
-	return convertedFileInfo, err
+func (a *App) ConvertImage(unconvertedFilesArray []models.UnconvertedFile, convertQuality uint8) ([]models.ConversionInfo, error) {
+	filesInfoArr := make([]models.ConversionInfo, 0, len(unconvertedFilesArray))
+	var wg sync.WaitGroup
+	for _, unconvertedFileInfo := range unconvertedFilesArray {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			info, err := services.Convert(unconvertedFileInfo, convertQuality)
+			if err != nil {
+				fmt.Printf("%v", err)
+				return
+			}
+			filesInfoArr = append(filesInfoArr, info)
+		}()
+	}
+	wg.Wait()
+	return filesInfoArr, nil
 }
 
 func (a *App) SaveFile(FileName, FileFormat, CurrentPath, DesiredPath string) error {

@@ -10,9 +10,11 @@ import Logo from './assets/images/logo-universal.png'
 import { LuUpload, LuX, LuHardDriveDownload, LuCornerDownLeft, LuCirclePlus, LuSettings2, LuFile } from "react-icons/lu";
 import { Button } from './components/ui/Button/Button';
 
-import { GetInputPath, ConvertImage, ParseImagePaths, OpenDirectoryDialog } from "../wailsjs/go/main/App";
+import { GetInputPath, ConvertImage, OpenDirectoryDialog } from "../wailsjs/go/main/App";
 import { OnFileDrop } from '../wailsjs/runtime/runtime'
 import CreateImageObject from './services/fileCreatorService';
+import convertImageObjects from './services/fileConvertService';
+
 
 function App() {
 
@@ -104,23 +106,16 @@ function App() {
      * caso nao,  {@link ConvertImage} irá converte-los e atualizar seus objetos 
      * @returns erro caso ocorra um erro ao converter um arquivo
      */
-    function handleConvert() {
+    async function handleConvert() {
         try {
-            files.forEach(async (file, i) => {
-                const { IsConverted, FilePath, ConvertTo } = file;
-                if (!IsConverted) {
-                    let { NewPath, NewSize } = await ConvertImage(FilePath, ConvertTo, convertQuality);
-                    unconvertedArr.push(i = {})
-                    setFiles(prev => {
-                        const newArr = [...prev];
-                        let newFile = { ...file, ConvertedSize: NewSize, ConvertedPath: NewPath, IsConverted: true, };
-                        newArr[i] = newFile;
-                        return newArr
-                    })
-
-                } else {
-                    return file
-                }
+            const convertedArr = await convertImageObjects(files, convertQuality)
+            console.log("finalizou processo")
+            convertedArr.forEach(item => {
+                setFiles(prev => {
+                    let newArr = [...prev];
+                    newArr[item.ID] = { ...newArr[item.ID], IsConverted: true, ...item }
+                    return newArr
+                })
             })
         }
         catch (error) {

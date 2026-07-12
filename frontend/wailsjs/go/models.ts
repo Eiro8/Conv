@@ -1,8 +1,9 @@
 export namespace models {
 	
 	export class ConversionInfo {
-	    NewPath: string;
-	    NewSize: number;
+	    ID: number;
+	    ConvertedPath: string;
+	    ConvertedSize: number;
 	
 	    static createFrom(source: any = {}) {
 	        return new ConversionInfo(source);
@@ -10,8 +11,9 @@ export namespace models {
 	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
-	        this.NewPath = source["NewPath"];
-	        this.NewSize = source["NewSize"];
+	        this.ID = source["ID"];
+	        this.ConvertedPath = source["ConvertedPath"];
+	        this.ConvertedSize = source["ConvertedSize"];
 	    }
 	}
 	export class ImageStruct {
@@ -42,6 +44,22 @@ export namespace models {
 	        this.ConvertedPath = source["ConvertedPath"];
 	        this.ConvertedSize = source["ConvertedSize"];
 	        this.Base64Preview = source["Base64Preview"];
+	    }
+	}
+	export class UnconvertedFile {
+	    ID: number;
+	    FilePath: string;
+	    ConvertTo: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new UnconvertedFile(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.ID = source["ID"];
+	        this.FilePath = source["FilePath"];
+	        this.ConvertTo = source["ConvertTo"];
 	    }
 	}
 

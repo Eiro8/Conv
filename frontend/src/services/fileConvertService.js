@@ -1,28 +1,32 @@
 import { ConvertImage } from "../../wailsjs/go/main/App";
 
 /**
- * 
- * @param {object[]} imageObjectArray 
- * @returns 
+ * Recebe uma array de {@link ImageStruct}, converte os objetos ao formato desejado e retorna informaçoes sobre a conversão
+ * @param {object[]} imageObjectArray
+ * @param {number} convertQuality quanto o arquivo sera convertido de 0 - 100 
+ * @returns {object[]} Array de objeto contendo {ID, NewPath, NewSize}
  */
 
-let unconvertedArr = []
-
-async function handleConvert(imageObjectArray) {
+export default async function convertImageObjects(imageObjectArray, convertQuality) {
     try {
+        let unconvertedArray = []
         imageObjectArray.forEach((file, index) => {
             const { IsConverted, FilePath, ConvertTo } = file;
             if (!IsConverted) {
-                unconvertedArr.push(
-                    { ID: index, FilePath, ConvertTo }
+                unconvertedArray.push(
+                    {
+                        ID: parseInt(index, 10),
+                        FilePath: FilePath,
+                        ConvertTo: ConvertTo,
+                    }
                 )
             }
             else {
-                return file
+                return
             }
         })
-        const AlteredFiles = await ConvertImage(unconvertedArr);
-        return AlteredFiles
+        const AlteredFilesObj = await ConvertImage(unconvertedArray, convertQuality)
+        return AlteredFilesObj
     }
     catch (error) {
         console.log(error)
