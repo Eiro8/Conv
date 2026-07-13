@@ -1,141 +1,215 @@
-import React from 'react'
 import { useState } from 'react';
 import styles from './converter.module.css'
-import { LuUpload, LuX, LuHardDriveDownload, LuCornerDownLeft, LuCirclePlus, LuSettings2, LuChevronDown } from "react-icons/lu";
+
+import Navbar from '../../components/layout/Navbar/Navbar';
+import FileCard from './components/FileCard/FileCard';
+import SettingsButton from './components/Settings/Settings';
 import { Button } from '../../components/ui/Button/Button';
-import { SelectImage, ConvertImage, SaveFile } from "../../../wailsjs/go/main/App"; //* FUNCAO DO GO!!!!
+import { LuUpload, LuHardDriveDownload, LuCornerDownLeft, LuCirclePlus } from "react-icons/lu";
+import { OnFileDrop } from '../../../wailsjs/runtime/runtime';
+
+import CreateImageObject from '../../services/fileCreatorService';
+import convertImageObjects from '../../services/fileConvertService';
+import DirectoryDialog from '../../services/openDirectoryDialog';
+import FileDialog from '../../services/openFileDialog';
+
+function Converter() {
+
+    const [saveDirectory, setSaveDirectory] = useState("");
+    const [convertQuality, setConvertQuality] = useState(20)
 
 
-export const Converter = () => {
+    const [selected, setSelected] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
-    const [open, setOpen] = useState(null);
+
     const [files, setFiles] = useState([]);
     const allowedFileTypes = new Set([
         'WEBP',
         'JPG',
         'PNG',
     ]);
+
     //* Lógica de tratamento do Drag and drop de imagens
     const handleDragOver = (e) => {
         e.preventDefault();
         setIsHovered(true)
     };
+
     const handleDragLeave = (e) => {
         e.preventDefault();
         setIsHovered(false);
     };
-    const handleDrop = () => { }
 
+    /**
+     * Remove de 'files' o elemento cujo targetID for igual a seu ID.
+     * @param {string} targetId ID do elemento a ser deletado do useState files 
+     */
     function handleCloseButton(targetId) {
-        setFiles(filesArray => filesArray.filter((item) => item.id != targetId));
+        setFiles(filesArray => filesArray.filter((item) => item.ID != targetId));
     };
 
-    function handleBackButton() {
-        setFiles([]);
+    /**
+        * Recebe uma array de paths e os executa chamando function imageParser()
+        * @param {string} pathArray array de paths de arquivos  
+        */
+    OnFileDrop(async (x, y, paths) => {
+        await imageParser(paths)
+    }, true)
+
+
+    /**
+     * Chama {@link FileDialog} e executa o retorno em {@link imageParser}
+     */
+    async function handleImageInput() {
+        const pathArray = await FileDialog();
+        await imageParser(pathArray);
     }
 
-    //* Recebe a imagem em Base64, decodifica e converte em imagem. Passa o valor para o state Files()
-    async function handleFileInput() {
-        let ImageArray = []
+    /**
+     * Recebe uma lista de caminhos de imagens, cria os objetos correspondentes
+    * através de {@link CreateImageObject} e adiciona os arquivos ao estado.
+     * 
+     * @param {string} pathArray 
+     * @returns erro caso ocorra uma falha
+     */
+    async function imageParser(pathArray) {
         try {
-            const pathArray = await SelectImage();
-
-            pathArray.forEach(async (item, i) => {
-                let { FileName, FilePath, FileType, Preview } = item
-                const fileObj = {
-                    "id": files.length + i + 2,
-                    "name": FileName,
-                    "type": FileType,
-                    "src": `data:image/${FileType};charset=utf-8;base64,${Preview}`, //* blob do arquivo em Base64
-                    "path": FilePath,
-                    "isConverted": false,
-                    "convertPath": "",
-                    "convertTo": "WEBP",
-                }
-                ImageArray.push(fileObj)
+            let ImageObjects = await CreateImageObject(pathArray);
+            ImageObjects.forEach((fileObj) => {
+                setFiles(prev => [...prev, fileObj]);
             })
         } catch (error) {
             console.log(new Error(`Ocorreu um erro ao processar suas imagens: ${error.message}`))
-            return new Error(`Ocorreu um erro ao processar suas imagens: ${error.message}`)
+            return error
         }
-        setFiles(files.concat(ImageArray))
     }
 
-    function handleConvert() {
+    /**
+     * processa os arquivos de {@link files} e verifica se estao convertidos.
+     * caso nao,  {@link convertImageObjects} irá converte-los e atualizar seus objetos 
+     * @returns erro caso ocorra um erro ao converter um arquivo
+     */
+    async function handleConvert() {
         try {
-            files.forEach(async image => {
-                if (!image.isConverted) {
-                    let convertedImage = await ConvertImage(image.path, image.convertTo)
-                    console.log(image);
-                    console.log(convertedImage);
-                    image.convertPath = convertedImage;
-                    image.isConverted = true;
-                }
+            //! Futuramente, adicionar forma de enviar apenas um array de arquivos não convertidos pra nao precisar verificar se todos não estao convertidos
+            const convertedArr = await convertImageObjects(files, convertQuality)
+            console.log("finalizou processo")
+            convertedArr.forEach(item => {
+                setFiles(prev => {
+                    let newArr = [...prev];
+                    newArr[item.ID] = { ...newArr[item.ID], IsConverted: true, ...item }
+                    return newArr
+                })
             })
         }
         catch (error) {
+            console.log(error)
             return new Error(`Um erro ocorreu ao converter o arquivo: \n \n${error}`)
         }
         return files
     }
 
-    async function saveFile(path, name, format) {
-        try {
-            SaveFile(path, name, format)
-        } catch (error) {
-            return new Error(error.message)
+    /**
+     * Atualiza os estados de {@link setSaveDirectory} e {@link setConvertQuality} a partir do input da form
+     * @param {Event} e evento de clique 
+     */
+    function handleConfigSubmit(e, formRef) {
+        e.preventDefault();
+        const formData = new FormData(formRef.current)
+        const data = Object.fromEntries(formData)
+
+        let { save_directory, quality_range } = data
+        setSaveDirectory(save_directory)
+        setConvertQuality(parseInt(quality_range))
+    }
+
+    /**
+     * Lida com o botão de seleção de diretório em configurações
+     * @param {Event} e 
+     */
+    async function handleDirectorySelector(e) {
+        e.preventDefault();
+        let directory = await DirectoryDialog();
+        console.log(directory)
+        if (!directory) {
+            setSaveDirectory("")
+        } else {
+            setSaveDirectory(directory)
         }
     }
 
-    return (
-        <section className={styles.header}>
-            <div className={`${styles.header_wrapper} container`}>
-                {!files.length > 0 ? (
+    /** 
+        * Reseta setFiles() para uma array vazia
+       */
+    function handleBackButton() {
+        setFiles([])
+    }
+    /**
+         * Atualiza os estados de {@link setSaveDirectory} e {@link setConvertQuality} a partir do input da form
+         * @param {Event} e evento de clique 
+         */
+    /**
+         * Lida com o input de seleção de diretório em configurações.
+         * @param {Event} e 
+         */
+    function handleDirectorySelectorInput(e) {
+        setSaveDirectory(e.target.value)
+    }
+
+    return (<>
+        <Navbar />
+        <section className='header' onDragOver={handleDragOver} onDragLeave={handleDragLeave} style={{ "--wails-drop-target": "drop" }}>
+            <div className='header_wrapper container'>
+                {files.length > 0 ? (
                     <div className={'files_container'}>
-                        <ul className='files_box' onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleConvert}>
-                            {files.map((item, index) => {
-                                let ID = index + files.length + 1
+                        <ul className='files_box' >
+                            {files.map((item) => {
+                                let ID = item.ID
                                 return (
                                     <FileCard
                                         file={item}
                                         key={ID}
                                         id={ID}
-                                        isSaved={false}
-
                                         allowedFileTypes={allowedFileTypes}
 
                                         handleCloseButton={handleCloseButton}
-                                        handleSave={saveFile}
+                                        saveDirectory={saveDirectory}
                                     />
-
                                 )
                             })}
-                        </ul>
-                        <div className='files_settings'>
-                            <div className='files_utils'>
-                                <div className='files_form'>
-                                    <label htmlFor={'file-input'} className='input-text'><LuCirclePlus />Adicionar Mais</label>
-                                    <div type='file' accept='image/webp,image/jpeg,image/jpg,image/png,image/avif' id='file-input' multiple onClick={handleFileInput} ></div>
+                            <div className='files_settings'>
+                                <div className='files_utils'>
+                                    <Button type='button' onClick={handleImageInput} children={<><LuCirclePlus />Adicionar Mais</>} />
+                                    <Button variant='primary' children={<><LuCornerDownLeft /></>} onClick={() => handleBackButton()} />
                                 </div>
-                                <Button variant='primary' children={<><LuCornerDownLeft /></>} />
-                            </div>
-                            <div className='files_buttons'>
-                                <Button variant='primary' children={< LuSettings2 />} onClick={handleBackButton()} />
+                                <div className='files_buttons'>
+                                    <SettingsButton
+                                        handleDirectorySelector={handleDirectorySelector}
+                                        handleDirectorySelectorInput={handleDirectorySelectorInput}
+                                        handleConfigSubmit={handleConfigSubmit}
+                                        convertQuality={convertQuality}
+                                        saveDirectory={saveDirectory}
+                                    />
 
-                                {/*o ideal aqui seria passar uma array de strings ( file ) para entao converter todos juntos no Go.*/}
-                                <Button variant='secondary' children={<><LuHardDriveDownload />Converter Todos </>} onClick={async () => { files.forEach(file => handleConvert(file.path, file.convertTo)) }} />
-                            </div>
-                        </div>
-                    </div>
+                                    {/*o ideal aqui seria passar uma array de strings ( file ) para entao converter todos juntos no Go.*/}
+                                    <Button variant='secondary' children={<><LuHardDriveDownload />Converter Todos </>} onClick={async () => { handleConvert() }} />
+                                </div >
+                            </div >
+                        </ul >
+                    </div >
                 ) : (
-                    <div className='header_dropper_box' onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop} onClick={() => handleFileInput()}>
+                    <div className='header_dropper_box' onDragOver={handleDragOver} onDragLeave={handleDragLeave} onClick={() => handleImageInput()}>
                         <div className='dropper_img_wrap' >
                             <LuUpload /></div>
                         <h3>Selecionar Imagem(ns)</h3>
-                        <p>Arraste & Solte ou <span className='highlight'>Escolha</span></p>
+                        <p>Arraste & Solte ou <span className='highlight'>Clique</span></p>
                     </div>
-                )}
-            </div>
-        </section>
+                )
+                }
+            </div >
+        </section >
+    </>
     )
 }
+
+export default Converter
