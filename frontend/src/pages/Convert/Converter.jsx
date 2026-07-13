@@ -53,7 +53,7 @@ function Converter() {
         * @param {string} pathArray array de paths de arquivos  
         */
     OnFileDrop(async (x, y, paths) => {
-        await imageParser(paths)
+        await addImagesFromPaths(paths)
     }, true)
 
 
@@ -62,7 +62,7 @@ function Converter() {
      */
     async function handleImageInput() {
         const pathArray = await FileDialog();
-        await imageParser(pathArray);
+        await addImagesFromPaths(pathArray);
     }
 
     /**
@@ -72,7 +72,7 @@ function Converter() {
      * @param {string} pathArray 
      * @returns erro caso ocorra uma falha
      */
-    async function imageParser(pathArray) {
+    async function addImagesFromPaths(pathArray) {
         try {
             let ImageObjects = await CreateImageObject(pathArray);
             ImageObjects.forEach((fileObj) => {
@@ -147,10 +147,6 @@ function Converter() {
     /**
          * Atualiza os estados de {@link setSaveDirectory} e {@link setConvertQuality} a partir do input da form
          * @param {Event} e evento de clique 
-         */
-    /**
-         * Lida com o input de seleção de diretório em configurações.
-         * @param {Event} e 
          */
     function handleDirectorySelectorInput(e) {
         setSaveDirectory(e.target.value)

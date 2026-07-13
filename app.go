@@ -46,7 +46,6 @@ func (a *App) ConvertImage(unconvertedFilesArray []models.UnconvertedFile, conve
 	wg.Wait()
 	return filesInfoArr, nil
 }
-
 func (a *App) SaveFile(FileName, FileFormat, CurrentPath, DesiredPath string) error {
 	return services.SaveImage(FileName, FileFormat, CurrentPath, DesiredPath, a.ctx)
 }
@@ -71,7 +70,6 @@ func (a *App) ParseImagePaths(ImagesPath []string) []models.ImageStruct {
 	wg.Wait()
 	return pathsArray
 }
-
 func (a *App) OpenDirectoryDialog() (string, error) {
 	dir, err := runtime.OpenDirectoryDialog(a.ctx, runtime.OpenDialogOptions{
 		DefaultDirectory:           "",
