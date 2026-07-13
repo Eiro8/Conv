@@ -108,6 +108,7 @@ function App() {
      */
     async function handleConvert() {
         try {
+            //! Futuramente, adicionar forma de enviar apenas um array de arquivos não convertidos pra nao precisar verificar se todos não estao convertidos
             const convertedArr = await convertImageObjects(files, convertQuality)
             console.log("finalizou processo")
             convertedArr.forEach(item => {

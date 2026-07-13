@@ -29,8 +29,10 @@ func (a *App) startup(ctx context.Context) {
 func (a *App) ConvertImage(unconvertedFilesArray []models.UnconvertedFile, convertQuality uint8) ([]models.ConversionInfo, error) {
 	filesInfoArr := make([]models.ConversionInfo, 0, len(unconvertedFilesArray))
 	var wg sync.WaitGroup
+
 	for _, unconvertedFileInfo := range unconvertedFilesArray {
 		wg.Add(1)
+
 		go func() {
 			defer wg.Done()
 			info, err := services.Convert(unconvertedFileInfo, convertQuality)
