@@ -17,9 +17,6 @@ function Converter() {
 
     const [saveDirectory, setSaveDirectory] = useState("");
     const [convertQuality, setConvertQuality] = useState(20)
-
-
-    const [selected, setSelected] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
 
     const [files, setFiles] = useState([]);
@@ -139,9 +136,9 @@ function Converter() {
     }
 
     /** 
-        * Reseta setFiles() para uma array vazia
+        * limpa a array de {@link setFiles}
        */
-    function handleBackButton() {
+    function clearFiles() {
         setFiles([])
     }
     /**
@@ -154,7 +151,7 @@ function Converter() {
 
     return (<>
         <Navbar />
-        <section className='header' onDragOver={handleDragOver} onDragLeave={handleDragLeave} style={{ "--wails-drop-target": "drop" }}>
+        <section className={`header ${isHovered ? "header_hovered" : ""}`} onDragOver={handleDragOver} onDragLeave={handleDragLeave} style={{ "--wails-drop-target": "drop" }}>
             <div className='header_wrapper container'>
                 {files.length > 0 ? (
                     <div className={'files_container'}>
@@ -176,7 +173,7 @@ function Converter() {
                             <div className='files_settings'>
                                 <div className='files_utils'>
                                     <Button type='button' onClick={handleImageInput} children={<><LuCirclePlus />Adicionar Mais</>} />
-                                    <Button variant='primary' children={<><LuCornerDownLeft /></>} onClick={() => handleBackButton()} />
+                                    <Button variant='primary' children={<><LuCornerDownLeft /></>} onClick={() => clearFiles()} />
                                 </div>
                                 <div className='files_buttons'>
                                     <SettingsButton
