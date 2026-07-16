@@ -32,7 +32,7 @@ func (a *App) ConvertImage(unconvertedFilesArray []models.UnconvertedFile, conve
 
 	for _, unconvertedFileInfo := range unconvertedFilesArray {
 		wg.Add(1)
-
+		runtime.EventsEmit(a.ctx, "convertendo", unconvertedFileInfo.ID)
 		go func() {
 			defer wg.Done()
 			info, err := services.Convert(unconvertedFileInfo, convertQuality)

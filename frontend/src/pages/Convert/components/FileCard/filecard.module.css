@@ -55,6 +55,21 @@
         }
     }
 
+    .loading {
+        width: 100%;
+        height: auto;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: end;
+        gap: var(--space-md);
+        img {
+            width: 35px;
+            height: auto;
+            fill: var(--accent);
+        }
+    }
+
     .buttons {
         display: flex;
         align-items: center;
