@@ -48,6 +48,7 @@ export namespace models {
 	}
 	export class UnconvertedFile {
 	    ID: number;
+	    OriginalID: number;
 	    FilePath: string;
 	    ConvertTo: string;
 	
@@ -58,6 +59,7 @@ export namespace models {
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.ID = source["ID"];
+	        this.OriginalID = source["OriginalID"];
 	        this.FilePath = source["FilePath"];
 	        this.ConvertTo = source["ConvertTo"];
 	    }

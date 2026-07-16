@@ -1,20 +1,25 @@
 package services
 
 import (
+	"context"
 	"file/helper"
 	"file/models"
 	"fmt"
 	"os"
 	"strings"
 	"sync"
+
+	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
-func Convert(unconvertedFile models.UnconvertedFile, conversionQuality uint8) (models.ConversionInfo, error) {
+func Convert(unconvertedFile models.UnconvertedFile, conversionQuality uint8, AppContext context.Context) (models.ConversionInfo, error) {
 
-	path := unconvertedFile.FilePath
-	extension := unconvertedFile.ConvertTo
-	ID := unconvertedFile.ID
+	var path string = unconvertedFile.FilePath
+	var extension string = unconvertedFile.ConvertTo
+	var ID uint16 = unconvertedFile.ID
+	var OriginalID uint16 = unconvertedFile.OriginalID
 
+	runtime.EventsEmit(AppContext, "startedConvert", OriginalID)
 	imgfile, _, err := helper.OpenAndDecode(path)
 
 	temp, err := os.CreateTemp("", "*."+strings.ToLower(extension))

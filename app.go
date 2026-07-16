@@ -34,12 +34,12 @@ func (a *App) ConvertImage(unconvertedFilesArray []models.UnconvertedFile, conve
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			runtime.EventsEmit(a.ctx, "convertendo", unconvertedFileInfo.ID)
-			info, err := services.Convert(unconvertedFileInfo, convertQuality)
+			info, err := services.Convert(unconvertedFileInfo, convertQuality, a.ctx)
 			if err != nil {
 				fmt.Printf("%v", err)
 				return
 			}
+			runtime.EventsEmit(a.ctx, "endedConvert", int(unconvertedFileInfo.ID))
 			filesInfoArr = append(filesInfoArr, info)
 		}()
 	}

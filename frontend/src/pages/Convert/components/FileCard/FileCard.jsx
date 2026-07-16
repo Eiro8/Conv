@@ -10,7 +10,7 @@ import saveFile from '../../../../services/fileSaverService';
 
 import { Button } from '../../../../components/ui/Button/Button'
 import { LuX, LuHardDriveDownload, LuChevronDown, LuArrowRight } from "react-icons/lu";
-import { EventsOff, EventsOn } from '../../../../../wailsjs/runtime/runtime';
+import { EventsOff, EventsOn, EventsOnce } from '../../../../../wailsjs/runtime/runtime';
 
 const FileCard = ({
     file,
@@ -24,22 +24,29 @@ const FileCard = ({
     //* Receber o size em bytes para melhorar
     const [open, setOpen] = useState(false);
     const [selector, setSelector] = useState(ConvertTo);
-    const [isConverting, setIsConverting] = useState(false)
+    const [isConverting, setIsConverting] = useState(false);
+
+    const loadingSpan = useRef(null);
+    const buttonSpan = useRef(null);
+
+
 
     const src = `data:image/${FileType};charset=utf-8;base64,${Base64Preview}` //* blob do arquivo em Base64
     let oldSize = bytesParser(FileSize);
     let newSize = bytesParser(ConvertedSize);
-
     useEffect(() => {
+        const handleConvert = (eventID) => {
+            if (eventID === ID) {
+                console.log(`eventID: ${eventID}\nID: ${ID}`)
+            }
+        }
 
-        EventsOn("convertendo", () => {
-            setIsConverting(true)
-        })
+        // EventsOnce("startedConvert", handleConvert)
+        EventsOn("startedConvert", handleConvert)
 
         return () => {
-            EventsOff("convertendo");
-
-        }
+            EventsOff("convertImage");
+        };
     }, [])
 
     return (
@@ -53,11 +60,11 @@ const FileCard = ({
                 </span>
             </div>
             {isConverting ? (
-                <span className={styles.loading}>
+                <span className={styles.loading} ref={loadingSpan}>
                     <img className={styles.LoadingSVG} src={LoadingSVG} draggable={false} />
                 </span>
             ) : (
-                <span className={styles.buttons}>
+                <span className={styles.buttons} ref={buttonSpan}>
                     {!IsConverted ?
                         (
                             <>

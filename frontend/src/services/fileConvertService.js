@@ -11,11 +11,12 @@ export default async function convertImageObjects(imageObjectArray, convertQuali
     try {
         let unconvertedArray = []
         imageObjectArray.forEach((file, index) => {
-            const { IsConverted, FilePath, ConvertTo } = file;
+            const { IsConverted, FilePath, ConvertTo, ID } = file;
             if (!IsConverted) {
                 unconvertedArray.push(
                     {
                         ID: parseInt(index, 10),
+                        OriginalID: ID,
                         FilePath: FilePath,
                         ConvertTo: ConvertTo,
                     }
