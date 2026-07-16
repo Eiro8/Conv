@@ -121,6 +121,8 @@
                 gap: var(--space-lg);
                 padding: 0px;
                 box-sizing: border-box;
+                overflow: hidden;
+                z-index: 1;
 
 
                 .files_settings {

@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useState } from 'react'
 
 import styles from './filecard.module.css'
 import LoadingSVG from '../../../../assets/svg/black-180-ring-with-bg.svg'
+
 
 import bytesParser from '../../../../utils/ByteParser';
 import saveFile from '../../../../services/fileSaverService';
@@ -29,19 +30,17 @@ const FileCard = ({
     let oldSize = bytesParser(FileSize);
     let newSize = bytesParser(ConvertedSize);
 
-
     useEffect(() => {
-        const handleConvertEvent = (event) => {
+
+        EventsOn("convertendo", () => {
             setIsConverting(true)
-        }
-        EventsOn("convertendo", handleConvertEvent);
+        })
+
         return () => {
-            EventsOff("convertendo")
-            setIsConverting(false)
+            EventsOff("convertendo");
+
         }
     }, [])
-
-
 
     return (
         <li className={styles.file}>
@@ -53,43 +52,45 @@ const FileCard = ({
                     {IsConverted ? (<><LuArrowRight /><span className={styles.newInfo}>{newSize}</span><span className={styles.newInfo}>{selector}</span></>) : (null)}
                 </span>
             </div>
-            {isConverting ?
-                (<span className={styles.loading}><p>Processando...</p><img className={styles.LoadingSVG} src={LoadingSVG} draggable={false} /></span>)
-                : (
-                    <span className={styles.buttons}>
-                        {!IsConverted ?
-                            (
-                                <>
-                                    <p className={styles.text}>Converter para</p>
-                                    <Button variant={styles.dropdown} children={<>{selector}<span className={styles.rotateOnClick}><LuChevronDown /></span></>} onClick={() => { setOpen(!open); }} />
-                                </>
-                            ) : null}
+            {isConverting ? (
+                <span className={styles.loading}>
+                    <img className={styles.LoadingSVG} src={LoadingSVG} draggable={false} />
+                </span>
+            ) : (
+                <span className={styles.buttons}>
+                    {!IsConverted ?
+                        (
+                            <>
+                                <p className={styles.text}>Converter para</p>
+                                <Button variant={styles.dropdown} children={<>{selector}<span className={styles.rotateOnClick}><LuChevronDown /></span></>} onClick={() => { setOpen(!open); }} />
+                            </>
+                        ) : null}
 
-                        {/*//* o Dropdown */}
-                        {open ?
-                            (
-                                <ul className={styles.format_options}>
-                                    {Array.from(allowedFileTypes).map(format => (
-                                        <li
-                                            key={format}
-                                            onClick={() => {
-                                                setOpen(false);
-                                                setSelector(format);
-                                            }}
-                                            className={styles.format_option}>
-                                            {format}
-                                        </li>
-                                    ))}
-                                </ul>
-                            ) : null}
-                        {IsConverted == true ?
-                            (
-                                <Button variant={"primary"} onClick={() => { saveFile(FileName, selector, ConvertedPath, saveDirectory) }} children={<LuHardDriveDownload />} />
-                            )
-                            :
-                            (<Button variant={"primary"} onClick={() => { handleCloseButton(ID) }} children={<LuX />} />)}
-                    </span>
-                )}
+                    {/*//* o Dropdown */}
+                    {open ?
+                        (
+                            <ul className={styles.format_options}>
+                                {Array.from(allowedFileTypes).map(format => (
+                                    <li
+                                        key={format}
+                                        onClick={() => {
+                                            setOpen(false);
+                                            setSelector(format);
+                                        }}
+                                        className={styles.format_option}>
+                                        {format}
+                                    </li>
+                                ))}
+                            </ul>
+                        ) : null}
+                    {IsConverted == true ?
+                        (
+                            <Button variant={"primary"} onClick={() => { saveFile(FileName, selector, ConvertedPath, saveDirectory) }} children={<LuHardDriveDownload />} />
+                        )
+                        :
+                        (<Button variant={"primary"} onClick={() => { handleCloseButton(ID) }} children={<LuX />} />)}
+                </span>
+            )}
         </li >
     )
 }

@@ -6,6 +6,8 @@
     box-sizing: border-box;
     align-items: center;
     gap: var(--space-md);
+    z-index: 0;
+
 
     .image {
         height: auto;
@@ -63,6 +65,7 @@
         align-items: center;
         justify-content: end;
         gap: var(--space-md);
+
         img {
             width: 35px;
             height: auto;
