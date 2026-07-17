@@ -93,10 +93,12 @@ function Converter() {
             console.log("finalizou processo")
             convertedArr.forEach(item => {
                 setFiles(prev => {
+                    
                     let newArr = [...prev];
                     newArr[item.ID] = { ...newArr[item.ID], IsConverted: true, ...item }
                     return newArr
                 })
+
             })
         }
         catch (error) {

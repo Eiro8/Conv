@@ -10,7 +10,7 @@ import saveFile from '../../../../services/fileSaverService';
 
 import { Button } from '../../../../components/ui/Button/Button'
 import { LuX, LuHardDriveDownload, LuChevronDown, LuArrowRight } from "react-icons/lu";
-import { EventsOff, EventsOn, EventsOnce } from '../../../../../wailsjs/runtime/runtime';
+import { EventsOff, EventsOn } from '../../../../../wailsjs/runtime/runtime';
 
 const FileCard = ({
     file,
@@ -26,18 +26,14 @@ const FileCard = ({
     const [selector, setSelector] = useState(ConvertTo);
     const [isConverting, setIsConverting] = useState(false);
 
-    const loadingSpan = useRef(null);
-    const buttonSpan = useRef(null);
-
-
-
     const src = `data:image/${FileType};charset=utf-8;base64,${Base64Preview}` //* blob do arquivo em Base64
     let oldSize = bytesParser(FileSize);
     let newSize = bytesParser(ConvertedSize);
+
     useEffect(() => {
         const handleConvert = (eventID) => {
             if (eventID === ID) {
-                console.log(`eventID: ${eventID}\nID: ${ID}`)
+                setIsConverting(true)
             }
         }
 
@@ -45,9 +41,10 @@ const FileCard = ({
         EventsOn("startedConvert", handleConvert)
 
         return () => {
-            EventsOff("convertImage");
+            EventsOff("startedConvert");
         };
     }, [])
+
 
     return (
         <li className={styles.file}>
@@ -59,12 +56,12 @@ const FileCard = ({
                     {IsConverted ? (<><LuArrowRight /><span className={styles.newInfo}>{newSize}</span><span className={styles.newInfo}>{selector}</span></>) : (null)}
                 </span>
             </div>
-            {isConverting ? (
-                <span className={styles.loading} ref={loadingSpan}>
+            {isConverting && IsConverted == false ? (
+                <span className={styles.loading}>
                     <img className={styles.LoadingSVG} src={LoadingSVG} draggable={false} />
                 </span>
             ) : (
-                <span className={styles.buttons} ref={buttonSpan}>
+                <span className={styles.buttons}>
                     {!IsConverted ?
                         (
                             <>
