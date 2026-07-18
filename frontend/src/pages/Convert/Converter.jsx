@@ -93,7 +93,7 @@ function Converter() {
             console.log("finalizou processo")
             convertedArr.forEach(item => {
                 setFiles(prev => {
-                    
+
                     let newArr = [...prev];
                     newArr[item.ID] = { ...newArr[item.ID], IsConverted: true, ...item }
                     return newArr
@@ -153,11 +153,11 @@ function Converter() {
 
     return (<>
         <Navbar />
-        <section className={`header ${isHovered ? "header_hovered" : ""}`} onDragOver={handleDragOver} onDragLeave={handleDragLeave} style={{ "--wails-drop-target": "drop" }}>
-            <div className='header_wrapper container'>
+        <section className={`${styles.header} ${isHovered ? styles.header_hovered : ""}`} onDragOver={handleDragOver} onDragLeave={handleDragLeave} style={{ "--wails-drop-target": "drop" }}>
+            <div className={`${styles.header_wrapper} container`}>
                 {files.length > 0 ? (
-                    <div className={'files_container'}>
-                        <ul className='files_box' >
+                    <div className={styles.files_container}>
+                        <ul className={styles.files_box} >
                             {files.map((item) => {
                                 let ID = item.ID
                                 return (
@@ -172,12 +172,12 @@ function Converter() {
                                     />
                                 )
                             })}
-                            <div className='files_settings'>
-                                <div className='files_utils'>
+                            <div className={styles.files_settings}>
+                                <div className={styles.files_utils}>
                                     <Button type='button' onClick={handleImageInput} children={<><LuCirclePlus />Adicionar Mais</>} />
                                     <Button variant='primary' children={<><LuCornerDownLeft /></>} onClick={() => clearFiles()} />
                                 </div>
-                                <div className='files_buttons'>
+                                <div className={styles.files_buttons}>
                                     <SettingsButton
                                         handleDirectorySelector={handleDirectorySelector}
                                         handleDirectorySelectorInput={handleDirectorySelectorInput}
@@ -193,11 +193,11 @@ function Converter() {
                         </ul >
                     </div >
                 ) : (
-                    <div className='header_dropper_box' onDragOver={handleDragOver} onDragLeave={handleDragLeave} onClick={() => handleImageInput()}>
-                        <div className='dropper_img_wrap' >
+                    <div className={styles.header_dropper_box} onDragOver={handleDragOver} onDragLeave={handleDragLeave} onClick={() => handleImageInput()}>
+                        <div className={styles.dropper_img_wrap} >
                             <LuUpload /></div>
                         <h3>Selecionar Imagem(ns)</h3>
-                        <p>Arraste & Solte ou <span className='highlight'>Clique</span></p>
+                        <p>Arraste & Solte ou <span className={styles.highlight}>Clique</span></p>
                     </div>
                 )
                 }

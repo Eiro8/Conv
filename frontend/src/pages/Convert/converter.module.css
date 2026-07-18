@@ -47,7 +47,6 @@
     width: 100%;
     height: 100%;
     position: relative;
-    background-color: var(--tertiary);
 
     .header_wrapper {
         /* --wails-drop-target nã é nada mais que, o atributo que faz com que o runtime do wails indentifique qual elemento o drag and drop dele funcionará.*/
@@ -71,7 +70,7 @@
             height: 80dvh;
             max-height: 500px;
             width: 100%;
-            border: 1px solid var(--white);
+            border: 1px solid var(--accent);
             background-color: var(--black);
             border-radius: var(--radius-md);
             gap: var(--space-md);
@@ -94,7 +93,7 @@
             }
 
             &:hover {
-                border-color: var(--accent);
+                border-color: var(--white);
             }
 
 
@@ -194,15 +193,5 @@
         &:hover {
             border-color: var(--accent);
         }
-    }
-}
-
-.header_hovered {
-    ::before {
-        content: "";
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        background-color: red;
     }
 }
