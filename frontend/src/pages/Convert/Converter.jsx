@@ -1,5 +1,9 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import styles from './converter.module.css'
+
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
+import _ScrollTrigger, { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import Navbar from '../../components/layout/Navbar/Navbar';
 import FileCard from './components/FileCard/FileCard';
@@ -13,11 +17,21 @@ import convertImageObjects from '../../services/fileConvertService';
 import DirectoryDialog from '../../services/openDirectoryDialog';
 import FileDialog from '../../services/openFileDialog';
 
+
+gsap.registerPlugin(ScrollTrigger)
+
 function Converter() {
 
     const [saveDirectory, setSaveDirectory] = useState("");
     const [convertQuality, setConvertQuality] = useState(20)
     const [isHovered, setIsHovered] = useState(false);
+    const [haveFiles, setHaveFiles] = useState(false);
+
+
+    const SettingsRef = useRef();
+    const SettingsBoxRef = useRef();
+
+
 
     const [files, setFiles] = useState([]);
     const allowedFileTypes = new Set([
@@ -93,7 +107,6 @@ function Converter() {
             console.log("finalizou processo")
             convertedArr.forEach(item => {
                 setFiles(prev => {
-
                     let newArr = [...prev];
                     newArr[item.ID] = { ...newArr[item.ID], IsConverted: true, ...item }
                     return newArr
@@ -151,13 +164,75 @@ function Converter() {
         setSaveDirectory(e.target.value)
     }
 
+    useEffect(() => {
+        if (files.length > 0) {
+            setHaveFiles(true)
+            _ScrollTrigger.refresh();
+        } else {
+            setHaveFiles(false)
+        }
+    }, [files])
+
+    useGSAP(() => {
+        if (!haveFiles) {
+            return
+        }
+
+        gsap.to(SettingsRef.current, {
+            scrollTrigger: {
+                trigger: SettingsBoxRef.current,
+                start: "top center",
+                end: "bottom-=20vh bottom",
+
+                onEnter: () => {
+                    gsap.set(SettingsRef.current, {
+                        position: "fixed",
+                        bottom: "60px",
+                        left: "50%",
+                        xPercent: -50,
+                        yPercent: 50,
+                        width: "80%",
+                        border: "1px solid var(--tertiary)",
+                        boxShadow: "inset 0px 0px 4px 0px var(--tertiary)"
+                    });
+                },
+
+                onLeave: () => {
+                    gsap.set(SettingsRef.current, {
+                        clearProps: "position,top,left,transform,box-shadow,border,width"
+                    });
+                },
+
+                onEnterBack: () => {
+                    gsap.set(SettingsRef.current, {
+                        position: "fixed",
+                        bottom: "60px",
+                        left: "50%",
+                        width: "80%",
+                        xPercent: -50,
+                        yPercent: 50,
+                        border: "1px solid var(--tertiary)",
+                        boxShadow: "inset 0px 0px 4px 0px var(--tertiary)"
+                    });
+                },
+
+                onLeaveBack: () => {
+                    gsap.set(SettingsRef.current, {
+                        clearProps: "position,top,left,transform,box-shadow,border,width"
+                    });
+                }
+
+            }
+        })
+    }, [haveFiles])
+
     return (<>
         <Navbar />
         <section className={`${styles.header} ${isHovered ? styles.header_hovered : ""}`} onDragOver={handleDragOver} onDragLeave={handleDragLeave} style={{ "--wails-drop-target": "drop" }}>
             <div className={`${styles.header_wrapper} container`}>
-                {files.length > 0 ? (
+                {haveFiles ? (
                     <div className={styles.files_container}>
-                        <ul className={styles.files_box} >
+                        <ul className={styles.files_box} ref={SettingsBoxRef}>
                             {files.map((item) => {
                                 let ID = item.ID
                                 return (
@@ -172,7 +247,7 @@ function Converter() {
                                     />
                                 )
                             })}
-                            <div className={styles.files_settings}>
+                            <div className={styles.files_settings} ref={SettingsRef}>
                                 <div className={styles.files_utils}>
                                     <Button type='button' onClick={handleImageInput} children={<><LuCirclePlus />Adicionar Mais</>} />
                                     <Button variant='primary' children={<><LuCornerDownLeft /></>} onClick={() => clearFiles()} />
