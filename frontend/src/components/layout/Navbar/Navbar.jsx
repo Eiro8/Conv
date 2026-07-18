@@ -1,4 +1,4 @@
-import Logo from '../../../assets/images/logo-universal.png'
+import Logo from '../../../assets/images/Logo.png'
 import styles from './Navbar.module.css'
 import React from 'react'
 
@@ -9,11 +9,11 @@ const Navbar = () => {
                 <img src={Logo} width={'60px'} draggable='false' ></img>
             </a>
             <span className={styles.nav_buttons}>
-                <a href='#' className={styles.highlight}>
+                <a href='https://github.com/Eiro8/Conv/issues' target='blank' rel="noopener noreferrer" className={styles.highlight}>
                     Precisa de ajuda?
                 </a>
                 <a href='#' className={styles.button}>
-                    Contato
+                    Contato ( em breve )
                 </a>
             </span>
         </section >
