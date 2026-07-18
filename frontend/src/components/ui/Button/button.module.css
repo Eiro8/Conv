@@ -1,7 +1,7 @@
 .span {
     display: flex;
     align-items: center;
-    width: 100%;
+    width: auto;
     gap: var(--space-md);
 }
 
@@ -28,7 +28,7 @@
 
 .secondary {
     display: flex;
-    width: fit-content;
+    width: auto;
     box-sizing: border-box;
     align-items: center;
     justify-content: center;

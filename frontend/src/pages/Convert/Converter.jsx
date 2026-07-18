@@ -164,6 +164,11 @@ function Converter() {
         setSaveDirectory(e.target.value)
     }
 
+
+    /**
+     * controla o estado de {@link haveFiles}, se files.lenght > 0, haveFiles sera true, e vice-versa.
+     * também controla o refresh do scrollTrigger, a cada atualização de ScrollTrigger, Files Leva Refresh
+     */
     useEffect(() => {
         if (files.length > 0) {
             setHaveFiles(true)
@@ -173,6 +178,10 @@ function Converter() {
         }
     }, [files])
 
+
+    /**
+     * controla as animações de config_settigns.
+     */
     useGSAP(() => {
         if (!haveFiles) {
             return
@@ -225,6 +234,8 @@ function Converter() {
         })
     }, [haveFiles])
 
+
+
     return (<>
         <Navbar />
         <section className={`${styles.header} ${isHovered ? styles.header_hovered : ""}`} onDragOver={handleDragOver} onDragLeave={handleDragLeave} style={{ "--wails-drop-target": "drop" }}>
@@ -259,8 +270,6 @@ function Converter() {
                                         convertQuality={convertQuality}
                                         saveDirectory={saveDirectory}
                                     />
-
-                                    {/*o ideal aqui seria passar uma array de strings ( file ) para entao converter todos juntos no Go.*/}
                                     <Button variant='secondary' children={<><LuHardDriveDownload />Converter Todos </>} onClick={async () => { handleConvert() }} />
                                 </div >
                             </div >
