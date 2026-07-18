@@ -182,8 +182,7 @@ function Converter() {
             scrollTrigger: {
                 trigger: SettingsBoxRef.current,
                 start: "top center",
-                end: "bottom-=20vh bottom",
-
+                end: "bottom bottom",
                 onEnter: () => {
                     gsap.set(SettingsRef.current, {
                         position: "fixed",
