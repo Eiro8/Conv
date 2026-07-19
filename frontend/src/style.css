@@ -6,7 +6,7 @@
     --black: #0f172a;
 
     --primary: #061122;
-    --secondary: #0E192C;
+    --secondary: #112649;
     --tertiary: #295BF6;
 
     --accent: #2E4569;
@@ -22,6 +22,13 @@
     --radius-lg: 32px;
     --radius-full: 99px;
 
+}
+
+#root {
+    height: 100%;
+    width: 100%;
+
+    background: black;
 }
 
 .container {
@@ -40,7 +47,6 @@
     overflow: hidden;
     width: 100%;
 }
-
 a,
 ul,
 li {
@@ -93,14 +99,11 @@ input[type="range"]::-webkit-slider-runnable-track {
 input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-
     width: 20px;
     height: 20px;
     border-radius: var(--radius-full);
-
     background: var(--tertiary);
     box-shadow: 0 0 4px var(--tertiary);
-
     margin-top: -5px;
 
 }

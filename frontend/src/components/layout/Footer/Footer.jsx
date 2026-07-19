@@ -1,16 +1,11 @@
 import React, { useCallback } from 'react'
-import { useState, useRef } from 'react'
 import styles from './footer.module.css'
 
-import useEmblaCarousel from 'embla-carousel-react'
-
-import { Button } from '../../ui/Button/Button.jsx'
 import FooterLogo from '../../../assets/images/BigLogo.png'
-import Image from '../../../assets/images/gapple.jpg'
 import Carousel from '../Carousel/Carousel.jsx'
 
 import ConversorIMG from '../../../assets/images/conversor.png'
-
+import SoonToCome from '../../../assets/images/soon.png'
 
 const Footer = () => {
 
@@ -23,12 +18,12 @@ const Footer = () => {
         },
         {
             title: "Compressor de Imagens",
-            image: ConversorIMG,
+            image: SoonToCome,
             link: "#"
         },
         {
             title: "Simplificador de Documento",
-            image: ConversorIMG,
+            image: SoonToCome,
             link: "#"
         }
     ];
@@ -45,9 +40,11 @@ const Footer = () => {
                     <Carousel options={Options} slides={Slides} />
                 </div>
             </div>
-            <span className={styles.disclaimer}>
+            <span className={styles.link}>
                 <p>Github.com/Eiro8</p>
-                <p>@C Copyright</p>
+            </span>
+            <span className={styles.copyright}>
+                <p>ⓒ Copyright</p>
             </span>
         </section>
     )

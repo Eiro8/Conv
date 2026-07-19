@@ -16,6 +16,7 @@ import CreateImageObject from '../../services/fileCreatorService';
 import convertImageObjects from '../../services/fileConvertService';
 import DirectoryDialog from '../../services/openDirectoryDialog';
 import FileDialog from '../../services/openFileDialog';
+import Footer from '../../components/layout/Footer/footer';
 
 
 gsap.registerPlugin(ScrollTrigger)
@@ -237,55 +238,57 @@ function Converter() {
 
 
     return (<>
-        <Navbar />
-        <section className={`${styles.header} ${isHovered ? styles.header_hovered : ""}`} onDragOver={handleDragOver} onDragLeave={handleDragLeave} style={{ "--wails-drop-target": "drop" }}>
-            <div className={`${styles.header_wrapper} container`}>
-                {haveFiles ? (
-                    <div className={styles.files_container}>
-                        <ul className={styles.files_box} ref={SettingsBoxRef}>
-                            {files.map((item) => {
-                                let ID = item.ID
-                                return (
-                                    <FileCard
-                                        file={item}
-                                        key={ID}
-                                        id={ID}
-                                        allowedFileTypes={allowedFileTypes}
+        <div className={"container"}>
+            <section className={`${styles.header} ${isHovered ? styles.header_hovered : ""}`} onDragOver={handleDragOver} onDragLeave={handleDragLeave} style={{ "--wails-drop-target": "drop" }}>
+                <div className={`${styles.header_wrapper} container`}>
+                    <h1 className={styles.tool_title}>Conversor</h1>
+                    {haveFiles ? (
+                        <div className={styles.files_container}>
+                            <ul className={styles.files_box} ref={SettingsBoxRef}>
+                                {files.map((item) => {
+                                    let ID = item.ID
+                                    return (
+                                        <FileCard
+                                            file={item}
+                                            key={ID}
+                                            id={ID}
+                                            allowedFileTypes={allowedFileTypes}
 
-                                        handleCloseButton={handleCloseButton}
-                                        saveDirectory={saveDirectory}
-                                    />
-                                )
-                            })}
-                            <div className={styles.files_settings} ref={SettingsRef}>
-                                <div className={styles.files_utils}>
-                                    <Button type='button' onClick={handleImageInput} children={<><LuCirclePlus />Adicionar Mais</>} />
-                                    <Button variant='primary' children={<><LuCornerDownLeft /></>} onClick={() => clearFiles()} />
-                                </div>
-                                <div className={styles.files_buttons}>
-                                    <SettingsButton
-                                        handleDirectorySelector={handleDirectorySelector}
-                                        handleDirectorySelectorInput={handleDirectorySelectorInput}
-                                        handleConfigSubmit={handleConfigSubmit}
-                                        convertQuality={convertQuality}
-                                        saveDirectory={saveDirectory}
-                                    />
-                                    <Button variant='secondary' children={<><LuHardDriveDownload />Converter Todos </>} onClick={async () => { handleConvert() }} />
+                                            handleCloseButton={handleCloseButton}
+                                            saveDirectory={saveDirectory}
+                                        />
+                                    )
+                                })}
+                                <div className={styles.files_settings} ref={SettingsRef}>
+                                    <div className={styles.files_utils}>
+                                        <Button type='button' onClick={handleImageInput} children={<><LuCirclePlus />Adicionar Mais</>} />
+                                        <Button variant='primary' children={<><LuCornerDownLeft /></>} onClick={() => clearFiles()} />
+                                    </div>
+                                    <div className={styles.files_buttons}>
+                                        <SettingsButton
+                                            handleDirectorySelector={handleDirectorySelector}
+                                            handleDirectorySelectorInput={handleDirectorySelectorInput}
+                                            handleConfigSubmit={handleConfigSubmit}
+                                            convertQuality={convertQuality}
+                                            saveDirectory={saveDirectory}
+                                        />
+                                        <Button variant='secondary' children={<><LuHardDriveDownload />Converter Todos </>} onClick={async () => { handleConvert() }} />
+                                    </div >
                                 </div >
-                            </div >
-                        </ul >
-                    </div >
-                ) : (
-                    <div className={styles.header_dropper_box} onDragOver={handleDragOver} onDragLeave={handleDragLeave} onClick={() => handleImageInput()}>
-                        <div className={styles.dropper_img_wrap} >
-                            <LuUpload /></div>
-                        <h3>Selecionar Imagem(ns)</h3>
-                        <p>Arraste & Solte ou <span className={styles.highlight}>Clique</span></p>
-                    </div>
-                )
-                }
-            </div >
-        </section >
+                            </ul >
+                        </div >
+                    ) : (
+                        <div className={styles.header_dropper_box} onDragOver={handleDragOver} onDragLeave={handleDragLeave} onClick={() => handleImageInput()}>
+                            <div className={styles.dropper_img_wrap} >
+                                <LuUpload /></div>
+                            <h3>Selecionar Imagem(ns)</h3>
+                            <p>Arraste & Solte ou <span className={styles.highlight}>Clique</span></p>
+                        </div>
+                    )
+                    }
+                </div >
+            </section >
+        </div>
     </>
     )
 }

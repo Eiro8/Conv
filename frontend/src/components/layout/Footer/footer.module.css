@@ -1,5 +1,5 @@
 .footer {
-    background: linear-gradient(180deg, black 20%, var(--secondary) 60%, var(--tertiary) 100%);
+    background: linear-gradient(180deg, black 20%, var(--secondary) 40%, var(--tertiary) 100%);
     width: 100%;
     min-height: 100%;
     max-height: fit-content;
@@ -53,6 +53,21 @@
             justify-content: center;
             display: flex;
         }
+    }
+
+    .disclaimer {
+        display: flex;
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+        gap: var(--space-md);
+        font-size: 1rem;
+        font-weight: 500;
+    }
+
+    .copyright {
+        font-size: .8rem;
+        font-weight: 500;
     }
 
 }
