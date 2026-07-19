@@ -40,7 +40,7 @@ export const PrevButton = (props) => {
     const { ...restProps } = props
 
     return (
-        <Button type="button" {...restProps} children={<ArrowLeft />} />
+        <Button type="button" variant='secondary' {...restProps} children={<ArrowLeft />} />
     )
 }
 
@@ -48,6 +48,6 @@ export const NextButton = (props) => {
     const { ...restProps } = props
 
     return (
-        <Button type="button" {...restProps} children={<ArrowRight />} />
+        <Button type="button" variant='secondary' {...restProps} children={<ArrowRight />} />
     )
 }
