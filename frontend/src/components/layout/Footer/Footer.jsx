@@ -17,12 +17,24 @@ const Footer = () => {
             link: "#"
         },
         {
-            title: "Compressor de Vídeo ( em breve )",
+            title: `Gerador de Favicon
+             ( em breve )`,
             image: SoonToCome,
             link: "#"
         },
         {
-            title: "Simplificador de Documento com IA ( em breve )",
+            title: `Gerador de Thumbnails
+            ( em breve )`,
+            image: SoonToCome,
+            link: "#"
+        },{
+            title: `Compressor de Imagens
+            ( em breve )`,
+            image: SoonToCome,
+            link: "#"
+        },{
+            title: `Removedor de Metadados
+            ( em breve )`,
             image: SoonToCome,
             link: "#"
         }
@@ -41,9 +53,6 @@ const Footer = () => {
                 </div>
             </div>
             <div className={styles.footer_info}>
-                <span className={styles.link}>
-                    <p>Github.com/Eiro8</p>
-                </span>
                 <span className={styles.copyright}>
                     <a href='#'>ⓒ Copyright</a>
                 </span>

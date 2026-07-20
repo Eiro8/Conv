@@ -1,7 +1,6 @@
-import React from "react"
 import { useState, useRef, useEffect } from 'react';
 
-import { LuX, LuHardDriveDownload, LuCornerDownLeft, LuCirclePlus, LuSettings2, LuFile } from "react-icons/lu";
+import { LuX, LuSettings2, LuFile } from "react-icons/lu";
 import { Button } from "../../../../components/ui/Button/Button";
 import styles from './settings.module.css'
 
@@ -15,8 +14,6 @@ const SettingsButton = ({
     handleConfigSubmit,
     convertQuality,
     saveDirectory,
-
-    ...props
 }) => {
     const [open, setOpen] = useState(false);
     const ConfigForm = useRef();
@@ -52,7 +49,7 @@ const SettingsButton = ({
             dialog.close();
         }
     }, [open]);
-    
+
     return (
         <>
             <Button variant='primary' children={< LuSettings2 />} onClick={() => (setOpen(!open))} />

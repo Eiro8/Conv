@@ -1,4 +1,3 @@
-import { Window } from '@wailsio/runtime'
 import { WindowMinimise, Quit, WindowToggleMaximise } from '../../wailsjs/runtime/runtime'
 
 export const handleMinimize = () => {

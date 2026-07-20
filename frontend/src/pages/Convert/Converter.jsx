@@ -5,7 +5,6 @@ import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import _ScrollTrigger, { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-import Navbar from '../../components/layout/Navbar/Navbar';
 import FileCard from './components/FileCard/FileCard';
 import SettingsButton from './components/Settings/Settings';
 import { Button } from '../../components/ui/Button/Button';
@@ -16,7 +15,7 @@ import CreateImageObject from '../../services/fileCreatorService';
 import convertImageObjects from '../../services/fileConvertService';
 import DirectoryDialog from '../../services/openDirectoryDialog';
 import FileDialog from '../../services/openFileDialog';
-import Footer from '../../components/layout/Footer/footer';
+
 
 
 gsap.registerPlugin(ScrollTrigger)
@@ -107,11 +106,12 @@ function Converter() {
         try {
             //! Futuramente, adicionar forma de enviar apenas um array de arquivos não convertidos pra nao precisar verificar se todos não estao convertidos
             const convertedArr = await convertImageObjects(files, convertQuality)
-            console.log("finalizou processo")
             convertedArr.forEach(item => {
+                const { ConvertTo } = item
+                console.log(ConvertTo)
                 setFiles(prev => {
                     let newArr = [...prev];
-                    newArr[item.ID] = { ...newArr[item.ID], IsConverted: true, ...item }
+                    newArr[item.ID] = { ...newArr[item.ID], ...item, IsConverted: true, ConvertTo: ConvertTo, }
                     return newArr
                 })
 
@@ -167,7 +167,6 @@ function Converter() {
         setSaveDirectory(e.target.value)
     }
 
-
     /**
      * controla o estado de {@link haveFiles}, se files.lenght > 0, haveFiles sera true, e vice-versa.
      * também controla o refresh do scrollTrigger, a cada atualização de ScrollTrigger, Files Leva Refresh
@@ -175,12 +174,10 @@ function Converter() {
     useEffect(() => {
         if (files.length > 0) {
             setHaveFiles(true)
-            _ScrollTrigger.refresh();
         } else {
             setHaveFiles(false)
         }
     }, [files])
-
 
     /**
      * controla as animações de config_settigns.
@@ -237,33 +234,56 @@ function Converter() {
         })
     }, [haveFiles])
 
+    useEffect(() => {
+        ScrollTrigger.refresh();
+    }, [files.length]);
 
+    function handleConvertTo(id, format) {
+
+        setFiles(prev => {
+
+            return prev.map(file => {
+
+                if (file.ID === id) {
+
+                    return {
+                        ...file,
+                        ConvertTo: format
+                    }
+
+                }
+
+                return file;
+
+            })
+
+        })
+
+    }
 
     return (<>
         <div className={"container"}>
             <section className={`${styles.header} ${isHovered ? styles.header_hovered : ""}`} onDragOver={handleDragOver} onDragLeave={handleDragLeave} style={{ "--wails-drop-target": "drop" }}>
-                <div className={`${styles.header_wrapper} container`}>
+                <div className={`${styles.header_wrapper} container`} id={'top'}>
                     {haveFiles ? (
                         <div className={styles.files_container}>
                             <ul className={styles.files_box} ref={SettingsBoxRef}>
                                 {files.map((item) => {
-                                    let ID = item.ID
                                     return (
                                         <FileCard
                                             file={item}
-                                            key={ID}
-                                            id={ID}
+                                            key={item.ID}
                                             allowedFileTypes={allowedFileTypes}
-
                                             handleCloseButton={handleCloseButton}
                                             saveDirectory={saveDirectory}
+                                            handleFormat={handleConvertTo}
                                         />
                                     )
                                 })}
                                 <div className={styles.files_settings} ref={SettingsRef}>
                                     <div className={styles.files_utils}>
                                         <Button type='button' onClick={handleImageInput} children={<><LuCirclePlus />Adicionar Mais</>} />
-                                        <Button variant='primary' children={<><LuCornerDownLeft /></>} onClick={() => clearFiles()} />
+                                        <Button variant='primary' children={<><LuCornerDownLeft /></>} onClick={() => { clearFiles(); scrollTo(top) }} />
                                     </div>
                                     <div className={styles.files_buttons}>
                                         <SettingsButton

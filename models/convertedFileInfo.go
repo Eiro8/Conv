@@ -5,4 +5,5 @@ type ConversionInfo struct {
 	ID            uint16
 	ConvertedPath string
 	ConvertedSize int64
+	ConvertTo     string
 }

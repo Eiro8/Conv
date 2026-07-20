@@ -4,6 +4,7 @@ export namespace models {
 	    ID: number;
 	    ConvertedPath: string;
 	    ConvertedSize: number;
+	    ConvertTo: string;
 	
 	    static createFrom(source: any = {}) {
 	        return new ConversionInfo(source);
@@ -14,6 +15,7 @@ export namespace models {
 	        this.ID = source["ID"];
 	        this.ConvertedPath = source["ConvertedPath"];
 	        this.ConvertedSize = source["ConvertedSize"];
+	        this.ConvertTo = source["ConvertTo"];
 	    }
 	}
 	export class ImageStruct {

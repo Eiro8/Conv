@@ -28,7 +28,7 @@ func main() {
 			EnableFileDrop:     true,
 			DisableWebViewDrop: false,
 		},
-		MinWidth:         650,
+		MinWidth:         500,
 		MinHeight:        300,
 		WindowStartState: options.Minimised, //* deixa a tela minimisada ao iniciar o app
 		Frameless:        true,              //* deixa sem frame em volta

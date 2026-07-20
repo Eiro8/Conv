@@ -43,5 +43,5 @@ func Convert(unconvertedFile models.UnconvertedFile, conversionQuality uint8, Ap
 		return models.ConversionInfo{}, err
 	}
 
-	return models.ConversionInfo{ID, newPath, newSize}, nil
+	return models.ConversionInfo{ID, newPath, newSize, extension}, nil
 }
