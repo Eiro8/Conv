@@ -138,10 +138,10 @@ A conversão de múltiplas imagens utiliza goroutines para melhorar o desempenho
 
 ## Autor
 
-Desenvolvido por **Israel Ribeiro Ramos**.
+Desenvolvido por **Israel Ribeiro**.
 
 * GitHub: [Eiro8](https://github.com/Eiro8)
-* LinkedIn: [Israel Ribeiro Ramos](https://www.linkedin.com/in/israel-rribeiro/)
+* LinkedIn: [Israel Ribeiro](https://www.linkedin.com/in/israel-rribeiro/)
 
 ## License
 
