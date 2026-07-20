@@ -17,12 +17,12 @@ const Footer = () => {
             link: "#"
         },
         {
-            title: "Compressor de Imagens",
+            title: "Compressor de Vídeo ( em breve )",
             image: SoonToCome,
             link: "#"
         },
         {
-            title: "Simplificador de Documento",
+            title: "Simplificador de Documento com IA ( em breve )",
             image: SoonToCome,
             link: "#"
         }
