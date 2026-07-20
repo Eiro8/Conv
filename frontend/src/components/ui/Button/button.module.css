@@ -3,6 +3,7 @@
     align-items: center;
     width: auto;
     gap: var(--space-md);
+    
 }
 
 .primary {

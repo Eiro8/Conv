@@ -19,7 +19,7 @@ export const Button = (
             disabled={isLoading || props.disabled}
             ref={ref}
             {...props}>
-            <span className={styles.span}>{isLoading ? <LuLoader /> : children}</span>
+            <span className={`${styles.span} text_overflow`}>{isLoading ? <LuLoader /> : children}</span>
         </button>
     )
 }

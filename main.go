@@ -28,13 +28,13 @@ func main() {
 			EnableFileDrop:     true,
 			DisableWebViewDrop: false,
 		},
-		MinWidth:         300,
+		MinWidth:         650,
 		MinHeight:        300,
-		WindowStartState: options.Minimised, //* deixa a tela maximisada ao iniciar o app
+		WindowStartState: options.Minimised, //* deixa a tela minimisada ao iniciar o app
 		Frameless:        true,              //* deixa sem frame em volta
 		AlwaysOnTop:      false,             //*Mantém o frame no topo das outras abas, mesmo quando perdeo  foco.
-		Windows:          &windows.Options{},
 		//! AlwaysOnTop ( removido por enquanto para melhor experiencia de desenvolvimento)
+		Windows:          &windows.Options{},
 		BackgroundColour: &options.RGBA{R: 27, G: 38, B: 54, A: 1},
 		OnStartup:        app.startup,
 		Bind: []interface{}{

@@ -1,5 +1,5 @@
 .config_background {
-    position: absolute;
+    position: fixed;
     inset: 0;
     display: flex;
     align-items: center;
@@ -8,7 +8,7 @@
 
     .config_options {
         height: fit-content;
-        width: clamp(200px,70%,350px);
+        width: clamp(200px, 70%, 350px);
         padding: var(--space-lg);
         background: var(--primary);
         border: 2px solid var(--accent);
