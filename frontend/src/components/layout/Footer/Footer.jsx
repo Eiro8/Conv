@@ -40,12 +40,14 @@ const Footer = () => {
                     <Carousel options={Options} slides={Slides} />
                 </div>
             </div>
-            <span className={styles.link}>
-                <p>Github.com/Eiro8</p>
-            </span>
-            <span className={styles.copyright}>
-                <p>ⓒ Copyright</p>
-            </span>
+            <div className={styles.footer_info}>
+                <span className={styles.link}>
+                    <p>Github.com/Eiro8</p>
+                </span>
+                <span className={styles.copyright}>
+                    <a href='#'>ⓒ Copyright</a>
+                </span>
+            </div>
         </section>
     )
 }
