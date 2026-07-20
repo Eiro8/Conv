@@ -88,6 +88,9 @@ function Converter() {
         try {
             let ImageObjects = await CreateImageObject(pathArray);
             ImageObjects.forEach((fileObj) => {
+                if (!fileObj.FileType) {
+                    return
+                }
                 setFiles(prev => [...prev, fileObj]);
             })
         } catch (error) {
