@@ -1,14 +1,15 @@
 .titleBar {
     --wails-draggable: drag;
     --wails-resize: none;
-    height: 35px;
+    height: var(--titlebar-height);
     width: 100%;
     background: black;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    position: relative;
-    position: sticky;
+    position: fixed;
+    top: 0;
+    z-index: 999;
 
     .titleBar_wrap {
         width: 100%;

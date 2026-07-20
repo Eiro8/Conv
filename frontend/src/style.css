@@ -22,11 +22,12 @@
     --radius-lg: 32px;
     --radius-full: 99px;
 
+    --titlebar-height: 35px
 }
+
 #root {
     height: 100%;
     width: 100%;
-
     background: black;
 }
 
@@ -46,6 +47,7 @@
     overflow: hidden;
     width: 100%;
 }
+
 a,
 ul,
 li {

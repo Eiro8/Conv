@@ -11,12 +11,12 @@ function App() {
     const appIcon = ""
     const appName = "conv"
 
-    return (<>
+    return (<div class="app-content">
         <TitleBar appIcon={appIcon} appName={appName} />
         <Navbar currentTool={activeTool} />
         <Converter />
         <Footer />
-    </>
+    </div>
     )
 }
 

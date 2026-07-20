@@ -5,7 +5,7 @@ import { Square, Minus, X, ArrowRightFromLine } from 'lucide-react'
 import { handleMinimize, handleMaximize, handleClose } from '../../../services/windowService.js'
 
 const TitleBar = (props) => {
-    const { activeTool, appIcon, appName } = props;
+    const { appIcon, appName } = props;
 
 
     return (
