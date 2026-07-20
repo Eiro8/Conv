@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './TitleBar.module.css'
 import Logo from '../../../assets/images/SquaredLogo.png'
-import { Square, Minus, X, ArrowBigRightDash } from 'lucide-react'
+import { Square, Minus, X, ArrowRightFromLine } from 'lucide-react'
 import { handleMinimize, handleMaximize, handleClose } from '../../../services/windowService.js'
 
 const TitleBar = (props) => {
@@ -14,7 +14,9 @@ const TitleBar = (props) => {
                 <div className={styles.app_info}>
                     <div className={styles.brand}>
                         <img src={appIcon} className={styles.brand_logo} />
-                        <p className={styles.info}>{appName} <ArrowBigRightDash /> {activeTool}</p>
+                        <span className={styles.info}>
+                            <p>{appName}</p>
+                        </span>
                     </div>
                     <div className={styles.uninteractable_overlay} draggable={'false'}></div>
                 </div>

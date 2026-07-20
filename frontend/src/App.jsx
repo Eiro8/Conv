@@ -7,13 +7,13 @@ import Navbar from './components/layout/Navbar/Navbar';
 import TitleBar from './components/layout/TitleBar/TitleBar';
 
 function App() {
-    const activeTool = "Converter"
+    const activeTool = "Conversor de Imagens"
     const appIcon = ""
-    const appName = "CONV"
-    
+    const appName = "conv"
+
     return (<>
-        <TitleBar activeTool={activeTool} appIcon={appIcon} appName={appName} />
-        <Navbar />
+        <TitleBar appIcon={appIcon} appName={appName} />
+        <Navbar currentTool={activeTool} />
         <Converter />
         <Footer />
     </>

@@ -13,7 +13,9 @@
     .titleBar_wrap {
         width: 100%;
         height: 100%;
-        display: flex;
+        display: grid;
+        grid-template-columns: auto 150px;
+
         .app_info {
             width: 100%;
             height: 100%;
@@ -27,6 +29,8 @@
                 gap: var(--space-md);
                 align-items: center;
                 z-index: 1;
+                max-width: 70%;
+                overflow: hidden;
 
 
                 .info {
@@ -36,6 +40,23 @@
                     margin-left: 5px;
                     gap: var(--space-md);
                     box-sizing: border-box;
+                    overflow: hidden;
+
+                    p {
+                        display: flex;
+                        align-items: center;
+                        text-wrap: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        -o-text-overflow: ellipsis;
+                        -ms-text-overflow: ellipsis;
+                    }
+
+                    svg {
+                        height: 15px;
+                        width: auto;
+                        aspect-ratio: 1/1;
+                    }
                 }
             }
 
