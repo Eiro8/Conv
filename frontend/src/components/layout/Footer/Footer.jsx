@@ -54,7 +54,7 @@ const Footer = () => {
             </div>
             <div className={styles.footer_info}>
                 <span className={styles.copyright}>
-                    <a href='#'>ⓒ Copyright</a>
+                    <a href='https://github.com/Eiro8/Conv?tab=readme-ov-file'>ⓒ Copyright</a>
                 </span>
             </div>
         </section>
