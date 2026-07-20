@@ -239,18 +239,13 @@ function Converter() {
     }, [files.length]);
 
     function handleConvertTo(id, format) {
-
         setFiles(prev => {
-
             return prev.map(file => {
-
                 if (file.ID === id) {
-
                     return {
                         ...file,
                         ConvertTo: format
                     }
-
                 }
 
                 return file;
