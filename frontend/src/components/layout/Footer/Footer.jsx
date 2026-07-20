@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import react from 'react'
 import styles from './footer.module.css'
 
 import FooterLogo from '../../../assets/images/BigLogo.png'
@@ -6,8 +6,8 @@ import Carousel from '../Carousel/Carousel.jsx'
 
 import ConversorIMG from '../../../assets/images/conversor.png'
 import SoonToCome from '../../../assets/images/soon.png'
-
 const Footer = () => {
+
 
     const Options = { loop: true }
     const Slides = [
@@ -27,18 +27,20 @@ const Footer = () => {
             ( em breve )`,
             image: SoonToCome,
             link: "#"
-        },{
+        }, {
             title: `Compressor de Imagens
             ( em breve )`,
             image: SoonToCome,
             link: "#"
-        },{
+        }, {
             title: `Removedor de Metadados
             ( em breve )`,
             image: SoonToCome,
             link: "#"
         }
     ];
+
+
 
 
     return (
@@ -53,9 +55,7 @@ const Footer = () => {
                 </div>
             </div>
             <div className={styles.footer_info}>
-                <span className={styles.copyright}>
-                    <a href='https://github.com/Eiro8/Conv?tab=readme-ov-file'>ⓒ Copyright</a>
-                </span>
+                <p className={styles.copyright}>ⓒ Copyright 2026</p>
             </div>
         </section>
     )
