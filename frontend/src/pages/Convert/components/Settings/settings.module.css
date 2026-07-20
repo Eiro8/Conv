@@ -1,10 +1,15 @@
 .config_background {
     position: fixed;
-    inset: 0;
     display: flex;
     align-items: center;
+    height: 100vh;
+    width: 100vw;
     justify-content: center;
     backdrop-filter: blur(4px);
+    background: transparent;
+    bottom: 0;
+    right: 0;
+    border: none;
 
     .config_options {
         height: fit-content;
@@ -28,6 +33,7 @@
         .config_title {
             width: fit-content;
             align-self: center;
+            color: white;
         }
 
         .options_box {

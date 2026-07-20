@@ -1,5 +1,5 @@
 import React from "react"
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 import { LuX, LuHardDriveDownload, LuCornerDownLeft, LuCirclePlus, LuSettings2, LuFile } from "react-icons/lu";
 import { Button } from "../../../../components/ui/Button/Button";
@@ -20,19 +20,45 @@ const SettingsButton = ({
 }) => {
     const [open, setOpen] = useState(false);
     const ConfigForm = useRef();
+    const dialogRef = useRef();
+
     const [convertPercentage, setConvertPercentage] = useState(convertQuality)
 
 
     function handleSubmit(e) {
         handleConfigSubmit(e, ConfigForm)
+        dialogRef.current.setAttribute('inert', '')
         setOpen(false)
     }
+
+    useEffect(() => {
+        const dialog = dialogRef.current;
+
+
+
+        if (!dialog) return;
+        if (open) {
+            addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    dialog.close();
+                    setOpen(false)
+                }
+            })
+        }
+        if (open) {
+            // Abre o dialog como modal, deixando todo o resto da tela inert automaticamente
+            dialog.showModal();
+        } else {
+            dialog.close();
+        }
+    }, [open]);
+    
     return (
         <>
             <Button variant='primary' children={< LuSettings2 />} onClick={() => (setOpen(!open))} />
             {open ?
                 (
-                    <div className={styles.config_background}>
+                    <dialog className={styles.config_background} ref={dialogRef}>
                         <div className={styles.config_options}>
                             <span className={styles.close_button}>
                                 <Button children={<LuX />} onClick={() => setOpen(false)} />
@@ -58,7 +84,7 @@ const SettingsButton = ({
                                 <button className={styles.button} id={"submit-button"} type="submit" name="submit_button" onClick={handleSubmit}>Salvar</button>
                             </form>
                         </div>
-                    </div>
+                    </dialog>
                 ) : (null)}
         </>
     )

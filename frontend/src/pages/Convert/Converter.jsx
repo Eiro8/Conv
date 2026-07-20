@@ -28,7 +28,6 @@ function Converter() {
     const [isHovered, setIsHovered] = useState(false);
     const [haveFiles, setHaveFiles] = useState(false);
 
-
     const SettingsRef = useRef();
     const SettingsBoxRef = useRef();
 
