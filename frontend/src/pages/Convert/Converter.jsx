@@ -241,7 +241,6 @@ function Converter() {
         <div className={"container"}>
             <section className={`${styles.header} ${isHovered ? styles.header_hovered : ""}`} onDragOver={handleDragOver} onDragLeave={handleDragLeave} style={{ "--wails-drop-target": "drop" }}>
                 <div className={`${styles.header_wrapper} container`}>
-                    <h1 className={styles.tool_title}>Conversor</h1>
                     {haveFiles ? (
                         <div className={styles.files_container}>
                             <ul className={styles.files_box} ref={SettingsBoxRef}>
