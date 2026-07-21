@@ -10,8 +10,6 @@
 
 </div>
 
-<div align="center">[⬇️ Download da última versão](https://github.com/Eiro8/Conv/releases/latest)</div>
-
 ## Sobre o projeto
 
 O Conv é uma aplicação desktop para conversão e processamento de imagens, desenvolvida para oferecer uma experiência rápida, simples e totalmente local. O projeto utiliza **Go** para o processamento das imagens e **React** para a interface do usuário, integrados através do **Wails**.
