@@ -10,6 +10,11 @@
 
 </div>
 
+<div>
+<img src="./assets/readmePhoto.png" width="100%">
+
+</div>
+
 ## Sobre o projeto
 
 O Conv é uma aplicação desktop para conversão e processamento de imagens, desenvolvida para oferecer uma experiência rápida, simples e totalmente local. O projeto utiliza **Go** para o processamento das imagens e **React** para a interface do usuário, integrados através do **Wails**.
@@ -26,6 +31,8 @@ O objetivo é permitir que usuários convertam múltiplas imagens entre diferent
 * Seleção de diretório para salvar arquivos convertidos
 * Processamento local das imagens
 * Interface responsiva e intuitiva
+
+<img src="./assets/drag_and_drop.gif" width="50vw">
 
 ## Tecnologias utilizadas
 
